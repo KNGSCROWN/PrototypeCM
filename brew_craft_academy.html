@@ -1,0 +1,1877 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Starbucks Coffee Academy — Brew & Craft</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Libre+Baskerville:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap');
+
+  :root {
+    --cream: #F5F0E8;
+    --espresso: #2C1A0E;
+    --roast: #6B3A1F;
+    --caramel: #C47A2B;
+    --gold: #E8A93A;
+    --blonde: #F2D59E;
+    --medium: #A0522D;
+    --dark: #3D1C08;
+    --text: #1A1008;
+    --muted: #7A5C3A;
+    --border: rgba(107,58,31,0.2);
+    --card: #FFFDF8;
+    --accent: #8B4513;
+    --green: #1E3932;
+    --green-light: #00704A;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    font-family: 'DM Sans', sans-serif;
+    background: var(--cream);
+    color: var(--text);
+    min-height: 100vh;
+  }
+
+  /* HERO */
+  .hero {
+    background: var(--espresso);
+    color: var(--cream);
+    padding: 4rem 2rem 3rem;
+    text-align: center;
+    position: relative;
+    overflow: hidden;
+  }
+  .hero::before {
+    content: '';
+    position: absolute;
+    top: -60px; left: 50%;
+    transform: translateX(-50%);
+    width: 400px; height: 400px;
+    border-radius: 50%;
+    background: radial-gradient(circle, rgba(196,122,43,0.15) 0%, transparent 70%);
+  }
+  .hero-badge {
+    display: inline-block;
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--gold);
+    border: 1px solid rgba(232,169,58,0.4);
+    padding: 6px 16px;
+    border-radius: 2px;
+    margin-bottom: 1.5rem;
+  }
+  .hero h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 400;
+    line-height: 1.15;
+    margin-bottom: 1rem;
+  }
+  .hero h1 em { color: var(--gold); font-style: italic; }
+  .hero p {
+    font-size: 1rem;
+    color: rgba(245,240,232,0.7);
+    max-width: 560px;
+    margin: 0 auto 2rem;
+    line-height: 1.7;
+  }
+  .progress-bar-wrap { max-width: 400px; margin: 0 auto; }
+  .progress-label {
+    display: flex;
+    justify-content: space-between;
+    font-size: 12px;
+    color: rgba(245,240,232,0.5);
+    margin-bottom: 8px;
+  }
+  .progress-track {
+    height: 3px;
+    background: rgba(245,240,232,0.15);
+    border-radius: 2px;
+    overflow: hidden;
+  }
+  .progress-fill {
+    height: 100%;
+    background: var(--gold);
+    border-radius: 2px;
+    transition: width 0.5s ease;
+  }
+
+  /* NAV */
+  .chapter-nav {
+    background: var(--espresso);
+    border-top: 1px solid rgba(245,240,232,0.08);
+    padding: 0 1.5rem;
+    display: flex;
+    gap: 0;
+    overflow-x: auto;
+    scrollbar-width: none;
+    position: sticky;
+    top: 0;
+    z-index: 100;
+  }
+  .chapter-nav::-webkit-scrollbar { display: none; }
+  .chapter-btn {
+    flex-shrink: 0;
+    padding: 14px 18px;
+    font-size: 11px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: rgba(245,240,232,0.45);
+    background: none;
+    border: none;
+    border-bottom: 2px solid transparent;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+    white-space: nowrap;
+  }
+  .chapter-btn:hover { color: rgba(245,240,232,0.8); }
+  .chapter-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  /* CONTENT */
+  .content { max-width: 820px; margin: 0 auto; padding: 3rem 1.5rem 6rem; }
+  .chapter { display: none; }
+  .chapter.active { display: block; animation: fadeIn 0.4s ease; }
+
+  @keyframes fadeIn {
+    from { opacity: 0; transform: translateY(12px); }
+    to { opacity: 1; transform: translateY(0); }
+  }
+
+  .chapter-header {
+    margin-bottom: 2.5rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+  .chapter-num {
+    font-size: 11px;
+    letter-spacing: 3px;
+    text-transform: uppercase;
+    color: var(--caramel);
+    margin-bottom: 0.5rem;
+  }
+  .chapter-header h2 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(1.6rem, 4vw, 2.4rem);
+    font-weight: 400;
+    color: var(--espresso);
+    line-height: 1.2;
+  }
+  .chapter-header .subtitle {
+    font-family: 'Libre Baskerville', serif;
+    font-style: italic;
+    color: var(--muted);
+    margin-top: 0.5rem;
+    font-size: 1rem;
+  }
+
+  .prose { font-size: 16px; line-height: 1.8; color: #2a1a0a; }
+  .prose p { margin-bottom: 1.25rem; }
+  .prose strong { font-weight: 500; color: var(--roast); }
+
+  /* CALLOUT / QUOTE */
+  .callout {
+    background: var(--espresso);
+    color: var(--cream);
+    padding: 1.5rem 2rem;
+    border-radius: 4px;
+    margin: 2rem 0;
+    position: relative;
+    overflow: hidden;
+  }
+  .callout::before {
+    content: '\201C';
+    font-family: 'Playfair Display', serif;
+    font-size: 5rem;
+    color: rgba(232,169,58,0.2);
+    position: absolute;
+    top: -10px; left: 10px;
+    line-height: 1;
+  }
+  .callout p {
+    font-family: 'Libre Baskerville', serif;
+    font-style: italic;
+    font-size: 1.05rem;
+    line-height: 1.7;
+    position: relative;
+    z-index: 1;
+    color: rgba(245,240,232,0.9);
+  }
+  .callout cite {
+    display: block;
+    font-size: 12px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    color: var(--gold);
+    margin-top: 0.75rem;
+    font-style: normal;
+  }
+
+  /* FACT BOX */
+  .fact-box {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-left: 3px solid var(--caramel);
+    border-radius: 4px;
+    padding: 1.25rem 1.5rem;
+    margin: 1.5rem 0;
+    font-size: 15px;
+    line-height: 1.7;
+    color: var(--roast);
+  }
+  .fact-box .fact-label {
+    font-size: 10px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--caramel);
+    margin-bottom: 0.5rem;
+    font-weight: 500;
+  }
+
+  /* SECTION HEADING */
+  .section-heading {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: var(--espresso);
+    margin: 2.5rem 0 1rem;
+    padding-bottom: 0.5rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  /* ACCORDION */
+  .accordion { margin: 1.5rem 0; }
+  .acc-item {
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 0.75rem;
+    background: var(--card);
+    transition: box-shadow 0.2s;
+  }
+  .acc-item:hover { box-shadow: 0 2px 12px rgba(44,26,14,0.07); }
+  .acc-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+    cursor: pointer;
+    user-select: none;
+  }
+  .acc-icon {
+    width: 34px; height: 34px;
+    border-radius: 50%;
+    background: var(--espresso);
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 15px;
+    flex-shrink: 0;
+  }
+  .acc-title { font-weight: 500; font-size: 15px; flex: 1; }
+  .acc-arrow { font-size: 12px; color: var(--muted); transition: transform 0.2s; }
+  .acc-item.open .acc-arrow { transform: rotate(180deg); }
+  .acc-body {
+    display: none;
+    padding: 0 1.25rem 1.25rem;
+    font-size: 14px;
+    color: #4a2e16;
+    line-height: 1.75;
+    border-top: 1px solid var(--border);
+    padding-top: 1rem;
+  }
+  .acc-item.open .acc-body { display: block; }
+
+  /* TASTE GRID */
+  .taste-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  .taste-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .taste-card:hover { box-shadow: 0 4px 16px rgba(44,26,14,0.1); transform: translateY(-2px); }
+  .taste-card.active { border-color: var(--caramel); background: rgba(196,122,43,0.06); }
+  .taste-emoji { font-size: 2rem; margin-bottom: 0.5rem; }
+  .taste-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--espresso);
+    margin-bottom: 0.25rem;
+  }
+  .taste-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+  .taste-detail {
+    display: none;
+    font-size: 13px;
+    color: var(--roast);
+    line-height: 1.7;
+    border-top: 1px solid var(--border);
+    margin-top: 0.75rem;
+    padding-top: 0.75rem;
+  }
+  .taste-card.active .taste-detail { display: block; }
+
+  /* FLAVOR WHEEL */
+  .flavor-wheel-wrap {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  .flavor-categories {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 1.25rem;
+  }
+  .flavor-cat-btn {
+    padding: 6px 14px;
+    border-radius: 20px;
+    font-size: 12px;
+    border: 1px solid var(--border);
+    background: none;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+    color: var(--muted);
+  }
+  .flavor-cat-btn:hover { border-color: var(--caramel); color: var(--caramel); }
+  .flavor-cat-btn.active { background: var(--espresso); color: var(--gold); border-color: var(--espresso); }
+  .flavor-detail-panel {
+    background: rgba(44,26,14,0.04);
+    border-radius: 6px;
+    padding: 1.25rem;
+    font-size: 14px;
+    line-height: 1.75;
+    color: var(--roast);
+    min-height: 80px;
+  }
+  .flavor-detail-panel h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    color: var(--espresso);
+    margin-bottom: 0.5rem;
+  }
+  .flavor-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 0.75rem; }
+  .flavor-tag {
+    padding: 3px 10px;
+    background: var(--espresso);
+    color: var(--cream);
+    border-radius: 12px;
+    font-size: 11px;
+    letter-spacing: 0.5px;
+  }
+
+  /* THE FOUR MS */
+  .four-ms {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  @media (max-width: 500px) { .four-ms { grid-template-columns: 1fr; } }
+  .m-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    position: relative;
+    overflow: hidden;
+    cursor: pointer;
+    transition: all 0.2s;
+  }
+  .m-card:hover { box-shadow: 0 4px 20px rgba(44,26,14,0.1); transform: translateY(-2px); }
+  .m-card.open { border-color: var(--caramel); }
+  .m-letter {
+    font-family: 'Playfair Display', serif;
+    font-size: 3.5rem;
+    font-weight: 600;
+    color: rgba(44,26,14,0.07);
+    position: absolute;
+    top: 0; right: 10px;
+    line-height: 1;
+  }
+  .m-title { font-weight: 500; font-size: 15px; color: var(--espresso); margin-bottom: 2px; }
+  .m-italian { font-size: 12px; color: var(--caramel); font-style: italic; margin-bottom: 0.75rem; }
+  .m-body {
+    font-size: 13px;
+    color: var(--muted);
+    line-height: 1.7;
+    display: none;
+  }
+  .m-card.open .m-body { display: block; color: #4a2e16; }
+
+  /* ESPRESSO STEPS */
+  .steps-visual {
+    display: flex;
+    gap: 0;
+    margin: 1.5rem 0;
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+  }
+  .step-tab {
+    flex: 1;
+    padding: 1rem 0.75rem;
+    text-align: center;
+    cursor: pointer;
+    background: var(--card);
+    border-right: 1px solid var(--border);
+    transition: all 0.2s;
+    font-size: 13px;
+    color: var(--muted);
+  }
+  .step-tab:last-child { border-right: none; }
+  .step-tab:hover { background: rgba(196,122,43,0.06); }
+  .step-tab.active { background: var(--espresso); color: var(--gold); }
+  .step-tab .step-num { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+  .step-tab .step-name { font-weight: 500; }
+  .step-detail {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    font-size: 14px;
+    line-height: 1.75;
+    color: #4a2e16;
+    margin-top: 0.75rem;
+    animation: fadeIn 0.3s ease;
+  }
+  .step-detail h4 {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    color: var(--espresso);
+    margin-bottom: 0.5rem;
+  }
+
+  /* MILK TROUBLESHOOTER */
+  .trouble-grid {
+    display: grid;
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  .trouble-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+  }
+  .trouble-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+  }
+  .trouble-dot {
+    width: 12px; height: 12px;
+    border-radius: 50%;
+    flex-shrink: 0;
+  }
+  .trouble-title { font-weight: 500; font-size: 15px; flex: 1; }
+  .trouble-badge {
+    font-size: 10px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    padding: 3px 8px;
+    border-radius: 3px;
+  }
+  .trouble-body {
+    display: none;
+    padding: 0 1.25rem 1.25rem;
+    font-size: 14px;
+    color: #4a2e16;
+    line-height: 1.75;
+    border-top: 1px solid var(--border);
+    padding-top: 1rem;
+  }
+  .trouble-card.open .trouble-body { display: block; }
+  .trouble-body .problem { color: #8B0000; margin-bottom: 0.5rem; }
+  .trouble-body .solution { color: var(--green-light); }
+  .trouble-body strong { font-weight: 500; }
+
+  /* LATTE ART DESIGNS */
+  .latte-designs {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(220px, 1fr));
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  .design-card {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    cursor: pointer;
+    transition: all 0.2s;
+    text-align: center;
+  }
+  .design-card:hover { box-shadow: 0 4px 16px rgba(44,26,14,0.1); }
+  .design-card.active { border-color: var(--caramel); }
+  .design-art {
+    width: 80px; height: 80px;
+    border-radius: 50%;
+    background: #3a1a08;
+    margin: 0 auto 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 2.5rem;
+    position: relative;
+    overflow: hidden;
+  }
+  .design-name {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--espresso);
+    margin-bottom: 0.25rem;
+  }
+  .design-level { font-size: 11px; color: var(--caramel); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 0.5rem; }
+  .design-steps {
+    display: none;
+    text-align: left;
+    margin-top: 1rem;
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--muted);
+    border-top: 1px solid var(--border);
+    padding-top: 0.75rem;
+  }
+  .design-card.active .design-steps { display: block; color: #4a2e16; }
+  .design-step { display: flex; gap: 0.5rem; margin-bottom: 0.5rem; }
+  .design-step-num {
+    width: 20px; height: 20px;
+    border-radius: 50%;
+    background: var(--espresso);
+    color: var(--gold);
+    font-size: 10px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    margin-top: 2px;
+  }
+
+  /* EXTRACTION CHART */
+  .extraction-visual {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 1.5rem 0;
+  }
+  .extraction-title { font-size: 12px; letter-spacing: 2px; text-transform: uppercase; color: var(--muted); margin-bottom: 1.25rem; }
+  .ext-zones {
+    display: grid;
+    grid-template-columns: 1fr 1.5fr 1fr;
+    gap: 3px;
+    border-radius: 6px;
+    overflow: hidden;
+    margin-bottom: 1rem;
+  }
+  .ext-zone {
+    padding: 1rem 0.75rem;
+    text-align: center;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  .ext-zone:hover { opacity: 0.85; }
+  .ext-under { background: #8B4513; color: #F5D5B5; }
+  .ext-ideal { background: var(--green); color: var(--gold); }
+  .ext-over { background: #1a0a02; color: #C8A090; }
+  .ext-zone-label { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; margin-bottom: 4px; }
+  .ext-zone-name { font-family: 'Playfair Display', serif; font-size: 1rem; }
+  .ext-desc {
+    font-size: 13px;
+    line-height: 1.7;
+    color: var(--muted);
+    padding: 0.75rem;
+    background: rgba(44,26,14,0.03);
+    border-radius: 4px;
+    min-height: 60px;
+  }
+
+  /* BREW VARIABLES */
+  .brew-vars {
+    display: grid;
+    gap: 1rem;
+    margin: 1.5rem 0;
+  }
+  .bvar {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    overflow: hidden;
+    cursor: pointer;
+    transition: box-shadow 0.2s;
+  }
+  .bvar:hover { box-shadow: 0 2px 12px rgba(44,26,14,0.07); }
+  .bvar-header {
+    display: flex;
+    align-items: center;
+    gap: 1rem;
+    padding: 1rem 1.25rem;
+  }
+  .bvar-icon {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--espresso);
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 18px;
+    flex-shrink: 0;
+  }
+  .bvar-title { font-weight: 500; flex: 1; }
+  .bvar-arrow { font-size: 12px; color: var(--muted); transition: transform 0.2s; }
+  .bvar.open .bvar-arrow { transform: rotate(180deg); }
+  .bvar-body {
+    display: none;
+    padding: 0 1.25rem 1.25rem;
+    font-size: 14px;
+    color: #4a2e16;
+    line-height: 1.75;
+    border-top: 1px solid var(--border);
+    padding-top: 1rem;
+  }
+  .bvar.open .bvar-body { display: block; }
+
+  /* QUIZ */
+  .quiz-wrap {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.5rem;
+    margin: 2rem 0;
+  }
+  .quiz-label {
+    font-size: 11px;
+    letter-spacing: 2px;
+    text-transform: uppercase;
+    color: var(--caramel);
+    margin-bottom: 1rem;
+  }
+  .quiz-q {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem;
+    color: var(--espresso);
+    margin-bottom: 1.25rem;
+    line-height: 1.4;
+  }
+  .quiz-options { display: grid; gap: 0.5rem; margin-bottom: 1rem; }
+  .quiz-opt {
+    padding: 0.75rem 1rem;
+    border: 1px solid var(--border);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 14px;
+    background: none;
+    text-align: left;
+    font-family: 'DM Sans', sans-serif;
+    transition: all 0.2s;
+    color: var(--text);
+  }
+  .quiz-opt:hover { border-color: var(--caramel); background: rgba(196,122,43,0.04); }
+  .quiz-opt.correct { background: rgba(0,112,74,0.1); border-color: var(--green-light); color: var(--green); }
+  .quiz-opt.wrong { background: rgba(139,0,0,0.07); border-color: #8B0000; color: #8B0000; }
+  .quiz-feedback {
+    font-size: 14px;
+    line-height: 1.6;
+    padding: 0.75rem 1rem;
+    border-radius: 6px;
+    display: none;
+  }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.correct { background: rgba(0,112,74,0.08); color: var(--green); }
+  .quiz-feedback.wrong { background: rgba(139,0,0,0.07); color: #8B0000; }
+  .quiz-next {
+    margin-top: 1rem;
+    padding: 0.6rem 1.5rem;
+    background: var(--espresso);
+    color: var(--gold);
+    border: none;
+    border-radius: 4px;
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    display: none;
+    font-family: 'DM Sans', sans-serif;
+    transition: opacity 0.2s;
+  }
+  .quiz-next:hover { opacity: 0.85; }
+  .quiz-next.show { display: inline-block; }
+  .quiz-progress { font-size: 12px; color: var(--muted); margin-bottom: 1rem; }
+  .quiz-score {
+    text-align: center;
+    padding: 1.5rem;
+    display: none;
+  }
+  .quiz-score.show { display: block; }
+  .quiz-score .score-num {
+    font-family: 'Playfair Display', serif;
+    font-size: 3rem;
+    color: var(--espresso);
+    line-height: 1;
+  }
+  .quiz-score .score-label { color: var(--muted); font-size: 14px; margin-top: 0.25rem; }
+
+  /* NAV FOOTER */
+  .chapter-nav-footer {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 3rem;
+    padding-top: 1.5rem;
+    border-top: 1px solid var(--border);
+  }
+  .nav-btn {
+    padding: 10px 20px;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    background: none;
+    font-size: 13px;
+    letter-spacing: 1px;
+    text-transform: uppercase;
+    cursor: pointer;
+    font-family: 'DM Sans', sans-serif;
+    color: var(--muted);
+    transition: all 0.2s;
+  }
+  .nav-btn:hover { border-color: var(--caramel); color: var(--caramel); }
+  .nav-btn.primary { background: var(--espresso); color: var(--gold); border-color: var(--espresso); }
+  .nav-btn:disabled { opacity: 0.3; cursor: default; }
+
+  /* SENSORY MEMORY BUILDER */
+  .memory-steps {
+    display: grid;
+    gap: 0.75rem;
+    margin: 1.5rem 0;
+  }
+  .mem-step {
+    background: var(--card);
+    border: 1px solid var(--border);
+    border-radius: 8px;
+    padding: 1.25rem;
+    display: flex;
+    gap: 1rem;
+    align-items: flex-start;
+  }
+  .mem-step-num {
+    width: 36px; height: 36px;
+    border-radius: 50%;
+    background: var(--espresso);
+    color: var(--gold);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 600;
+    flex-shrink: 0;
+  }
+  .mem-step-body h4 { font-weight: 500; font-size: 15px; margin-bottom: 0.25rem; color: var(--espresso); }
+  .mem-step-body p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  /* GLOSSARY */
+  .glossary-list { margin: 1.5rem 0; }
+  .gloss-item {
+    border-bottom: 1px solid var(--border);
+    padding: 1rem 0;
+  }
+  .gloss-term {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem;
+    font-weight: 600;
+    color: var(--espresso);
+    margin-bottom: 0.25rem;
+  }
+  .gloss-def { font-size: 14px; color: var(--muted); line-height: 1.6; }
+
+  /* RESPONSIVE */
+  @media (max-width: 600px) {
+    .four-ms { grid-template-columns: 1fr; }
+    .taste-grid { grid-template-columns: 1fr 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-badge">Starbucks Coffee Academy · Level 300</div>
+  <h1>Brew &amp; <em>Craft</em></h1>
+  <p>The art and science of transforming exceptional beans into unforgettable cups — through sensory mastery, espresso excellence, latte art, and the craft of brewing.</p>
+  <div class="progress-bar-wrap">
+    <div class="progress-label">
+      <span id="progressLabel">Chapter 1 of 6</span>
+      <span id="progressPct">17%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill" style="width:17%"></div>
+    </div>
+  </div>
+</div>
+
+<nav class="chapter-nav" id="chapterNav">
+  <button class="chapter-btn active" onclick="showChapter(0)">Introduction</button>
+  <button class="chapter-btn" onclick="showChapter(1)">Sensory World</button>
+  <button class="chapter-btn" onclick="showChapter(2)">Taste, Aroma & Flavor</button>
+  <button class="chapter-btn" onclick="showChapter(3)">Espresso</button>
+  <button class="chapter-btn" onclick="showChapter(4)">Latte Art</button>
+  <button class="chapter-btn" onclick="showChapter(5)">Brewing</button>
+</nav>
+
+<div class="content">
+
+<!-- ═══════════════════════════════════════ CHAPTER 0: INTRO -->
+<div class="chapter active" id="ch0">
+  <div class="chapter-header">
+    <div class="chapter-num">Introduction</div>
+    <h2>The Art &amp; Craft of Coffee</h2>
+    <div class="subtitle">Where passion meets precision, and every cup tells a story.</div>
+  </div>
+
+  <div class="prose">
+    <p>With decades of rich coffee heritage behind us and an unparalleled passion for connecting with customers, it is through the art of barista craft that what we do at Starbucks comes to life. Since Starbucks began in 1971, we have focused unwaveringly on quality — the quality of our coffee and the experience enjoyed by our customers.</p>
+    <p>The barista's role is crucial. Not only do you handcraft delicious beverages and shape a welcoming environment — you share stories. Stories of coffee and how a small bean grows inside a cherry. Stories of the many people in the amazing world of coffee who make what you do possible. Every cup you craft is a reminder and a representation of the long chain of hands that brought us these beans.</p>
+  </div>
+
+  <div class="callout">
+    <p>The more care you put into every beverage you craft, the more pride you will feel. Aspire to the same amount of care and pride as the farmers who grow the beans, or the mill workers who transform them through processing, or the roasters who coax out of them all the incredible flavors hidden inside.</p>
+    <cite>— Starbucks Coffee Academy, Level 300</cite>
+  </div>
+
+  <div class="section-heading">What You'll Learn in This Book</div>
+  <div class="accordion">
+    <div class="acc-item" onclick="toggleAcc(this)">
+      <div class="acc-header">
+        <div class="acc-icon">👁️</div>
+        <div class="acc-title">The Sensory World of Coffee</div>
+        <div class="acc-arrow">▾</div>
+      </div>
+      <div class="acc-body">How our five senses — and especially smell and taste — work together to create the complete experience of flavor. You'll learn how to actively engage your senses to notice more in every cup, and why developing sensory skills is a process of self-discovery.</div>
+    </div>
+    <div class="acc-item" onclick="toggleAcc(this)">
+      <div class="acc-header">
+        <div class="acc-icon">👅</div>
+        <div class="acc-title">Taste, Aroma & Flavor</div>
+        <div class="acc-arrow">▾</div>
+      </div>
+      <div class="acc-body">The anatomy of flavor, the five basic tastes, the role of retronasal olfaction, how to use the Coffee Taster's Flavor Wheel, and how to pair coffee with food for a deeper sensory experience.</div>
+    </div>
+    <div class="acc-item" onclick="toggleAcc(this)">
+      <div class="acc-header">
+        <div class="acc-icon">☕</div>
+        <div class="acc-title">Espresso at Our Heart</div>
+        <div class="acc-arrow">▾</div>
+      </div>
+      <div class="acc-body">The Four Ms of espresso — coffee (Miscela), grinder (Macinazione), machine (Macchina), and barista (Mano) — and how each contributes to a perfect shot. Plus the crucial steps of grind, dose, tamp, and brew.</div>
+    </div>
+    <div class="acc-item" onclick="toggleAcc(this)">
+      <div class="acc-header">
+        <div class="acc-icon">🎨</div>
+        <div class="acc-title">The Craft of Latte Art</div>
+        <div class="acc-arrow">▾</div>
+      </div>
+      <div class="acc-body">The science of milk steaming, how to create perfect microfoam, common latte art problems and solutions, plus step-by-step guides to pouring hearts, tulips, and rosettas.</div>
+    </div>
+    <div class="acc-item" onclick="toggleAcc(this)">
+      <div class="acc-header">
+        <div class="acc-icon">🌊</div>
+        <div class="acc-title">Immersed in Brewing</div>
+        <div class="acc-arrow">▾</div>
+      </div>
+      <div class="acc-body">What extraction really is, how the Three Ts (temperature, time, turbulence) control flavor, the importance of proportion and grind, and how Starbucks brewing recipes ensure global consistency.</div>
+    </div>
+  </div>
+
+  <div class="fact-box">
+    <div class="fact-label">Starbucks Mission</div>
+    <strong>"To inspire and nurture the human spirit — one person, one cup and one neighborhood at a time."</strong>
+  </div>
+
+  <div class="chapter-nav-footer">
+    <button class="nav-btn" disabled>← Previous</button>
+    <button class="nav-btn primary" onclick="showChapter(1)">The Sensory World →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ CHAPTER 1: SENSORY WORLD -->
+<div class="chapter" id="ch1">
+  <div class="chapter-header">
+    <div class="chapter-num">Chapter 1</div>
+    <h2>The Sensory World of Coffee</h2>
+    <div class="subtitle">Sharpen your senses — they are the most powerful tools you own.</div>
+  </div>
+
+  <div class="prose">
+    <p>Our senses create depth and richness in our lives. We cannot turn them on and off, but we are not always consciously aware of them. When you develop sensory skills, you tell your brain that flavors, aromas, and textures matter.</p>
+    <p>Likes and dislikes are a valuable starting point, but once you expand your sensory vocabulary, you open yourself to a much richer experience. <strong>Anyone can become a coffee grader or sensory professional</strong> — the difference between your skills today and those of a professional taster is simply experience.</p>
+  </div>
+
+  <div class="callout">
+    <p>It's not about natural sensory skills, but rather the sensory awareness — or the passion to discover it. As our curiosity and ability to appreciate grow, so too does our enjoyment, because we become aware of truly what it is we love.</p>
+    <cite>— Doug Langworthy, Global Tea Quality</cite>
+  </div>
+
+  <div class="section-heading">The Four Steps of Coffee Tasting</div>
+  <div class="memory-steps">
+    <div class="mem-step">
+      <div class="mem-step-num">1</div>
+      <div class="mem-step-body">
+        <h4>Smell</h4>
+        <p>Bring freshly poured coffee close to your nose and take a few sniffs of the aroma. What do you notice — floral, fruity, herbal, chocolaty? Begin here before a sip.</p>
+      </div>
+    </div>
+    <div class="mem-step">
+      <div class="mem-step-num">2</div>
+      <div class="mem-step-body">
+        <h4>Slurp</h4>
+        <p>Take a proper slurp, aspirating the coffee across your entire palate. This introduces air and spreads the coffee across all your taste receptors and into your retronasal passage.</p>
+      </div>
+    </div>
+    <div class="mem-step">
+      <div class="mem-step-num">3</div>
+      <div class="mem-step-body">
+        <h4>Locate</h4>
+        <p>Where on your palate do you notice sensations? Acidity on the sides? Bitterness at the back? Sweetness at the tip? Body throughout your mouth? Focus on one aspect at a time.</p>
+      </div>
+    </div>
+    <div class="mem-step">
+      <div class="mem-step-num">4</div>
+      <div class="mem-step-body">
+        <h4>Describe</h4>
+        <p>Find language for what you taste. Compare the flavor to things you've experienced. Is it like dark chocolate? Ripe citrus? Toasted nuts? Building this vocabulary is the work of a lifetime.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-heading">Building a Sensory Memory</div>
+  <div class="prose">
+    <p>As you continue to taste coffee, you begin to draw parallels between what you're tasting now and coffees you've tasted before. You may be reminded of a fruit you once ate or an aroma you once smelled. Two coffees may both be chocolaty, but one might have a more intense milk chocolate quality while the other is more like a cocoa nib.</p>
+    <p>As you grow as a taster, you will find deeper nuances of flavor. Your ability to match customers with their own ideal coffees will grow. <strong>Training your sensory skills leads to an enhanced level of understanding, respect, and appreciation</strong> for the world of coffee.</p>
+  </div>
+
+  <div class="callout">
+    <p>Unless you are experienced with actual individual flavor components, you will not be able to call them out when you taste coffee. Broadening your general taste experience will give you a foundation for understanding the nuances that are hints of flavor.</p>
+    <cite>— Sergio Alvarez, Global Coffee Development</cite>
+  </div>
+
+  <div class="section-heading">How Starbucks Uses Sensory Skills</div>
+  <div class="accordion">
+    <div class="acc-item" onclick="toggleAcc(this)">
+      <div class="acc-header"><div class="acc-icon">✈️</div><div class="acc-title">Coffee Buyers at Origin</div><div class="acc-arrow">▾</div></div>
+      <div class="acc-body">Buyers cup offer and preshipment samples at origin — using their palates to approve or reject lots before they're shipped. Every bag of Starbucks coffee has been tasted by a trained sensory professional.</div>
+    </div>
+    <div class="acc-item" onclick="toggleAcc(this)">
+      <div class="acc-header"><div class="acc-icon">🔬</div><div class="acc-title">Research & Development Team</div><div class="acc-arrow">▾</div></div>
+      <div class="acc-body">The R&D team uses sensory skills to validate cup profiles to Starbucks standards and to develop new beverages and food platforms — everything that shows up in stores every day, around the globe.</div>
+    </div>
+    <div class="acc-item" onclick="toggleAcc(this)">
+      <div class="acc-header"><div class="acc-icon">🔥</div><div class="acc-title">Master Roasters</div><div class="acc-arrow">▾</div></div>
+      <div class="acc-body">Roasters use sensory skills to find new and interesting flavors and to decide and develop the full flavor expression of a coffee — including blending recipes and roasting profiles.</div>
+    </div>
+    <div class="acc-item" onclick="toggleAcc(this)">
+      <div class="acc-header"><div class="acc-icon">🍵</div><div class="acc-title">Global Tea Quality Team</div><div class="acc-arrow">▾</div></div>
+      <div class="acc-body">Sensory skills are used in assessing the quality of tea and botanical components, and to develop new tea blends or maintain the flavor profiles of favorite offerings.</div>
+    </div>
+  </div>
+
+  <div class="section-heading">The Coffee Passport</div>
+  <div class="fact-box">
+    <div class="fact-label">Your Tool for Sensory Journeys</div>
+    The Starbucks Coffee Passport is part guide, part journal. Each time you taste a coffee you "visit" a different place of origin — learning about the geography, culture, people, and places associated with that coffee. Think of it as capturing who you were as a coffee lover, who you are now, and where you're headed. There's no right or wrong approach — as long as you are recording your experiences tasting coffees.
+  </div>
+
+  <!-- QUIZ 1 -->
+  <div id="quiz1"></div>
+
+  <div class="chapter-nav-footer">
+    <button class="nav-btn" onclick="showChapter(0)">← Introduction</button>
+    <button class="nav-btn primary" onclick="showChapter(2)">Taste, Aroma & Flavor →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ CHAPTER 2: TASTE, AROMA, FLAVOR -->
+<div class="chapter" id="ch2">
+  <div class="chapter-header">
+    <div class="chapter-num">Chapter 2</div>
+    <h2>Taste, Aroma &amp; Flavor</h2>
+    <div class="subtitle">Flavor is what our brains create when aroma and taste combine.</div>
+  </div>
+
+  <div class="section-heading">The Anatomy of Flavor</div>
+  <div class="prose">
+    <p>Although the words <em>flavor</em> and <em>taste</em> are used interchangeably in conversation, they are two different concepts. <strong>Taste</strong> is the sensation that happens in your mouth — primarily on your tongue. <strong>Flavor</strong> is how your brain synthesizes taste data with aroma data to form a complete experience.</p>
+    <p>You can test this yourself: pinch your nose and take a slurp of Pike Place® Roast. You'll detect sensations on your tongue, but the chocolaty and nutty flavors will be nowhere to be found. Release your nose — and suddenly the full flavor of cocoa and toasted nuts returns.</p>
+  </div>
+
+  <div class="fact-box">
+    <div class="fact-label">The Retronasal Passage</div>
+    You can smell food from <em>inside your mouth</em>. The airway that connects your nasal and oral cavities — the <strong>retronasal passage</strong> — allows aromatic compounds to be "smelled" from the mouth. This retronasal olfaction is what makes the perception of flavor possible. It's why slurping coffee loudly (and aspirating it across your palate) is not rude — it's professional.
+  </div>
+
+  <div class="section-heading">The Five Basic Tastes</div>
+  <p style="font-size:14px;color:var(--muted);margin-bottom:1rem;">Tap each taste to learn more about it and how it shows up in coffee.</p>
+  <div class="taste-grid" id="tasteGrid">
+    <div class="taste-card" onclick="toggleTaste(this)">
+      <div class="taste-emoji">🍯</div>
+      <div class="taste-name">Sweet</div>
+      <div class="taste-desc">Indicates sugars are present — elementally pleasurable.</div>
+      <div class="taste-detail">Sweetness signals energy (sugars like fructose, glucose, lactose). In coffee, the natural sweetness of well-roasted beans and quality milk comes from sugars that caramelize during roasting. A balanced, well-extracted espresso should taste <strong>smooth and sweet</strong>.</div>
+    </div>
+    <div class="taste-card" onclick="toggleTaste(this)">
+      <div class="taste-emoji">🍋</div>
+      <div class="taste-name">Sour</div>
+      <div class="taste-desc">Caused by acids — citric, phosphoric, acetic.</div>
+      <div class="taste-detail">Many different organic acids contribute to sour tastes. Citric acid (bright, citrus-like), phosphoric acid (tingly), and acetic acid (sharp, vinegar-like) all play roles in coffee acidity. <strong>Under-extracted coffee tastes sour</strong> — this is a key diagnosis tool for baristas.</div>
+    </div>
+    <div class="taste-card" onclick="toggleTaste(this)">
+      <div class="taste-emoji">☕</div>
+      <div class="taste-name">Bitter</div>
+      <div class="taste-desc">Our brains evolved to detect toxins — but in small doses, it's fascinating.</div>
+      <div class="taste-detail">A little bitterness makes many things interesting — dark chocolate, kale, coffee, and tea. Caffeine lends coffee some of its pleasant slight bitterness. <strong>Over-extracted coffee tastes bitter</strong> — the opposite of sour — so knowing the difference helps you diagnose brewing problems.</div>
+    </div>
+    <div class="taste-card" onclick="toggleTaste(this)">
+      <div class="taste-emoji">🧂</div>
+      <div class="taste-name">Salty</div>
+      <div class="taste-desc">Primarily sodium and mineral salts.</div>
+      <div class="taste-detail">In coffee, salinity comes from mineral content in the water used for brewing. The water chemistry in your store's filtration system is tuned to ensure the right mineral balance — enough to extract great flavor, but not so much as to taste overtly salty or mineral-heavy.</div>
+    </div>
+    <div class="taste-card" onclick="toggleTaste(this)">
+      <div class="taste-emoji">🥩</div>
+      <div class="taste-name">Umami</div>
+      <div class="taste-desc">Japanese for "delicious taste" — rich, savory amino acids.</div>
+      <div class="taste-detail">Umami is a substantial, rich, savory taste from amino acids in proteins. It can come from cooking, curing, or aging. In coffee, certain complex roasting compounds can contribute subtle savory or round, full qualities that add depth to the overall flavor profile — especially in aged coffees or certain origins.</div>
+    </div>
+  </div>
+
+  <div class="fact-box">
+    <div class="fact-label">The Tongue "Map" Myth</div>
+    You may have seen a diagram showing sweet is tasted on the tip of the tongue and bitter on the back. This is a misunderstanding of a study published around 1901 — it was never intended to show where you tasted, but rather the different "thresholds for taste perception." In reality, <strong>all taste buds have a mixture of receptor cells and can perceive all five tastes</strong>, though some areas are slightly more sensitive to certain tastes than others.
+  </div>
+
+  <div class="section-heading">Aroma: A Trillion Scents</div>
+  <div class="prose">
+    <p>Inside every nose are approximately <strong>six million olfactory receptors</strong> (a dog has 300 million, but has a harder time holding a cupping spoon). Through the instantaneous mapping of aromatic molecules to the olfactory bulb, humans can differentiate about a <strong>trillion different scents</strong>.</p>
+    <p>The aroma of coffee is made up of many different singular aromas. A Kenyan coffee might have a bouquet of grapefruit, raspberry, and lemon zest. A wet-hulled Indonesian coffee may feature aromatic notes of green herbs and molasses. One of the challenges of developing sensory skills is breaking down a complex bouquet into its singular scents.</p>
+    <p>The olfactory bulb is located close to the regions of the brain that process <strong>memory and emotions</strong>. This is why smell, more than any other sense, triggers powerful memories. The next time you taste a coffee and are reminded of Sunday mornings with your grandmother, congratulate your olfactory perceptions on their "scent-memory" capabilities.</p>
+  </div>
+
+  <div class="section-heading">The Coffee Taster's Flavor Wheel</div>
+  <div class="prose"><p>Created by the Specialty Coffee Association and World Coffee Research, and most recently updated in 2016, the Flavor Wheel is one of the most iconic resources in the coffee industry. Start at the innermost ring and work outward. Tap a category to explore it.</p></div>
+
+  <div class="flavor-wheel-wrap">
+    <div class="flavor-categories" id="flavorCats">
+      <button class="flavor-cat-btn active" onclick="showFlavor(this,'sweet')">Sweet</button>
+      <button class="flavor-cat-btn" onclick="showFlavor(this,'floral')">Floral</button>
+      <button class="flavor-cat-btn" onclick="showFlavor(this,'fruity')">Fruity</button>
+      <button class="flavor-cat-btn" onclick="showFlavor(this,'sour')">Sour/Fermented</button>
+      <button class="flavor-cat-btn" onclick="showFlavor(this,'green')">Green/Vegetative</button>
+      <button class="flavor-cat-btn" onclick="showFlavor(this,'nutty')">Nutty/Cocoa</button>
+      <button class="flavor-cat-btn" onclick="showFlavor(this,'spices')">Spices</button>
+      <button class="flavor-cat-btn" onclick="showFlavor(this,'roasted')">Roasted</button>
+    </div>
+    <div class="flavor-detail-panel" id="flavorPanel">
+      <h4>Sweet</h4>
+      <p>The sweet aromatics in coffee come from caramelized sugars developed during roasting. Sweet coffee can have notes of vanilla, brown sugar, honey, caramel, maple syrup, or molasses.</p>
+      <div class="flavor-tags">
+        <span class="flavor-tag">Vanilla</span>
+        <span class="flavor-tag">Brown Sugar</span>
+        <span class="flavor-tag">Honey</span>
+        <span class="flavor-tag">Caramelized</span>
+        <span class="flavor-tag">Maple Syrup</span>
+        <span class="flavor-tag">Molasses</span>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-heading">The Art of Pairing</div>
+  <div class="prose">
+    <p>Food pairings can transform the experience of a coffee, completing it or even making it greater than the sum of its parts. Coffee flavors can be drawn out or enhanced when paired with certain foods.</p>
+  </div>
+  <div class="accordion">
+    <div class="acc-item" onclick="toggleAcc(this)">
+      <div class="acc-header"><div class="acc-icon">🤝</div><div class="acc-title">Complementary Pairings</div><div class="acc-arrow">▾</div></div>
+      <div class="acc-body">The coffee and food enhance <em>similar</em> qualities in each other, and neither dominates. Example: pairing an herbal Sumatran coffee with a savory breakfast sandwich, or a bright Kenyan coffee with a lemon loaf cake. The flavors echo and amplify each other.</div>
+    </div>
+    <div class="acc-item" onclick="toggleAcc(this)">
+      <div class="acc-header"><div class="acc-icon">⚡</div><div class="acc-title">Contrasting Pairings</div><div class="acc-arrow">▾</div></div>
+      <div class="acc-body">Contrasting flavors combine to create a <em>new</em> experience. More challenging, but when successful the entire tasting experience is improved. Example: intense, roasty-sweet espresso with creamy vanilla ice cream. This pairing is about how together they form a surprising new taste — not echoing similarities.</div>
+    </div>
+  </div>
+
+  <!-- QUIZ 2 -->
+  <div id="quiz2"></div>
+
+  <div class="chapter-nav-footer">
+    <button class="nav-btn" onclick="showChapter(1)">← Sensory World</button>
+    <button class="nav-btn primary" onclick="showChapter(3)">Espresso →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ CHAPTER 3: ESPRESSO -->
+<div class="chapter" id="ch3">
+  <div class="chapter-header">
+    <div class="chapter-num">Chapter 3</div>
+    <h2>Espresso at Our Heart</h2>
+    <div class="subtitle">A small cup of concentrated magic — at the center of everything we make.</div>
+  </div>
+
+  <div class="prose">
+    <p>Espresso is a small cup of concentrated, aromatic, and intense coffee. As it brews, the machine's pressure forces very hot water to pass quickly through finely ground coffee. An extraordinarily unique brew, high-quality espresso is at the heart of many of our favorite handcrafted beverages.</p>
+    <p>Starbucks did not introduce espresso beverages until opening its sixth store in 1984. Although today espresso machines can be found most everywhere — in restaurants, cafés, even car dealerships — they are relative newcomers. The legendary history of coffee itself goes all the way back to the 9th century, but espresso is a modern innovation.</p>
+  </div>
+
+  <div class="section-heading">The Four Ms of Espresso</div>
+  <p style="font-size:14px;color:var(--muted);margin-bottom:1rem;">Brewing great espresso is like a well-choreographed dance. Tap each element to explore it.</p>
+
+  <div class="four-ms">
+    <div class="m-card" onclick="toggleM(this)">
+      <div class="m-letter">M</div>
+      <div class="m-title">The Coffee</div>
+      <div class="m-italian">Miscela (mee-SHAY-lah)</div>
+      <div class="m-body">Quality espresso is only ever as good as the quality of the coffee itself. Every Starbucks® espresso uses high-quality arabica beans. Our ideal flavor profile for espresso is <strong>smooth and sweet</strong>. Not all coffees make great espresso — the high-pressure quick-brew process concentrates flavors, and sharper edges that are interesting in a brewed cup can be negatively amplified as espresso. Some coffees that are delightful as espresso alone may also lose their nuances when combined with steamed milk.</div>
+    </div>
+    <div class="m-card" onclick="toggleM(this)">
+      <div class="m-letter">M</div>
+      <div class="m-title">The Grinder</div>
+      <div class="m-italian">Macinazione (mah-cheenaht-see-OH-nay)</div>
+      <div class="m-body">A high-quality burr grinder is especially critical for espresso due to the very small grind size required. Espresso grinders make <strong>micro-adjustments</strong> — the sharp burrs inside cut coffee beans into a consistent size immediately before brewing. Grinder maintenance matters: burrs dull like a kitchen knife, causing inconsistent grind size and off-flavors. Regular cleaning of the grinder protects equipment and upholds quality.</div>
+    </div>
+    <div class="m-card" onclick="toggleM(this)">
+      <div class="m-letter">M</div>
+      <div class="m-title">The Machine</div>
+      <div class="m-italian">Macchina (MAH-kee-nah)</div>
+      <div class="m-body">Only an espresso machine can create the <strong>nine bars of pressure</strong> needed for true espresso. The earliest machines used a large lever; today a button activates an electric pump — but baristas still call it "pulling a shot." Modern machines set water temperature and brew pressure and guarantee consistency from the first beverage of the morning through peak rush. Starbucks uses machines from the super-automatic Mastrena® to the more hands-on Black Eagle.</div>
+    </div>
+    <div class="m-card" onclick="toggleM(this)">
+      <div class="m-letter">M</div>
+      <div class="m-title">The Barista</div>
+      <div class="m-italian">Mano (MAH-no)</div>
+      <div class="m-body">Mano means "hand" in Italian — and that says it all. <strong>It is the barista who ultimately owns espresso quality.</strong> The machine is a tool; it's the hands using the tool that make it sing. A good barista knows how espresso should look, taste, and feel in the mouth — the perfectly flowing shot should resemble warm honey pouring from a spoon. Once pulled, the barista must immediately serve or incorporate the shot, as flavor changes and crema dissipates with every passing moment.</div>
+    </div>
+  </div>
+
+  <div class="fact-box">
+    <div class="fact-label">The Fifth Element: Water</div>
+    There is a fifth key element not starting with "M": <strong>water</strong>. If the water doesn't taste good, neither will the espresso. Fresh, filtered, odor-free water minimizes service calls and extends machine life — incorrect water chemistry can corrode equipment or cause mineral buildup (scaling) inside machines. Every store has an individualized water treatment system based on on-site quality tests.
+  </div>
+
+  <div class="section-heading">Consistent Steps to Espresso Excellence</div>
+  <p style="font-size:14px;color:var(--muted);margin-bottom:1rem;">No matter what machine is used, espresso preparation always follows the same four-step process.</p>
+
+  <div class="steps-visual">
+    <div class="step-tab active" onclick="showStep(this,0)"><div class="step-num">Step 1</div><div class="step-name">Grind</div></div>
+    <div class="step-tab" onclick="showStep(this,1)"><div class="step-num">Step 2</div><div class="step-name">Dose</div></div>
+    <div class="step-tab" onclick="showStep(this,2)"><div class="step-num">Step 3</div><div class="step-name">Tamp</div></div>
+    <div class="step-tab" onclick="showStep(this,3)"><div class="step-num">Step 4</div><div class="step-name">Brew</div></div>
+  </div>
+  <div class="step-detail" id="stepDetail">
+    <h4>Grind</h4>
+    <p>Fresh beans are finely ground to the correct particle size <em>immediately before brewing</em>. For the Black Eagle & Mythos, stainless-steel flat burrs grind to a consistent size — the barista sets particle size by watching shot time and tasting. The grinder has stepless adjustments for micro-correction. For the Mastrena®, a computerized system monitors shot time and automatically adjusts grind size for optimum extraction.</p>
+  </div>
+
+  <div class="section-heading">A Short History of Espresso</div>
+  <div class="prose">
+    <p>The first steam espresso machine received a patent in Turin, Italy, in 1884 as "new steam machinery for the economic and instantaneous confection of coffee beverages." These early machines used a large steam boiler to force hot water through "pucks" of coffee — fast and prolific, but less elegant than today's espresso, often over-extracted and quite bitter, with fewer than two bars of pressure (modern machines use around five times as much).</p>
+    <p>Over the next century, espresso machine innovation created boilers that could generate the pressure needed for the beverage we now know. The innovation is ongoing — today espresso is made on many different machines, in different styles, but all follow the same essential process.</p>
+  </div>
+
+  <!-- QUIZ 3 -->
+  <div id="quiz3"></div>
+
+  <div class="chapter-nav-footer">
+    <button class="nav-btn" onclick="showChapter(2)">← Taste & Flavor</button>
+    <button class="nav-btn primary" onclick="showChapter(4)">Latte Art →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ CHAPTER 4: LATTE ART -->
+<div class="chapter" id="ch4">
+  <div class="chapter-header">
+    <div class="chapter-num">Chapter 4</div>
+    <h2>The Craft of Latte Art</h2>
+    <div class="subtitle">Expertly steamed milk and quality espresso become your creative tools.</div>
+  </div>
+
+  <div class="prose">
+    <p>Espresso culture was born in Italy. As love for espresso expanded around the world, skilled and curious baristas began to experiment with how they poured steamed milk — noticing that with practice, they could craft designs out of creamy foam. The first beverage decorated with the iconic rosetta design was poured at Espresso Vivace in Seattle in 1992.</p>
+    <p>When a customer sees a barista mark a cap of foam with a handcrafted design, they see the high level of care being brought to their beverage. More than ever, customers love sharing pictures of their ornately decorated cups. With the rise of social media, #latteart is inspiring baristas around the globe to master new designs.</p>
+  </div>
+
+  <div class="section-heading">It Begins with Milk</div>
+  <div class="prose">
+    <p>Latte art is made possible only with correctly steamed and textured milk. Milk is made up of a complex mix of three components: <strong>sugars, fats, and proteins</strong>. Each plays an important role in milk steaming.</p>
+  </div>
+
+  <div class="accordion">
+    <div class="acc-item" onclick="toggleAcc(this)">
+      <div class="acc-header"><div class="acc-icon">🍬</div><div class="acc-title">Sugar — The Source of Sweetness</div><div class="acc-arrow">▾</div></div>
+      <div class="acc-body">The primary source of milk's natural sweetness is <strong>lactose</strong>. Temperature affects taste — the human tongue is more sensitive to sweetness when food or drink is warm. When milk is heated during steaming, the lactose tastes sweeter. But if milk gets too hot, lactose interacts with other components, loses sweetness, and creates unpleasant flavor compounds associated with scalding. The <strong>ideal steaming temperature for adults is 150°–170°F (66°–77°C)</strong>.</div>
+    </div>
+    <div class="acc-item" onclick="toggleAcc(this)">
+      <div class="acc-header"><div class="acc-icon">🧴</div><div class="acc-title">Fat — The Source of Creaminess</div><div class="acc-arrow">▾</div></div>
+      <div class="acc-body">Fat is the source of milk's naturally rich creaminess. Whole milk used in stores is about <strong>4.5% milk fat</strong>; nonfat milk is 0%. Fat helps stabilize the structure of microfoam — the creamy, pourable foam necessary for latte art. A microfoam made with whole milk will be creamier and more luscious, while nonfat milk creates a slightly drier, stiffer foam. Both can be used to create latte art with practice.</div>
+    </div>
+    <div class="acc-item" onclick="toggleAcc(this)">
+      <div class="acc-header"><div class="acc-icon">🧬</div><div class="acc-title">Protein — The Structure Builder</div><div class="acc-arrow">▾</div></div>
+      <div class="acc-body">The caseins and whey proteins in milk play crucial roles in steaming. As air is introduced through the steam wand, the milk's proteins create a thin film around the surface of the bubbles, forming the structure needed for foam. These same proteins make whipped cream and cold foam possible. Different milks have different protein contents, affecting each milk's ability to maintain velvety microfoam.</div>
+    </div>
+  </div>
+
+  <div class="section-heading">The Milk Steaming Routine</div>
+  <div class="memory-steps">
+    <div class="mem-step">
+      <div class="mem-step-num">1</div>
+      <div class="mem-step-body">
+        <h4>Into the Pitcher — Start with Cold Milk</h4>
+        <p>Pour the correct volume of cold milk for the beverage. Starting with cold milk gives the barista more time to reach the perfect aeration level before the milk gets too hot. Too much milk → under-aeration to avoid overflow. Too little → over-aeration to compensate.</p>
+      </div>
+    </div>
+    <div class="mem-step">
+      <div class="mem-step-num">2</div>
+      <div class="mem-step-body">
+        <h4>Aerate First</h4>
+        <p>Introduce air into the cold milk ("stretching") before steaming to final temperature. Aerating must happen below 100°F (38°C) — once proteins denature above this point, they can no longer smoothly combine into foam. A good gauge: when the pitcher feels similar in temperature to your palm (~98.6°F), stop aerating. Listen for the sound of ripping paper as a sign of proper aeration.</p>
+      </div>
+    </div>
+    <div class="mem-step">
+      <div class="mem-step-num">3</div>
+      <div class="mem-step-body">
+        <h4>Correct Steam Wand Placement</h4>
+        <p>Place the tip of the steam wand off-center and just under the surface of the milk. Too high → big useless bubbles. Too low → simply hot milk with no foam. After aeration, guide the wand deeper to create a whirlpool motion — this keeps small bubbles evenly incorporated, creating the glossy, wet-paint texture needed for latte art.</p>
+      </div>
+    </div>
+    <div class="mem-step">
+      <div class="mem-step-num">4</div>
+      <div class="mem-step-body">
+        <h4>Steam to Temperature, Then Pour</h4>
+        <p>Complete steaming to 150°–170°F. Swirl the pitcher to mix milk and foam. The glossy, smooth microfoam is buoyant — it floats gracefully on top of the espresso. This buoyancy is what allows a latte or cappuccino to have that beautiful crown of foam.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-heading">Troubleshooting Milk Texture</div>
+  <div class="trouble-grid">
+    <div class="trouble-card" onclick="toggleTrouble(this)">
+      <div class="trouble-header">
+        <div class="trouble-dot" style="background:#cc4400"></div>
+        <div class="trouble-title">Under-Aerated Milk</div>
+        <div class="trouble-badge" style="background:rgba(204,68,0,0.1);color:#cc4400">Problem</div>
+      </div>
+      <div class="trouble-body">
+        <p class="problem"><strong>Problem:</strong> Watery texture that will not hold a latte art design. Milk does not have quality microfoam.</p>
+        <p class="solution"><strong>Solution:</strong> Follow the Milk Steaming Routine. During aeration, listen for the sound of ripping paper and make sure the volume of milk grows. If aeration isn't happening correctly, try adjusting the steam wand tip to be closer to the surface.</p>
+      </div>
+    </div>
+    <div class="trouble-card" onclick="toggleTrouble(this)">
+      <div class="trouble-header">
+        <div class="trouble-dot" style="background:#8B4513"></div>
+        <div class="trouble-title">Over-Aerated Milk</div>
+        <div class="trouble-badge" style="background:rgba(139,69,19,0.1);color:#8B4513">Problem</div>
+      </div>
+      <div class="trouble-body">
+        <p class="problem"><strong>Problem:</strong> Large bubbles, lacks shine. Too stiff to pour latte art because too much air has been introduced.</p>
+        <p class="solution"><strong>Solution:</strong> During aeration, listen for the sound of ripping paper — you might be aerating too long. If large bubbles are blown in during aeration, the steam wand tip might not be fully submerged. Adjust it to be slightly deeper.</p>
+      </div>
+    </div>
+    <div class="trouble-card" onclick="toggleTrouble(this)">
+      <div class="trouble-header">
+        <div class="trouble-dot" style="background:#5a3e28"></div>
+        <div class="trouble-title">Separated Milk</div>
+        <div class="trouble-badge" style="background:rgba(90,62,40,0.1);color:#5a3e28">Problem</div>
+      </div>
+      <div class="trouble-body">
+        <p class="problem"><strong>Problem:</strong> Although milk was correctly textured, as you go to pour, steamed milk comes out first, followed by stiff foam. The microfoam has separated from the milk.</p>
+        <p class="solution"><strong>Solution:</strong> Even correctly textured milk will separate over time as foam rises. Groom your milk by swirling the pitcher to mix the milk and foam to maintain a smooth, velvety texture. Pour promptly after steaming.</p>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-heading">Latte Art Designs</div>
+  <p style="font-size:14px;color:var(--muted);margin-bottom:1rem;">Master in this order: dot → heart → tulip → rosetta. Tap a design to see the steps.</p>
+  <div class="latte-designs">
+    <div class="design-card" onclick="toggleDesign(this)">
+      <div class="design-art">🤍</div>
+      <div class="design-name">Heart</div>
+      <div class="design-level">Foundation</div>
+      <div class="design-steps">
+        <div class="design-step"><div class="design-step-num">1</div><span>From a distance, pour a thin stream into the deepest part of the espresso until cup is half full.</span></div>
+        <div class="design-step"><div class="design-step-num">2</div><span>Bring the pitcher close to the surface. Increase flow to lay a wide dot of foam in the center — this is your heart base.</span></div>
+        <div class="design-step"><div class="design-step-num">3</div><span>As the cup nears full, tilt the spout back and draw a thin stream straight through the center of the dot, pulling it into a heart shape.</span></div>
+      </div>
+    </div>
+    <div class="design-card" onclick="toggleDesign(this)">
+      <div class="design-art">🌷</div>
+      <div class="design-name">Tulip</div>
+      <div class="design-level">Intermediate</div>
+      <div class="design-steps">
+        <div class="design-step"><div class="design-step-num">1</div><span>From a distance, pour until cup is half to two-thirds full.</span></div>
+        <div class="design-step"><div class="design-step-num">2</div><span>Bring pitcher close. Increase flow to lay a dot of foam in the center. Tilt pitcher away, cleanly breaking the stream.</span></div>
+        <div class="design-step"><div class="design-step-num">3</div><span>Repeat — pour another dot, pushing the next layer into the first, shaping the tulip. Add additional layers as desired.</span></div>
+        <div class="design-step"><div class="design-step-num">4</div><span>On your last layer, draw a pencil-thin stream straight through the design toward the cup's edge — pulling the dot into a beautiful stacked tulip.</span></div>
+      </div>
+    </div>
+    <div class="design-card" onclick="toggleDesign(this)">
+      <div class="design-art">🌿</div>
+      <div class="design-name">Rosetta</div>
+      <div class="design-level">Advanced</div>
+      <div class="design-steps">
+        <div class="design-step"><div class="design-step-num">1</div><span>From a distance, pour until cup is half to two-thirds full.</span></div>
+        <div class="design-step"><div class="design-step-num">2</div><span>Bring pitcher close. Increase flow and begin a side-to-side motion — this creates the rippled base of the rosetta.</span></div>
+        <div class="design-step"><div class="design-step-num">3</div><span>Move the pitcher backwards while continuing the side-to-side motion — this forms the leaves of the rosetta.</span></div>
+        <div class="design-step"><div class="design-step-num">4</div><span>Once at the back of the cup, hold position and lay foam to create the top heart of the rosetta.</span></div>
+        <div class="design-step"><div class="design-step-num">5</div><span>Draw a pencil-thin stream straight through the design toward the cup's edge — this draws the final rosetta line.</span></div>
+      </div>
+    </div>
+  </div>
+
+  <div class="section-heading">Common Latte Art Problems</div>
+  <div class="accordion">
+    <div class="acc-item" onclick="toggleAcc(this)">
+      <div class="acc-header"><div class="acc-icon">🔬</div><div class="acc-title">Design Is Too Small</div><div class="acc-arrow">▾</div></div>
+      <div class="acc-body"><strong>Problem:</strong> Good contrast but very small design. <br><strong>Solution:</strong> Begin laying white foam earlier — bring the pitcher close to the surface sooner so the design has more time and milk to grow and fill the cup.</div>
+    </div>
+    <div class="acc-item" onclick="toggleAcc(this)">
+      <div class="acc-header"><div class="acc-icon">📐</div><div class="acc-title">Design Is Off-Center</div><div class="acc-arrow">▾</div></div>
+      <div class="acc-body"><strong>Problem:</strong> Good contrast but design is to one side. <br><strong>Solution:</strong> The location of the pitcher and stream of milk determines where the design will be. For a centered, symmetrical design, keep the stream of milk in the center of the cup.</div>
+    </div>
+    <div class="acc-item" onclick="toggleAcc(this)">
+      <div class="acc-header"><div class="acc-icon">👻</div><div class="acc-title">Vanishing Latte Art</div><div class="acc-arrow">▾</div></div>
+      <div class="acc-body"><strong>Problem:</strong> White latte art vanishes as the cup fills. <br><strong>Solution:</strong> Pouring from a distance pulls white foam down under the surface. Keep the spout as close to the surface as possible. If tilting the cup, move the pitcher and cup together as the beverage fills — flattening the cup without moving the pitcher increases distance and causes designs to shrink and vanish.</div>
+    </div>
+    <div class="acc-item" onclick="toggleAcc(this)">
+      <div class="acc-header"><div class="acc-icon">💨</div><div class="acc-title">Ghosting & Poor Contrast</div><div class="acc-arrow">▾</div></div>
+      <div class="acc-body"><strong>Problem:</strong> Beige splotches instead of crisp white-on-brown contrast. <br><strong>Solution:</strong> If you hit the side of the cup or pour too aggressively, milk splashes and causes "ghosts." Pour a thin stream of textured milk into the deepest part of the espresso (the "pin drop") so milk cleanly dives under the surface. To correct existing ghosting, pour a thin stream in a spiral motion over the ghosted areas to pull the splotches back under the espresso.</div>
+    </div>
+  </div>
+
+  <!-- QUIZ 4 -->
+  <div id="quiz4"></div>
+
+  <div class="chapter-nav-footer">
+    <button class="nav-btn" onclick="showChapter(3)">← Espresso</button>
+    <button class="nav-btn primary" onclick="showChapter(5)">Brewing →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ CHAPTER 5: BREWING -->
+<div class="chapter" id="ch5">
+  <div class="chapter-header">
+    <div class="chapter-num">Chapter 5</div>
+    <h2>Immersed in Brewing</h2>
+    <div class="subtitle">The power to bring it all to life is in your hands — literally.</div>
+  </div>
+
+  <div class="prose">
+    <p>Before a coffee reaches your store, time and effort have been invested all along the supply chain — farmers, mill workers, quality teams, roasters, and blenders. But one more pair of hands is needed to bring to full life all the beans' quality and rich flavor: yours.</p>
+    <p>This transformation is a unique responsibility of the barista. Unlike a winemaker who curates flavor from vine to bottle, it is the job of the barista to take what the master roasters and blenders envisioned and — with your own expertise — work that final magic. And it must be done right.</p>
+  </div>
+
+  <div class="section-heading">What Is Extraction?</div>
+  <div class="prose">
+    <p>Inside each coffee bean there are many different flavor and aromatic compounds. These are drawn out at different times in the brewing process — some pleasing, others not. This process is called <strong>extraction</strong>. Coffee is chemically complex — around 900 chemicals are extracted during brewing, and technically about 30% of the roasted bean is water-soluble. But not all that can be extracted should be.</p>
+  </div>
+
+  <div class="extraction-visual">
+    <div class="extraction-title">Extraction: Finding the Sweet Spot — Tap each zone</div>
+    <div class="ext-zones">
+      <div class="ext-zone ext-under" onclick="showExtZone(this,'under')">
+        <div class="ext-zone-label">Under</div>
+        <div class="ext-zone-name">Extracted</div>
+      </div>
+      <div class="ext-zone ext-ideal" onclick="showExtZone(this,'ideal')">
+        <div class="ext-zone-label">Ideal</div>
+        <div class="ext-zone-name">18–22%</div>
+      </div>
+      <div class="ext-zone ext-over" onclick="showExtZone(this,'over')">
+        <div class="ext-zone-label">Over</div>
+        <div class="ext-zone-name">Extracted</div>
+      </div>
+    </div>
+    <div class="ext-desc" id="extDesc">The most pleasing flavors are found with <strong>18%–22% extraction</strong>. This is the target range that Starbucks R&D has validated with both measurement tools (refractometers) and sensory analysis. Click on any zone above to explore what it tastes like.</div>
+  </div>
+
+  <div class="section-heading">Brewing Variables</div>
+  <p style="font-size:14px;color:var(--muted);margin-bottom:1rem;">Each brewing variable affects how much extraction occurs and what ends up in your cup. Tap to explore.</p>
+
+  <div class="brew-vars">
+    <div class="bvar" onclick="toggleBvar(this)">
+      <div class="bvar-header">
+        <div class="bvar-icon">⚖️</div>
+        <div class="bvar-title">Proportion / Brew Ratio</div>
+        <div class="bvar-arrow">▾</div>
+      </div>
+      <div class="bvar-body">
+        Using the correct proportion of water to coffee is one of the Four Fundamentals of brewing. <strong>Starbucks recommends a brew ratio of 18:1</strong> (water-to-coffee) — calculated as 6 fl oz of water per 2 tablespoon scoop of coffee. The lower the ratio, the stronger the beverage; the higher the ratio, the weaker. Changing the ratio affects both strength <em>and</em> extraction. Across the industry, ratios of 16:1 to 18:1 produce a pleasant strength agreeable to most customers.
+      </div>
+    </div>
+    <div class="bvar" onclick="toggleBvar(this)">
+      <div class="bvar-header">
+        <div class="bvar-icon">⚙️</div>
+        <div class="bvar-title">The Grind</div>
+        <div class="bvar-arrow">▾</div>
+      </div>
+      <div class="bvar-body">
+        Grinding increases the surface area of coffee, allowing water to pass through the beans and pull out flavor compounds. <strong>Finer grind → more surface area → faster extraction.</strong> Coarser grind → less surface area → slower extraction. There is no universally ideal grind size — the key is choosing the right grind for your brewing method. Ground coffee oxidizes quickly, so always grind immediately before brewing. A coffee bean's surface area increases more than 10,000 times when finely ground for espresso — no wonder espresso can extract in about 20 seconds!
+      </div>
+    </div>
+    <div class="bvar" onclick="toggleBvar(this)">
+      <div class="bvar-header">
+        <div class="bvar-icon">🌡️</div>
+        <div class="bvar-title">Temperature</div>
+        <div class="bvar-arrow">▾</div>
+      </div>
+      <div class="bvar-body">
+        Coffee extraction happens at different rates given different water temperatures. Too hot → extraction happens very quickly. Cold water → very slow extraction. This is why cold brew takes ~20 hours using a coarse grind, while a hot press takes only 4 minutes with the same grind. Starbucks stores use filtered water at the precisely correct temperature — every single brew.
+      </div>
+    </div>
+    <div class="bvar" onclick="toggleBvar(this)">
+      <div class="bvar-header">
+        <div class="bvar-icon">⏱️</div>
+        <div class="bvar-title">Time (Contact Time)</div>
+        <div class="bvar-arrow">▾</div>
+      </div>
+      <div class="bvar-body">
+        As long as coffee is in contact with water, extraction is underway. In a coffee press, the barista controls contact time by plunging. In a pour-over, time is controlled by gravity, filter type, and grind size resistance. The brewing recipe specifies exactly how long to brew for optimal extraction.
+      </div>
+    </div>
+    <div class="bvar" onclick="toggleBvar(this)">
+      <div class="bvar-header">
+        <div class="bvar-icon">🌀</div>
+        <div class="bvar-title">Turbulence</div>
+        <div class="bvar-arrow">▾</div>
+      </div>
+      <div class="bvar-body">
+        Turbulence is the mixing action created as water passes over and through coffee. It can be caused by movement from a brew head, kettle, or manual agitation. <strong>Turbulence increases extraction</strong> — too much can lead to over-extraction. When using a pour-over, pouring too quickly causes excess agitation; too slowly can cause drips and splashes. The recipe guides you to pour a steady, even stream that generates just the right amount of turbulence.
+      </div>
+    </div>
+  </div>
+
+  <div class="section-heading">The Three Key Brewing Ingredients</div>
+  <div class="accordion">
+    <div class="acc-item" onclick="toggleAcc(this)">
+      <div class="acc-header"><div class="acc-icon">🫘</div><div class="acc-title">Coffee — Just the Right Degree of Fresh</div><div class="acc-arrow">▾</div></div>
+      <div class="acc-body">To brew a great cup, start with fresh-tasting beans. Stale coffee has lost much of its aroma and acidity — volatile compounds degrade over time, leaving dull, cardboard-like flavors. <strong>Starbucks recommends using coffee within one week of opening its FlavorLock™ bag.</strong> However, coffee that is <em>too</em> fresh (just roasted) is also problematic — the naturally built-up gases rush out when wetted, making it difficult to extract the right flavor compounds. Wait one week after roasting before brewing.</div>
+    </div>
+    <div class="acc-item" onclick="toggleAcc(this)">
+      <div class="acc-header"><div class="acc-icon">💧</div><div class="acc-title">Water — The Perfect, Good-Tasting Balance</div><div class="acc-arrow">▾</div></div>
+      <div class="acc-body">A cup of coffee is about <strong>98% water</strong>. Water with too many minerals makes it harder to dissolve coffee. Distilled water (all minerals removed) causes very quick extraction that over-extracts negative compounds. Every Starbucks store has a specialized water-filtration system that removes undesirable compounds while ensuring only the right concentration of the right compounds remains — so no matter what's in your city's water, it's optimized for brewing by the time it reaches your cup.</div>
+    </div>
+    <div class="acc-item" onclick="toggleAcc(this)">
+      <div class="acc-header"><div class="acc-icon">📄</div><div class="acc-title">The Filter — Flavor Clarity & Mouthfeel</div><div class="acc-arrow">▾</div></div>
+      <div class="acc-body"><strong>Metal filters</strong> (coffee press, espresso, Clover®) let through more solids and coffee oils → more robust mouthfeel. <strong>Paper filters</strong> (batch brew, pour-over, siphon) trap more solids and oils → lighter body, cleaner mouthfeel. Both soluble and insoluble compounds are extracted. The type of filter directly shapes the texture of the finished beverage — use the best filter for your brew method and desired cup quality.</div>
+    </div>
+  </div>
+
+  <div class="section-heading">Extraction & Strength</div>
+  <div class="prose">
+    <p><strong>Extraction</strong> controls flavor — what flavor compounds are in the cup. <strong>Strength</strong> controls intensity — how much of those flavors there are, as a ratio of dissolved coffee to water. A typical cup of brewed coffee is only about 1.2% coffee / 98.8% water. A shot of espresso is about 10% coffee / 90% water.</p>
+    <p>The goal of brewing is to achieve a pleasing balance of both. To reduce strength without altering extraction, add hot water after brewing — this is exactly what an Americano is.</p>
+  </div>
+
+  <div class="callout">
+    <p>Though you will be grinding and brewing some of the greatest arabica beans in the world, even the best coffee will not taste right if it's brewed incorrectly. Do the coffee justice — and all the people along the way who made it possible. The power is in your hands.</p>
+    <cite>— Starbucks Coffee Academy, Level 300</cite>
+  </div>
+
+  <div class="section-heading">Equipment Care & Maintenance</div>
+  <div class="fact-box">
+    <div class="fact-label">Why It Matters</div>
+    It does not take long for equipment to experience a buildup of coffee oils. These oils can make a perfectly pulled espresso shot taste rancid, or render an otherwise well-brewed cup undrinkable. The average cost of a service call on an espresso machine equals approximately <strong>333 lattes!</strong> Preventative maintenance — regularly scheduled visits to replace parts that experience wear — ensures a long service life and protects beverage quality.
+  </div>
+
+  <!-- FINAL QUIZ -->
+  <div id="quiz5"></div>
+
+  <div class="chapter-nav-footer">
+    <button class="nav-btn" onclick="showChapter(4)">← Latte Art</button>
+    <button class="nav-btn primary" onclick="showChapter(0)">↺ Start Over</button>
+  </div>
+</div>
+
+</div><!-- /content -->
+
+<script>
+// ──────────────────────────────────────────
+// CHAPTER NAVIGATION
+// ──────────────────────────────────────────
+let currentChapter = 0;
+const totalChapters = 6;
+
+function showChapter(idx) {
+  document.querySelectorAll('.chapter').forEach((c, i) => {
+    c.classList.toggle('active', i === idx);
+  });
+  document.querySelectorAll('.chapter-btn').forEach((b, i) => {
+    b.classList.toggle('active', i === idx);
+  });
+  currentChapter = idx;
+  const pct = Math.round(((idx + 1) / totalChapters) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressPct').textContent = pct + '%';
+  document.getElementById('progressLabel').textContent = 'Chapter ' + (idx + 1) + ' of ' + totalChapters;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ──────────────────────────────────────────
+// ACCORDION
+// ──────────────────────────────────────────
+function toggleAcc(el) {
+  el.classList.toggle('open');
+}
+
+// ──────────────────────────────────────────
+// TASTE CARDS
+// ──────────────────────────────────────────
+function toggleTaste(el) {
+  const wasOpen = el.classList.contains('active');
+  document.querySelectorAll('.taste-card').forEach(c => c.classList.remove('active'));
+  if (!wasOpen) el.classList.add('active');
+}
+
+// ──────────────────────────────────────────
+// FLAVOR WHEEL
+// ──────────────────────────────────────────
+const flavorData = {
+  sweet: {
+    title: 'Sweet',
+    desc: 'The sweet aromatics in coffee come from caramelized sugars developed during roasting. Sweet coffee can express vanilla, brown sugar, honey, caramel, maple syrup, or molasses.',
+    tags: ['Vanilla', 'Brown Sugar', 'Honey', 'Caramelized', 'Maple Syrup', 'Molasses']
+  },
+  floral: {
+    title: 'Floral',
+    desc: 'A sweet, light, slightly fragrant aromatic associated with fresh flowers. Floral coffees may evoke chamomile, rose, or jasmine — especially in washed African coffees from Ethiopia and Kenya.',
+    tags: ['Chamomile', 'Rose', 'Jasmine', 'Black Tea']
+  },
+  fruity: {
+    title: 'Fruity',
+    desc: 'A sweet, floral, aromatic blend of a variety of ripe fruits. Fruity coffees span from bright berries to tropical notes to citrus — often found in natural-processed coffees or high-altitude origins.',
+    tags: ['Blackberry', 'Raspberry', 'Blueberry', 'Strawberry', 'Raisin', 'Cherry', 'Grapefruit', 'Orange', 'Lemon', 'Lime', 'Pineapple', 'Peach']
+  },
+  sour: {
+    title: 'Sour / Fermented',
+    desc: 'Sour notes can be desirable (bright acidity from citric, malic acid) or undesirable (vinegar-like acetic acid, butyric acid from over-fermentation). Under-extracted coffee tastes sour.',
+    tags: ['Acetic Acid', 'Citric Acid', 'Malic Acid', 'Winey', 'Fermented', 'Overripe']
+  },
+  green: {
+    title: 'Green / Vegetative',
+    desc: 'An aromatic characteristic of fresh, plant-based material. These notes are generally considered defects in roasted coffee — they suggest under-roasting or processing problems.',
+    tags: ['Olive Oil', 'Under-Ripe', 'Peapod', 'Fresh', 'Hay-Like', 'Herb-Like', 'Beany']
+  },
+  nutty: {
+    title: 'Nutty / Cocoa',
+    desc: 'A slightly sweet, brown, woody, oily, and sometimes bitter aromatic. Nutty and cocoa notes are very common in medium-roasted Latin American coffees — think Pike Place® Roast.',
+    tags: ['Dark Chocolate', 'Chocolate', 'Cocoa', 'Almond', 'Hazelnut', 'Peanuts']
+  },
+  spices: {
+    title: 'Spices',
+    desc: 'The sweet, brown aromatic associated with spices. Brown spice notes appear more commonly in darker roasts. Pepper gives a sharp, physically penetrating sensation in the nasal cavity.',
+    tags: ['Brown Spice', 'Clove', 'Cinnamon', 'Nutmeg', 'Anise', 'Pepper', 'Pungent']
+  },
+  roasted: {
+    title: 'Roasted',
+    desc: 'Dark brown impression characteristics of products cooked by dry heat to a high temperature. Roasted notes include cereal, malt, smoke, ash, and tobacco — common in dark-roasted coffees.',
+    tags: ['Cereal', 'Grain', 'Malt', 'Smoky', 'Ashy', 'Burnt', 'Tobacco']
+  }
+};
+
+function showFlavor(btn, key) {
+  document.querySelectorAll('.flavor-cat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const d = flavorData[key];
+  document.getElementById('flavorPanel').innerHTML = `
+    <h4>${d.title}</h4>
+    <p>${d.desc}</p>
+    <div class="flavor-tags">${d.tags.map(t => `<span class="flavor-tag">${t}</span>`).join('')}</div>
+  `;
+}
+
+// ──────────────────────────────────────────
+// THE FOUR MS
+// ──────────────────────────────────────────
+function toggleM(el) {
+  const wasOpen = el.classList.contains('open');
+  document.querySelectorAll('.m-card').forEach(c => c.classList.remove('open'));
+  if (!wasOpen) el.classList.add('open');
+}
+
+// ──────────────────────────────────────────
+// ESPRESSO STEPS
+// ──────────────────────────────────────────
+const stepContent = [
+  {
+    title: 'Grind',
+    text: 'Fresh beans are finely ground to the correct particle size <em>immediately before brewing</em>. For the Black Eagle & Mythos, stainless-steel flat burrs grind consistently — the barista sets particle size by watching shot time and tasting, making stepless micro-adjustments. For the Mastrena® & Mastrena® II, a computerized system monitors shot time and automatically adjusts the burr distance to correct particle size for optimum extraction.'
+  },
+  {
+    title: 'Dose',
+    text: 'The correct amount of coffee is measured out and evenly distributed. For the Black Eagle, the barista doses freshly ground coffee into the portafilter basket using a scale to set the correct grind time. Precision portafilter baskets with laser-cut holes create consistency in extraction and water flow even at peak volume. For the Mastrena®, the perfect amount is automatically ground to order, dosed, and distributed into a temperature-controlled brew chamber.'
+  },
+  {
+    title: 'Tamp',
+    text: 'The ground coffee is evenly compressed to ensure uniformity in extraction. For the Black Eagle, the barista uses a tamper to ergonomically and evenly compress the coffee. The specific Starbucks tamper was selected because when the portafilter basket is filled with the correct dose, this tamper creates consistent taste in cup. For the Mastrena®, a mechanical piston tamps the bed of coffee with even pressure, monitoring resistance to create a repeatable tamp.'
+  },
+  {
+    title: 'Brew',
+    text: 'Under pressure, hot water is forced through the puck of coffee to extract a full-bodied and sweet shot. A volumetric water-flow system regulates the correct amount of water to start and stop each pull. A slow pre-infusion evenly saturates the bed of coffee to prepare for extraction. Consistent water temperature is ensured throughout the brew process. The perfectly flowing shot should resemble warm honey pouring from a spoon.'
+  }
+];
+
+function showStep(btn, idx) {
+  document.querySelectorAll('.step-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  const d = stepContent[idx];
+  document.getElementById('stepDetail').innerHTML = `<h4>${d.title}</h4><p>${d.text}</p>`;
+}
+
+// ──────────────────────────────────────────
+// TROUBLE CARDS
+// ──────────────────────────────────────────
+function toggleTrouble(el) {
+  el.classList.toggle('open');
+}
+
+// ──────────────────────────────────────────
+// LATTE DESIGN CARDS
+// ──────────────────────────────────────────
+function toggleDesign(el) {
+  const wasOpen = el.classList.contains('active');
+  document.querySelectorAll('.design-card').forEach(c => c.classList.remove('active'));
+  if (!wasOpen) el.classList.add('active');
+}
+
+// ──────────────────────────────────────────
+// EXTRACTION ZONES
+// ──────────────────────────────────────────
+const extData = {
+  under: 'Under-extracted coffee tastes <strong>sour, vegetal, and underdeveloped</strong> — not enough favorable compounds have been dissolved. This happens when brewing is too short, grind is too coarse, water is too cold, or the coffee-to-water ratio is too low. Think of a coffee press left to brew for only two minutes.',
+  ideal: 'The sweet spot: <strong>18–22% extraction</strong>. Flavors are balanced and sweet, with pleasant acidity and no harsh bitterness. This is the target range that Starbucks R&D validates with both refractometers and sensory analysis. Following Starbucks brewing recipes in-store is designed to hit this window every single time.',
+  over: 'Over-extracted coffee tastes <strong>bitter, harsh, astringent, and dry on the finish</strong> — too many compounds have been dissolved, including the unpleasant ones extracted last. This happens when brewing is too long, grind is too fine, water is too hot, or the ratio is too high. Think of a coffee press forgotten for 10 minutes.'
+};
+
+function showExtZone(el, zone) {
+  document.getElementById('extDesc').innerHTML = extData[zone];
+}
+
+// ──────────────────────────────────────────
+// BREW VARIABLES
+// ──────────────────────────────────────────
+function toggleBvar(el) {
+  el.classList.toggle('open');
+}
+
+// ──────────────────────────────────────────
+// QUIZZES
+// ──────────────────────────────────────────
+const quizzes = {
+  quiz1: {
+    questions: [
+      {
+        q: "What are the four steps of coffee tasting at Starbucks?",
+        opts: ["Sip, taste, swallow, describe", "Smell, slurp, locate, describe", "Smell, taste, think, share", "Look, smell, sip, compare"],
+        answer: 1,
+        feedback: "Correct! The four steps are Smell → Slurp → Locate → Describe. This framework breaks down the tasting process and helps you experience aroma, flavor, body, and acidity by isolating one component at a time."
+      },
+      {
+        q: "What is the difference between someone's sensory skills today and those of a professional coffee taster?",
+        opts: ["Natural talent — some people are born with better palates", "Genetics — taste receptors vary significantly between people", "Simply a matter of experience and practice", "Only professionals can develop true sensory awareness"],
+        answer: 2,
+        feedback: "Correct! No matter your age or background, you have the same essential tasting mechanism as every other human. The difference between your sensory skills today and those of a professional coffee taster is simply experience."
+      },
+      {
+        q: "Why does Starbucks encourage baristas to use the Coffee Passport?",
+        opts: ["It's required by corporate policy", "To track hours spent in tastings", "To capture personal impressions and document sensory journeys over time", "To compare notes with other baristas"],
+        answer: 2,
+        feedback: "The Coffee Passport is part guide, part journal. It's your personal record of coffee tastings — capturing who you were as a coffee lover, who you are now, and where you're headed. There's no right or wrong approach, as long as you're recording your experiences."
+      }
+    ]
+  },
+  quiz2: {
+    questions: [
+      {
+        q: "What is flavor, technically?",
+        opts: ["Only what you taste on your tongue", "Only the aroma of the coffee", "How your brain synthesizes taste and aroma together", "The mouthfeel and body of the coffee"],
+        answer: 2,
+        feedback: "Flavor is how our brains synthesize aromas and tastes into a combined, overall experience. This is why pinching your nose eliminates most of what we call 'flavor' — you're disconnecting the aroma half of the equation."
+      },
+      {
+        q: "Which taste is associated with under-extracted coffee?",
+        opts: ["Bitter", "Sweet", "Sour", "Umami"],
+        answer: 2,
+        feedback: "Under-extracted coffee tastes sour. Over-extracted coffee tastes bitter. Knowing this distinction is one of the most practical diagnostic tools a barista can have."
+      },
+      {
+        q: "What is retronasal olfaction?",
+        opts: ["Smelling coffee before you drink it", "The process of smelling from inside the mouth through the nasal-oral airway", "The ability to detect aromas with eyes closed", "A technique for professional coffee tasters only"],
+        answer: 1,
+        feedback: "The retronasal passage connects your nasal and oral cavities, allowing aromatic compounds to be 'smelled' from your mouth. This is extremely important because it helps make the perception of flavor possible — and it's why proper slurping technique matters!"
+      }
+    ]
+  },
+  quiz3: {
+    questions: [
+      {
+        q: "What are the Four Ms of Espresso?",
+        opts: ["Machine, Method, Measure, Moisture", "Miscela, Macinazione, Macchina, Mano", "Mix, Microgrind, Monitor, Make", "Medium, Micro, Macro, Measure"],
+        answer: 1,
+        feedback: "Miscela (coffee), Macinazione (grinder), Macchina (machine), Mano (barista's hand). Each element is named in Italian because espresso culture was born there. Together, they form the well-choreographed dance of pulling a perfect shot."
+      },
+      {
+        q: "How many bars of pressure does an espresso machine use?",
+        opts: ["2 bars", "5 bars", "9 bars", "15 bars"],
+        answer: 2,
+        feedback: "Modern espresso machines create nine bars of pressure. The earliest machines in 1884 created fewer than two bars — which is why early espresso was often over-extracted and bitter, with no appealing crema."
+      },
+      {
+        q: "Why must espresso be served immediately after pulling?",
+        opts: ["It gets too cold quickly", "The flavor changes and crema dissipates with every passing moment", "The machine needs to reset", "Milk won't adhere to old espresso"],
+        answer: 1,
+        feedback: "The blossoming of a perfect espresso is intense and satisfying but also short-lived. With every passing moment, the flavor changes and the crema dissipates. The skilled barista knows that a quick, smooth, and efficient process yields the most consistent results."
+      }
+    ]
+  },
+  quiz4: {
+    questions: [
+      {
+        q: "Why must you aerate milk BEFORE steaming it to the final temperature?",
+        opts: ["For better flavor development", "Because proteins denature above ~100°F (38°C) and can no longer be smoothly incorporated into foam", "To save time during steaming", "Because hot milk aerates faster"],
+        answer: 1,
+        feedback: "At around 100°F (38°C), the proteins inside milk begin to denature — they lose their original structure. Once this happens, air can no longer be smoothly combined into the foam. If you keep aerating past this point, you'll end up with large, stubborn air bubbles that refuse to be incorporated."
+      },
+      {
+        q: "What is the ideal steaming temperature for adults?",
+        opts: ["100°–120°F (38°–49°C)", "130°–140°F (54°–60°C)", "150°–170°F (66°–77°C)", "180°–190°F (82°–88°C)"],
+        answer: 2,
+        feedback: "The ideal steaming temperature for adults is 150°–170°F (66°–77°C). At this temperature, lactose tastes at its sweetest without the unpleasant flavor compounds that appear when milk scalds above this range."
+      },
+      {
+        q: "What causes 'ghosting' in latte art?",
+        opts: ["Incorrect milk temperature", "Pouring too aggressively or hitting the side of the cup, causing milk to splash", "Using nonfat milk instead of whole milk", "Pouring too slowly"],
+        answer: 1,
+        feedback: "Ghosting — beige splotches instead of crisp white-on-brown contrast — is caused by pouring too aggressively or hitting the side of the cup, causing milk to splash. The solution is to use the 'pin drop' technique: pour a thin stream into the deepest part of the espresso so the milk cleanly dives under the surface."
+      }
+    ]
+  },
+  quiz5: {
+    questions: [
+      {
+        q: "What is the Starbucks recommended brew ratio?",
+        opts: ["12:1 (water to coffee)", "16:1 (water to coffee)", "18:1 (water to coffee)", "22:1 (water to coffee)"],
+        answer: 2,
+        feedback: "Starbucks recommends an 18:1 brew ratio — 6 fl oz of water for every 2 tablespoon scoop (10g) of coffee. Across the coffee industry, ratios between 16:1 and 18:1 result in a pleasant strength agreeable to most customers."
+      },
+      {
+        q: "Why does Starbucks wait one week after roasting before recommending coffee for brewing?",
+        opts: ["To allow time for quality inspection", "To let packaging gases escape before opening", "Freshly roasted coffee releases so many built-up gases when wetted that it's difficult to extract properly — flavors need time to develop", "Store logistics require at least a week of transit"],
+        answer: 2,
+        feedback: "Coffee that is too fresh is actually problematic for brewing — the naturally built-up gases rush out when wetted, making it hard to extract the right flavor compounds. Waiting one week after roasting gives time for off-gassing and allows flavors to fully develop."
+      },
+      {
+        q: "What does turbulence do to extraction?",
+        opts: ["It decreases extraction", "It has no effect on extraction", "It increases extraction — excessive turbulence can lead to over-extraction", "It only affects aroma, not extraction"],
+        answer: 2,
+        feedback: "Turbulence is the mixing action as water passes over and through coffee — and it increases extraction. Following correct brewing technique is essential. When using the pour-over method, a steady, even stream generates just the right amount of turbulence without over-agitating."
+      }
+    ]
+  }
+};
+
+function buildQuiz(containerId, quizKey) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  const quiz = quizzes[quizKey];
+  let current = 0;
+  let score = 0;
+  let answered = false;
+
+  function render() {
+    if (current >= quiz.questions.length) {
+      container.innerHTML = `
+        <div class="quiz-wrap">
+          <div class="quiz-label">Chapter Quiz Complete</div>
+          <div class="quiz-score show">
+            <div class="score-num">${score}/${quiz.questions.length}</div>
+            <div class="score-label">Questions Correct</div>
+            <p style="margin-top:1rem;font-size:14px;color:var(--muted);">${
+              score === quiz.questions.length ? 'Perfect score — you truly know your craft!' :
+              score >= quiz.questions.length - 1 ? 'Excellent — almost there!' :
+              'Good effort! Review the chapter material and try again.'
+            }</p>
+          </div>
+        </div>`;
+      return;
+    }
+    const q = quiz.questions[current];
+    answered = false;
+    container.innerHTML = `
+      <div class="quiz-wrap">
+        <div class="quiz-label">Chapter Quiz</div>
+        <div class="quiz-progress">Question ${current + 1} of ${quiz.questions.length}</div>
+        <div class="quiz-q">${q.q}</div>
+        <div class="quiz-options">
+          ${q.opts.map((o, i) => `<button class="quiz-opt" onclick="answerQ(this, ${i}, ${q.answer}, '${quizKey}', ${current})">${o}</button>`).join('')}
+        </div>
+        <div class="quiz-feedback" id="qfeedback_${quizKey}"></div>
+        <button class="quiz-next" id="qnext_${quizKey}" onclick="nextQ('${quizKey}')">Next →</button>
+      </div>`;
+  }
+
+  window['quizState_' + quizKey] = { current: () => current, increment: () => { current++; }, addScore: () => { score++; }, render };
+  render();
+}
+
+function answerQ(btn, chosen, correct, key, qIdx) {
+  const state = window['quizState_' + key];
+  if (!state) return;
+  const opts = btn.parentElement.querySelectorAll('.quiz-opt');
+  opts.forEach(o => o.disabled = true);
+  const fb = document.getElementById('qfeedback_' + key);
+  const nxt = document.getElementById('qnext_' + key);
+  const q = quizzes[key].questions[qIdx];
+  if (chosen === correct) {
+    btn.classList.add('correct');
+    fb.textContent = '✓ ' + q.feedback;
+    fb.className = 'quiz-feedback correct show';
+    state.addScore();
+  } else {
+    btn.classList.add('wrong');
+    opts[correct].classList.add('correct');
+    fb.textContent = '✗ ' + q.feedback;
+    fb.className = 'quiz-feedback wrong show';
+  }
+  nxt.classList.add('show');
+}
+
+function nextQ(key) {
+  const state = window['quizState_' + key];
+  if (!state) return;
+  state.increment();
+  state.render();
+}
+
+// Build all quizzes
+buildQuiz('quiz1', 'quiz1');
+buildQuiz('quiz2', 'quiz2');
+buildQuiz('quiz3', 'quiz3');
+buildQuiz('quiz4', 'quiz4');
+buildQuiz('quiz5', 'quiz5');
+</script>
+</body>
+</html>
