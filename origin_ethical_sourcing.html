@@ -1,0 +1,848 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Starbucks Coffee Academy — Origin & Ethical Sourcing</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Libre+Baskerville:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap');
+
+  :root {
+    --cream: #F5F0E8;
+    --espresso: #2C1A0E;
+    --roast: #6B3A1F;
+    --caramel: #C47A2B;
+    --gold: #E8A93A;
+    --blonde: #F2D59E;
+    --medium: #A0522D;
+    --dark: #3D1C08;
+    --text: #1A1008;
+    --muted: #7A5C3A;
+    --border: rgba(107,58,31,0.2);
+    --card: #FFFDF8;
+    --accent: #8B4513;
+    --green: #1E3932;
+    --green-light: #00704A;
+    --earth: #5C4A2A;
+    --leaf: #2D5016;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); min-height: 100vh; }
+
+  /* HERO */
+  .hero { background: var(--espresso); color: var(--cream); padding: 4rem 2rem 3rem; text-align: center; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(196,122,43,0.15) 0%, transparent 70%); }
+  .hero-badge { display: inline-block; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); border: 1px solid rgba(232,169,58,0.4); padding: 6px 16px; border-radius: 2px; margin-bottom: 1.5rem; }
+  .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 400; line-height: 1.15; margin-bottom: 1rem; }
+  .hero h1 em { color: var(--gold); font-style: italic; }
+  .hero p { font-size: 1rem; color: rgba(245,240,232,0.7); max-width: 560px; margin: 0 auto 2rem; line-height: 1.7; }
+  .progress-bar-wrap { max-width: 400px; margin: 0 auto; }
+  .progress-label { display: flex; justify-content: space-between; font-size: 12px; color: rgba(245,240,232,0.5); margin-bottom: 8px; }
+  .progress-track { height: 3px; background: rgba(245,240,232,0.15); border-radius: 2px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--gold); border-radius: 2px; transition: width 0.5s ease; }
+
+  /* NAV */
+  .chapter-nav { background: var(--espresso); border-top: 1px solid rgba(245,240,232,0.08); padding: 0 1.5rem; display: flex; gap: 0; overflow-x: auto; scrollbar-width: none; position: sticky; top: 0; z-index: 100; }
+  .chapter-nav::-webkit-scrollbar { display: none; }
+  .chapter-btn { flex-shrink: 0; padding: 14px 18px; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: rgba(245,240,232,0.45); background: none; border: none; border-bottom: 2px solid transparent; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.2s; white-space: nowrap; }
+  .chapter-btn:hover { color: rgba(245,240,232,0.8); }
+  .chapter-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  /* CONTENT */
+  .content { max-width: 820px; margin: 0 auto; padding: 3rem 1.5rem 6rem; }
+  .chapter { display: none; }
+  .chapter.active { display: block; animation: fadeIn 0.4s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+  .chapter-header { margin-bottom: 2.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
+  .chapter-num { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--caramel); margin-bottom: 0.5rem; }
+  .chapter-header h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 400; color: var(--espresso); line-height: 1.2; }
+  .chapter-header .subtitle { font-family: 'Libre Baskerville', serif; font-style: italic; color: var(--muted); margin-top: 0.5rem; font-size: 1rem; }
+
+  .prose { font-size: 16px; line-height: 1.8; color: #2a1a0a; }
+  .prose p { margin-bottom: 1.25rem; }
+  .prose strong { font-weight: 500; color: var(--roast); }
+
+  /* CALLOUT */
+  .callout { background: var(--espresso); color: var(--cream); padding: 1.5rem 2rem; border-radius: 4px; margin: 2rem 0; position: relative; overflow: hidden; }
+  .callout::before { content: '\201C'; font-family: 'Playfair Display', serif; font-size: 5rem; color: rgba(232,169,58,0.2); position: absolute; top: -10px; left: 10px; line-height: 1; }
+  .callout p { font-family: 'Libre Baskerville', serif; font-style: italic; font-size: 1.05rem; line-height: 1.7; position: relative; z-index: 1; color: rgba(245,240,232,0.9); }
+  .callout cite { display: block; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: var(--gold); margin-top: 0.75rem; font-style: normal; }
+
+  /* FACT BOX */
+  .fact-box { background: var(--card); border: 1px solid var(--border); border-left: 3px solid var(--caramel); border-radius: 4px; padding: 1.25rem 1.5rem; margin: 1.5rem 0; font-size: 15px; line-height: 1.7; color: var(--roast); }
+  .fact-box .fact-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--caramel); margin-bottom: 0.5rem; font-weight: 500; }
+
+  /* SECTION HEADING */
+  .section-heading { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 600; color: var(--espresso); margin: 2.5rem 0 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border); }
+
+  /* ACCORDION */
+  .accordion { margin: 1.5rem 0; }
+  .acc-item { border: 1px solid var(--border); border-radius: 6px; overflow: hidden; margin-bottom: 0.75rem; background: var(--card); transition: box-shadow 0.2s; }
+  .acc-item:hover { box-shadow: 0 2px 12px rgba(44,26,14,0.07); }
+  .acc-header { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.25rem; cursor: pointer; user-select: none; }
+  .acc-icon { width: 34px; height: 34px; border-radius: 50%; background: var(--espresso); color: var(--gold); display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+  .acc-title { font-weight: 500; font-size: 15px; flex: 1; }
+  .acc-arrow { font-size: 12px; color: var(--muted); transition: transform 0.2s; }
+  .acc-item.open .acc-arrow { transform: rotate(180deg); }
+  .acc-body { display: none; padding: 0 1.25rem 1.25rem; font-size: 14px; color: #4a2e16; line-height: 1.75; border-top: 1px solid var(--border); padding-top: 1rem; }
+  .acc-item.open .acc-body { display: block; }
+
+  /* TIMELINE */
+  .timeline { margin: 2rem 0; }
+  .tl-item { display: flex; gap: 1.5rem; margin-bottom: 2rem; position: relative; }
+  .tl-item::before { content: ''; position: absolute; left: 24px; top: 52px; bottom: -2rem; width: 1px; background: var(--border); }
+  .tl-item:last-child::before { display: none; }
+  .tl-dot { flex-shrink: 0; width: 48px; height: 48px; background: var(--espresso); color: var(--gold); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 18px; }
+  .tl-body { flex: 1; padding-top: 8px; }
+  .tl-body h4 { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 600; color: var(--espresso); margin-bottom: 0.3rem; }
+  .tl-date { font-size: 11px; letter-spacing: 1px; color: var(--caramel); text-transform: uppercase; margin-bottom: 0.4rem; }
+  .tl-body p { font-size: 14px; color: var(--muted); line-height: 1.65; }
+
+  /* STEP CARDS */
+  .steps-list { display: grid; gap: 0.75rem; margin: 1.5rem 0; }
+  .step-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; display: flex; gap: 1rem; align-items: flex-start; }
+  .step-num { width: 36px; height: 36px; border-radius: 50%; background: var(--espresso); color: var(--gold); display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 600; flex-shrink: 0; }
+  .step-body h4 { font-weight: 500; font-size: 15px; margin-bottom: 0.25rem; color: var(--espresso); }
+  .step-body p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  /* PROCESS TABS */
+  .process-tabs { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin: 1.5rem 0; }
+  .process-tab-bar { display: flex; background: var(--espresso); }
+  .ptab { flex: 1; padding: 12px 8px; text-align: center; cursor: pointer; font-size: 12px; letter-spacing: 0.5px; color: rgba(245,240,232,0.5); border: none; background: none; font-family: 'DM Sans', sans-serif; transition: all 0.2s; border-right: 1px solid rgba(245,240,232,0.08); }
+  .ptab:last-child { border-right: none; }
+  .ptab:hover { color: rgba(245,240,232,0.8); }
+  .ptab.active { color: var(--gold); background: rgba(232,169,58,0.1); }
+  .process-content { padding: 1.5rem; background: var(--card); min-height: 180px; animation: fadeIn 0.3s ease; }
+  .process-content h4 { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--espresso); margin-bottom: 0.75rem; }
+  .process-content p { font-size: 14px; color: #4a2e16; line-height: 1.75; margin-bottom: 0.75rem; }
+  .process-content .flavor-note { display: inline-block; background: var(--espresso); color: var(--gold); font-size: 11px; padding: 3px 10px; border-radius: 12px; margin: 2px; }
+
+  /* REGION CARDS */
+  .region-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+  .region-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; cursor: pointer; transition: all 0.2s; }
+  .region-card:hover { box-shadow: 0 4px 16px rgba(44,26,14,0.1); transform: translateY(-2px); }
+  .region-card.active { border-color: var(--caramel); background: rgba(196,122,43,0.04); }
+  .region-flag { font-size: 2rem; margin-bottom: 0.5rem; }
+  .region-name { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 600; color: var(--espresso); margin-bottom: 0.25rem; }
+  .region-label { font-size: 11px; color: var(--caramel); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 0.5rem; }
+  .region-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+  .region-detail { display: none; font-size: 13px; color: #4a2e16; line-height: 1.7; border-top: 1px solid var(--border); margin-top: 0.75rem; padding-top: 0.75rem; }
+  .region-card.active .region-detail { display: block; }
+  .flavor-tags { display: flex; flex-wrap: wrap; gap: 6px; margin-top: 0.6rem; }
+  .flavor-tag { padding: 3px 10px; background: var(--espresso); color: var(--cream); border-radius: 12px; font-size: 11px; }
+
+  /* COUNTRY EXPLORER */
+  .country-explorer { background: var(--card); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin: 1.5rem 0; }
+  .country-tabs { display: flex; flex-wrap: wrap; gap: 0; background: rgba(44,26,14,0.04); border-bottom: 1px solid var(--border); padding: 0.75rem; gap: 0.5rem; }
+  .ctab { padding: 6px 14px; border-radius: 20px; font-size: 12px; border: 1px solid var(--border); background: none; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.2s; color: var(--muted); }
+  .ctab:hover { border-color: var(--caramel); color: var(--caramel); }
+  .ctab.active { background: var(--espresso); color: var(--gold); border-color: var(--espresso); }
+  .country-panel { padding: 1.5rem; min-height: 160px; }
+  .country-panel h4 { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--espresso); margin-bottom: 0.5rem; }
+  .country-panel p { font-size: 14px; color: #4a2e16; line-height: 1.75; margin-bottom: 0.5rem; }
+
+  /* VARIETAL CARDS */
+  .varietal-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+  .varietal-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; cursor: pointer; transition: all 0.2s; }
+  .varietal-card:hover { box-shadow: 0 4px 16px rgba(44,26,14,0.08); }
+  .varietal-card.active { border-color: var(--caramel); }
+  .varietal-name { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 600; color: var(--espresso); margin-bottom: 0.25rem; }
+  .varietal-sub { font-size: 12px; color: var(--caramel); letter-spacing: 1px; text-transform: uppercase; margin-bottom: 0.5rem; }
+  .varietal-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+  .varietal-detail { display: none; font-size: 13px; color: #4a2e16; line-height: 1.7; border-top: 1px solid var(--border); margin-top: 0.75rem; padding-top: 0.75rem; }
+  .varietal-card.active .varietal-detail { display: block; }
+
+  /* CAFE PRACTICES */
+  .cafe-grid { display: grid; grid-template-columns: repeat(2, 1fr); gap: 1rem; margin: 1.5rem 0; }
+  @media (max-width: 500px) { .cafe-grid { grid-template-columns: 1fr; } }
+  .cafe-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden; }
+  .cafe-card:hover { box-shadow: 0 4px 20px rgba(44,26,14,0.1); }
+  .cafe-card.open { border-color: var(--caramel); }
+  .cafe-bg-letter { font-family: 'Playfair Display', serif; font-size: 4rem; font-weight: 600; color: rgba(44,26,14,0.06); position: absolute; top: 0; right: 8px; line-height: 1; }
+  .cafe-badge { display: inline-block; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; padding: 3px 8px; border-radius: 3px; margin-bottom: 0.75rem; }
+  .prereq { background: rgba(196,122,43,0.12); color: var(--caramel); }
+  .component { background: rgba(30,57,50,0.12); color: var(--green); }
+  .cafe-title { font-weight: 500; font-size: 16px; color: var(--espresso); margin-bottom: 0.25rem; }
+  .cafe-sub { font-size: 12px; color: var(--muted); margin-bottom: 0.75rem; }
+  .cafe-body { display: none; font-size: 13px; color: #4a2e16; line-height: 1.75; border-top: 1px solid var(--border); padding-top: 0.75rem; margin-top: 0.75rem; }
+  .cafe-card.open .cafe-body { display: block; }
+
+  /* QUIZ */
+  .quiz-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin: 2rem 0; }
+  .quiz-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--caramel); margin-bottom: 1rem; }
+  .quiz-q { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--espresso); margin-bottom: 1.25rem; line-height: 1.4; }
+  .quiz-options { display: grid; gap: 0.5rem; margin-bottom: 1rem; }
+  .quiz-opt { padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; font-size: 14px; background: none; text-align: left; font-family: 'DM Sans', sans-serif; transition: all 0.2s; color: var(--text); }
+  .quiz-opt:hover { border-color: var(--caramel); background: rgba(196,122,43,0.04); }
+  .quiz-opt.correct { background: rgba(0,112,74,0.1); border-color: var(--green-light); color: var(--green); }
+  .quiz-opt.wrong { background: rgba(139,0,0,0.07); border-color: #8B0000; color: #8B0000; }
+  .quiz-feedback { font-size: 14px; line-height: 1.6; padding: 0.75rem 1rem; border-radius: 6px; display: none; }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.correct { background: rgba(0,112,74,0.08); color: var(--green); }
+  .quiz-feedback.wrong { background: rgba(139,0,0,0.07); color: #8B0000; }
+  .quiz-next { margin-top: 1rem; padding: 0.6rem 1.5rem; background: var(--espresso); color: var(--gold); border: none; border-radius: 4px; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; display: none; font-family: 'DM Sans', sans-serif; transition: opacity 0.2s; }
+  .quiz-next:hover { opacity: 0.85; }
+  .quiz-next.show { display: inline-block; }
+  .quiz-progress { font-size: 12px; color: var(--muted); margin-bottom: 1rem; }
+  .quiz-score { text-align: center; padding: 1.5rem; display: none; }
+  .quiz-score.show { display: block; }
+  .quiz-score .score-num { font-family: 'Playfair Display', serif; font-size: 3rem; color: var(--espresso); line-height: 1; }
+  .quiz-score .score-label { color: var(--muted); font-size: 14px; margin-top: 0.25rem; }
+
+  /* NAV FOOTER */
+  .chapter-nav-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+  .nav-btn { padding: 10px 20px; border: 1px solid var(--border); border-radius: 4px; background: none; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; font-family: 'DM Sans', sans-serif; color: var(--muted); transition: all 0.2s; }
+  .nav-btn:hover { border-color: var(--caramel); color: var(--caramel); }
+  .nav-btn.primary { background: var(--espresso); color: var(--gold); border-color: var(--espresso); }
+  .nav-btn:disabled { opacity: 0.3; cursor: default; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-badge">Starbucks Coffee Academy · Level 300</div>
+  <h1>Origin &amp; <em>Ethical Sourcing</em></h1>
+  <p>From Kaldi's dancing goats to global supply chains — discover where coffee comes from, how it grows, how it's processed, and why sourcing it the right way matters.</p>
+  <div class="progress-bar-wrap">
+    <div class="progress-label">
+      <span id="progressLabel">Chapter 1 of 6</span>
+      <span id="progressPct">17%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill" style="width:17%"></div>
+    </div>
+  </div>
+</div>
+
+<nav class="chapter-nav" id="chapterNav">
+  <button class="chapter-btn active" onclick="showChapter(0)">History</button>
+  <button class="chapter-btn" onclick="showChapter(1)">The Coffee Tree</button>
+  <button class="chapter-btn" onclick="showChapter(2)">The Coffee Cherry</button>
+  <button class="chapter-btn" onclick="showChapter(3)">Origins & Terroir</button>
+  <button class="chapter-btn" onclick="showChapter(4)">Ethical Sourcing</button>
+  <button class="chapter-btn" onclick="showChapter(5)">C.A.F.E. Practices</button>
+</nav>
+
+<div class="content">
+
+<!-- ═══════════════════ CHAPTER 0: HISTORY -->
+<div class="chapter active" id="ch0">
+  <div class="chapter-header">
+    <div class="chapter-num">Chapter 1</div>
+    <h2>A Brief History of Coffee</h2>
+    <div class="subtitle">The Almighty Bean — from Ethiopian highlands to the corner of every street.</div>
+  </div>
+
+  <div class="prose">
+    <p>The history of the coffee plant is nothing if not storied — ancient legends of coffee-loving goats, monks, traders, and kings. A plant and its fruit of mythical renown making their way over centuries from Ethiopia and the Arabian Peninsula across cultures and continents.</p>
+  </div>
+
+  <div class="section-heading">A Legend Begins: Kaldi & His Goats</div>
+  <div class="fact-box">
+    <div class="fact-label">Ethiopia, circa A.D. 800–900</div>
+    A young goatherd named Kaldi noticed his goats becoming so lively after eating red berries from an evergreen shrub that they started to dance. A passing monk picked some of the fruit, made a tea from the berries, and discovered the drink kept him more alert during evening prayers. Word spread about these strange berries that produced energy and aided concentration — and it all started with Kaldi's goats.
+  </div>
+
+  <div class="section-heading">Coffee's Journey Around the World</div>
+  <div class="timeline">
+    <div class="tl-item">
+      <div class="tl-dot">🐐</div>
+      <div class="tl-body">
+        <div class="tl-date">~800–900 AD</div>
+        <h4>Ethiopia: Discovery</h4>
+        <p>Coffee first consumed in Ethiopia by chewing beans and leaves, brewing as tea, or fermenting pulp into wine. It became integral to Ethiopian culture — where today an elaborate daily coffee ceremony is still central to social life.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot">⛵</div>
+      <div class="tl-body">
+        <div class="tl-date">~1400s</div>
+        <h4>Yemen: First Cultivation & Qahwa</h4>
+        <p>Arabian traders brought coffee across the Red Sea to Yemen, where it was first roasted and boiled into a drink called <em>qahwa</em> — "that which prevents sleep." Yemen controlled the entire global coffee trade by requiring all exported beans to be sterilized first. The port city of Mocha became the world's major arabica market hub.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot">🕌</div>
+      <div class="tl-body">
+        <div class="tl-date">1555</div>
+        <h4>Constantinople: First Coffeehouses</h4>
+        <p>The Ottoman Governor of Yemen introduced coffee to Istanbul. The Topkapi Palace created the position of <em>kahvecibaşı</em> — Chief Coffee Maker. The world's first recorded coffeehouses (kaveh kanes) opened, where customers drank coffee, socialized, listened to music, and played chess — remarkably like a modern Starbucks "third place."</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot">🌍</div>
+      <div class="tl-body">
+        <div class="tl-date">1600s</div>
+        <h4>Europe: Coffee Takes Hold</h4>
+        <p>Coffee reached Europe via Venetian merchants. London's coffeehouses became "penny universities" — a penny bought coffee, newspapers, and edifying conversation. Paris fell for café au lait after the Turkish Ambassador introduced coffee to Louis XIV's court. Vienna's Franz Georg Kolschitzky strained out grounds and added cream and honey, creating Viennese-style coffee.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot">🌱</div>
+      <div class="tl-body">
+        <div class="tl-date">1700s</div>
+        <h4>The Americas: Coffee Goes Global</h4>
+        <p>A French naval officer stole a shoot from the Royal Botanical Gardens in Paris and smuggled it to Martinique. A Portuguese officer was given fertile seeds in a bouquet by the governor's wife in French Guiana — those seeds would begin coffee in Brazil, which now produces more coffee than any other country. The Boston Tea Party (1773) made coffee America's patriotic drink of choice.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot">☕</div>
+      <div class="tl-body">
+        <div class="tl-date">1966</div>
+        <h4>Peet's Coffee: Specialty Begins in the U.S.</h4>
+        <p>Alfred Peet opened Peet's Coffee and Tea in Berkeley, California, roasting dark in the European style. Three of his disciples — Jerry Baldwin, Zev Siegl, and Gordon Bowker — would go on to open the first Starbucks in Seattle in 1971, selling freshly roasted whole bean coffee.</p>
+      </div>
+    </div>
+    <div class="tl-item">
+      <div class="tl-dot">⭐</div>
+      <div class="tl-body">
+        <div class="tl-date">1982–Today</div>
+        <h4>Howard Schultz & the Starbucks We Know</h4>
+        <p>Howard Schultz joined Starbucks in 1982, traveled to Milan, and was enamored with Italian espresso bar culture. In 1984 he opened the first full espresso bar; within two months it was serving 800 customers a day. After buying Starbucks in 1987, Schultz grew it to 165 stores by 1992, went public, opened in Tokyo in 1996, and has grown to more than 29,000 stores in 76 countries.</p>
+      </div>
+    </div>
+  </div>
+
+  <div id="quiz0"></div>
+
+  <div class="chapter-nav-footer">
+    <button class="nav-btn" disabled>← Previous</button>
+    <button class="nav-btn primary" onclick="showChapter(1)">The Coffee Tree →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ CHAPTER 1: THE COFFEE TREE -->
+<div class="chapter" id="ch1">
+  <div class="chapter-header">
+    <div class="chapter-num">Chapter 2</div>
+    <h2>The Coffee Tree</h2>
+    <div class="subtitle">Bearer of the Bean — from seed in a nursery to 30 years of cherries.</div>
+  </div>
+
+  <div class="section-heading">Arabica vs. Robusta</div>
+  <div class="region-grid">
+    <div class="region-card" onclick="toggleRegion(this)">
+      <div class="region-flag">🌿</div>
+      <div class="region-name">Coffea arabica</div>
+      <div class="region-label">Starbucks' Choice</div>
+      <div class="region-desc">~65% of world's production. High quality at high altitude.</div>
+      <div class="region-detail">Arabica produces high-quality coffee with refined flavor, body, and acidity when grown at high altitudes. It is self-pollinating and tends to be less resistant to disease and drought — which is why significant research is underway (including at Hacienda Alsacia) to develop more resilient varietals. <strong>Starbucks purchases only high-quality arabica coffee.</strong></div>
+    </div>
+    <div class="region-card" onclick="toggleRegion(this)">
+      <div class="region-flag">🌱</div>
+      <div class="region-name">Coffea canephora</div>
+      <div class="region-label">Robusta — Not for Starbucks</div>
+      <div class="region-desc">Hardy, disease-resistant, higher caffeine — but harsher flavor.</div>
+      <div class="region-detail">Robusta is more resistant to disease, pests, and drought. It produces a higher yield but has a less refined, sometimes harsh flavor. It has slightly higher caffeine content than arabica. Robusta sells at a lower price and is often used as a filler blended with other coffees. <strong>Starbucks does not purchase robusta coffee.</strong></div>
+    </div>
+  </div>
+
+  <div class="section-heading">Key Varietals to Know</div>
+  <p style="font-size:14px;color:var(--muted);margin-bottom:1rem;">Tap a varietal to learn more. More than 80% of commercial arabica comes from Typica or Bourbon-related varieties.</p>
+  <div class="varietal-grid">
+    <div class="varietal-card" onclick="toggleVarietal(this)">
+      <div class="varietal-name">Typica</div>
+      <div class="varietal-sub">Genetic Parent</div>
+      <div class="varietal-desc">High yield, excellent cup quality at altitude.</div>
+      <div class="varietal-detail">Typica is the genetic parent of many common varietals including Maragogype and Java. It produces excellent cup quality when grown at high elevations but is susceptible to pests and coffee leaf rust.</div>
+    </div>
+    <div class="varietal-card" onclick="toggleVarietal(this)">
+      <div class="varietal-name">Bourbon</div>
+      <div class="varietal-sub">Complex & Sweet</div>
+      <div class="varietal-desc">Lower yield, excellent cup quality. Comes in yellow, red, orange, and pink.</div>
+      <div class="varietal-detail">Bourbon mutated into common varietals like Caturra and Villa Sarchi. Yellow, Red, Orange and even Pink Bourbon trees are cultivated for their complex, sweet cup profiles. El Salvador has retained many Bourbon trees alongside the newer Pacamara varietal.</div>
+    </div>
+    <div class="varietal-card" onclick="toggleVarietal(this)">
+      <div class="varietal-name">Caturra</div>
+      <div class="varietal-sub">Central America Staple</div>
+      <div class="varietal-desc">Compact, high yield. Discovered in Brazil in the 1930s.</div>
+      <div class="varietal-detail">Caturra is a mutation of Bourbon and intrigued farmers because of its high yield and compact growth, allowing trees to be planted close together. Today it is one of the most common varietals found on Central American coffee farms.</div>
+    </div>
+    <div class="varietal-card" onclick="toggleVarietal(this)">
+      <div class="varietal-name">Catuai</div>
+      <div class="varietal-sub">Brazil-Developed</div>
+      <div class="varietal-desc">Sturdy, dense cherry clusters across Latin America.</div>
+      <div class="varietal-detail">Developed in Brazil as a high-yield varietal by crossing Caturra and Mundo Novo. Sturdy and compact, Catuai trees do well with strong winds and rain. It grows dense clusters of red or yellow coffee cherries across Latin America.</div>
+    </div>
+    <div class="varietal-card" onclick="toggleVarietal(this)">
+      <div class="varietal-name">Gesha</div>
+      <div class="varietal-sub">Ethiopian Heirloom</div>
+      <div class="varietal-desc">Delicate, elegant, celebrated worldwide. Also called Geisha.</div>
+      <div class="varietal-detail">Named after a village in Ethiopia where it was first discovered, Gesha is an Ethiopian heirloom varietal with slender branches and larger cherries. Carefully introduced to Latin America by masterful coffee producers, it is celebrated for its unparalleled, elegant cup profile — often with delicate floral complexity.</div>
+    </div>
+    <div class="varietal-card" onclick="toggleVarietal(this)">
+      <div class="varietal-name">Heirloom</div>
+      <div class="varietal-sub">Ethiopian Legacy</div>
+      <div class="varietal-desc">Thousands of varietals growing wild — many still undiscovered.</div>
+      <div class="varietal-detail">Ethiopia is home to thousands of coffee varietals — many not commercially grown. Heirloom varietals are those found in Ethiopia that were never widely spread around the world. Think of them like heirloom tomatoes — historic varietals handed down over generations from farmer to farmer or growing wild. Coffee researchers are learning more about them every day.</div>
+    </div>
+  </div>
+
+  <div class="section-heading">From Seed to Mature Tree</div>
+  <div class="steps-list">
+    <div class="step-card"><div class="step-num">1</div><div class="step-body"><h4>Rising from the Soil (6 weeks)</h4><p>A delicate stem sprouts from the soil, carrying the parchment-covered seed with it — the "soldier" or "matchstick" stage. Farmers select only the healthiest seedlings to move to the protected nursery environment.</p></div></div>
+    <div class="step-card"><div class="step-num">2</div><div class="step-body"><h4>The Butterfly Stage (2 months)</h4><p>The parchment shell falls away revealing the first true leaves, resembling a butterfly's rounded wings. Over the next weeks, the plant produces shiny, elongated, pointed leaves.</p></div></div>
+    <div class="step-card"><div class="step-num">3</div><div class="step-body"><h4>Health Check (4 months)</h4><p>First branches develop. Size, structure, leaf color, branch spacing, and root system are observed. Any plant that doesn't qualify is discarded — a healthier plant is more productive and has a longer life.</p></div></div>
+    <div class="step-card"><div class="step-num">4</div><div class="step-body"><h4>Ready for the Field (1 year)</h4><p>With dark green color, healthy foliage, and a prominent root system, the young tree leaves the nursery and is transplanted to its permanent home in a coffee field. Now the farmer waits.</p></div></div>
+    <div class="step-card"><div class="step-num">5</div><div class="step-body"><h4>Mature Coffee Tree (3–5 years)</h4><p>The tree is fully mature, flowers every year, and begins producing coffee cherries. A healthy coffee tree can produce cherries for <strong>25–30 years</strong>. Trees are pruned to 5–6 feet (from a potential 30 feet) to increase productivity and allow airflow to prevent fungi.</p></div></div>
+  </div>
+
+  <div class="callout">
+    <p>The coffee tree is a living being with all the vital functions of every living being: She breathes, eats, grows and reproduces. And here is her offspring, right here, the coffee cherries. The tree will put in all her effort, she will sacrifice all of her leaves and branches to offer her offspring the best conditions for growth. That is why we say the coffee tree is an excellent mother.</p>
+    <cite>— Orlando Mora, Agronomist, Costa Rica Farmer Support Center</cite>
+  </div>
+
+  <div class="section-heading">Hacienda Alsacia: Future-Proofing Coffee</div>
+  <div class="fact-box">
+    <div class="fact-label">Starbucks Own Coffee Farm</div>
+    In 2013, Starbucks purchased Hacienda Alsacia on the slopes of Poás Volcano in Costa Rica. The 240-hectare farm is now the site of Starbucks Global Agronomy Research &amp; Development Center. Carlos Mario Rodriguez experiments with creating varietals resistant to coffee leaf rust (la roya), which is ravaging Latin American crops. Starbucks was one of the first recipients of the <strong>Core Collection</strong> — the 100 most genetically diverse strains of arabica in the world, sourced over 50 years ago from Ethiopia. The goal: breed the perfect coffee plant — resistant to disease, able to survive drought and heat, and producing outstanding quality.
+  </div>
+
+  <div id="quiz1"></div>
+
+  <div class="chapter-nav-footer">
+    <button class="nav-btn" onclick="showChapter(0)">← History</button>
+    <button class="nav-btn primary" onclick="showChapter(2)">The Coffee Cherry →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ CHAPTER 2: THE COFFEE CHERRY -->
+<div class="chapter" id="ch2">
+  <div class="chapter-header">
+    <div class="chapter-num">Chapter 3</div>
+    <h2>The Coffee Cherry</h2>
+    <div class="subtitle">Influencer of the Bean — from flowering to processing to green bean.</div>
+  </div>
+
+  <div class="prose">
+    <p>Coffee is omnipresent in our lives — but we might often forget it comes from a <em>fruit</em>. Throughout over 70 countries, more than 25 million people depend on coffee farms for their economic livelihood. The story of how the cherry is harvested, processed, and transformed into a green bean is coffee's crucial first chapter.</p>
+  </div>
+
+  <div class="section-heading">Anatomy of the Coffee Cherry</div>
+  <div class="accordion">
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">🍒</div><div class="acc-title">01 — Outer Skin</div><div class="acc-arrow">▾</div></div><div class="acc-body">The outermost skin of the cherry is taut, thick, and bitter. Peeled, the cherry looks a little like a peeled grape or a lychee — a pale, sticky layer of fruit surrounding the seeds.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">💧</div><div class="acc-title">02 — Pulp</div><div class="acc-arrow">▾</div></div><div class="acc-body">The pulp consists mostly of sugar and water. The heaviest part of the cherry, it makes up around <strong>80% of the total weight</strong> of a coffee harvest. Many coffee farms recycle the pulp into compost — fertilizing the very fields where the coffee grew.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">🍯</div><div class="acc-title">03 — Mucilage</div><div class="acc-arrow">▾</div></div><div class="acc-body">Under the pulp is the mucilage — a sticky, honey-like coating. The amount of time mucilage stays in contact with the bean (and how much remains) is one of the biggest influences on the coffee's flavor, body, and acidity in the cup.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">📄</div><div class="acc-title">04 — Parchment</div><div class="acc-arrow">▾</div></div><div class="acc-body">A thin, papery protective layer — similar to the skin on a peanut. In washed processing, the green bean is dried while still inside this parchment layer before it is hulled.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">✨</div><div class="acc-title">05 — Silver Skin</div><div class="acc-arrow">▾</div></div><div class="acc-body">A thin, almost translucent final protective layer on the green bean. It flakes off as "chaff" during roasting.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">🟢</div><div class="acc-title">06 — Green Bean</div><div class="acc-arrow">▾</div></div><div class="acc-body">The actual coffee bean (seed). Most cherries contain two flat-sided beans inside, face to face. In about 5–10% of cherries, a single, round bean known as a <strong>peaberry</strong> develops instead.</div></div>
+  </div>
+
+  <div class="section-heading">The Yearly Cycle</div>
+  <div class="prose">
+    <p>As the dry season turns to wet, coffee trees bud. Triggered by a long rain, the buds bloom into delicate, white, jasmine-scented flowers — when the fields are in full bloom, it almost looks like snow has fallen. Flowers are replaced by clusters of green cherries. Over the next few months, the cherries slowly change color from green to yellow to ruby red. It takes about <strong>nine months</strong> for a tree to progress from flowering to producing ripe cherries.</p>
+    <p>The premium coffee Starbucks sources thrives at high elevations, where cherries experience warm days and cooler nights — slowing growth and creating denser, complex beans. This is called <strong>selective harvesting</strong>: harvesters may revisit the same tree several times to pick only the ripest cherries.</p>
+  </div>
+
+  <div class="section-heading">Processing Methods</div>
+  <p style="font-size:14px;color:var(--muted);margin-bottom:1rem;">How the cherry is processed fundamentally shapes what ends up in your cup. Tap each method to explore it.</p>
+
+  <div class="process-tabs">
+    <div class="process-tab-bar">
+      <button class="ptab active" onclick="showProcess(this,'washed')">Washed</button>
+      <button class="ptab" onclick="showProcess(this,'semi')">Semi-Washed</button>
+      <button class="ptab" onclick="showProcess(this,'natural')">Natural</button>
+      <button class="ptab" onclick="showProcess(this,'honey')">Honey</button>
+      <button class="ptab" onclick="showProcess(this,'pulped')">Pulped Natural</button>
+    </div>
+    <div class="process-content" id="processContent">
+      <h4>Washed (Wet) Processing</h4>
+      <p>The most widely used method worldwide. After de-pulping, the mucilage is removed via fermentation (18–36 hours in a cement tank) or a demucilaging machine using less than 5% of traditional water. Beans are then dried in their parchment layer, rested in bags for up to two months, and finally hulled.</p>
+      <p>The mucilage has minimal contact with the bean, so its influence on flavor is limited. The result is a clean, bright cup with nuanced flavors, pleasing acidity, and a crisp finish.</p>
+      <div><span class="flavor-note">Clean Finish</span><span class="flavor-note">Bright Acidity</span><span class="flavor-note">Nuanced Flavors</span></div>
+    </div>
+  </div>
+
+  <div class="section-heading">Sorting, Bagging & Shipping</div>
+  <div class="prose">
+    <p>After processing, all green coffee is sorted at a dry mill — by hand, optical sorters (using color), and density separators (denser = higher quality). Coffee is then weighed and bagged in burlap sacks of around <strong>60 kilograms</strong>, often with colorful national designs expressing pride.</p>
+    <p>Bags are loaded into 20-foot shipping containers and taken to cargo ships. Depending on the destination, the coffee's trip takes <strong>two to eight weeks</strong>. A cargo ship from Africa to the East Coast of the U.S. travels more than a month. In some regions, before reaching the port, coffee makes even more interesting journeys — by oxcart in Costa Rica, motor scooter in Indonesia, or by donkey in Latin America.</p>
+  </div>
+
+  <div id="quiz2"></div>
+
+  <div class="chapter-nav-footer">
+    <button class="nav-btn" onclick="showChapter(1)">← Coffee Tree</button>
+    <button class="nav-btn primary" onclick="showChapter(3)">Origins & Terroir →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ CHAPTER 3: ORIGINS -->
+<div class="chapter" id="ch3">
+  <div class="chapter-header">
+    <div class="chapter-num">Chapter 4</div>
+    <h2>Coffee-Growing Countries</h2>
+    <div class="subtitle">A Closer Look at Origin — terroir, region by region.</div>
+  </div>
+
+  <div class="prose">
+    <p>Coffee grows best in the <strong>Coffee Belt</strong> — the tropical and sub-tropical zones that wrap around the globe between the Tropics of Cancer and Capricorn. This vast, complex area encompasses three main regions: Latin America, Africa, and Asia/Pacific. While each region has characteristic flavors, terroir (the combination of soil, altitude, and microclimate) makes every origin unique — even farm to farm.</p>
+  </div>
+
+  <div class="section-heading">Terroir: The Three Elements</div>
+  <div class="accordion">
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">🌋</div><div class="acc-title">Soil — Nutrients & Foundation</div><div class="acc-arrow">▾</div></div><div class="acc-body">Fertile soil provides the coffee plant with vital nutrients. Some of the finest coffee in the world grows in rich volcanic soil — like the foothills of Mt. Kenya or the volcanic slopes of Costa Rica. Volcanic ash has a high concentration of minerals, affecting sugar and organic acid development in the coffee bean. Rich, porous, well-drained soil is ideal — allowing roots to grow many feet long while holding enough water to hydrate the plant.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">⛰️</div><div class="acc-title">Altitude — Density & Complexity</div><div class="acc-arrow">▾</div></div><div class="acc-body">Higher altitudes make for a denser coffee bean. The denser the bean, the higher the quality and the more complex the flavor. Starbucks purchases arabica grown at approximately <strong>3,000–6,000 feet (900–1,800 meters)</strong> depending on the origin. At higher elevations, warm days and cool nights slow cherry growth — giving beans more time to develop sugars and intensify in flavor.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">🌤️</div><div class="acc-title">Microclimate — Unique Local Conditions</div><div class="acc-arrow">▾</div></div><div class="acc-body">A microclimate describes temperature, sunlight, and rainfall of a small or restricted location — conditions that often differ significantly from the surrounding area. A mountain's sun-exposed side has a different microclimate than the unexposed side. A river creates a different microclimate. A shaded area differs from one in direct sunlight. These microclimates can help unique flavor profiles appear within a very small area.</div></div>
+  </div>
+
+  <div class="section-heading">The Three Growing Regions</div>
+  <div class="region-grid">
+    <div class="region-card" onclick="toggleRegion(this)">
+      <div class="region-flag">🌎</div>
+      <div class="region-name">Latin America</div>
+      <div class="region-label">By volume, the largest</div>
+      <div class="region-desc">Nuts, cocoa, and soft spice — smooth mouthfeel, lingering finish.</div>
+      <div class="region-detail">Latin America produces most of the world's specialty coffee by volume. The Sierra Madre mountains running through Central America provide rich volcanic soil and high elevations ideal for coffee. Here we find smooth, lingering mouthfeels and notes of chocolate and toffee, baking spices like cinnamon and cardamom, walnut, cocoa nibs, toasted almonds — but also white peach, apricot, jasmine, vanilla, and citrus zest.</div>
+      <div class="flavor-tags"><span class="flavor-tag">Chocolate</span><span class="flavor-tag">Nuts</span><span class="flavor-tag">Caramel</span><span class="flavor-tag">Citrus</span><span class="flavor-tag">Soft Spice</span></div>
+    </div>
+    <div class="region-card" onclick="toggleRegion(this)">
+      <div class="region-flag">🌍</div>
+      <div class="region-name">Africa</div>
+      <div class="region-label">Birthplace of coffee</div>
+      <div class="region-desc">Citrus, berry, spice, and floral aromas — sparkling acidity.</div>
+      <div class="region-detail">Africa is home to some of the world's most intriguing coffee flavors. Around 5 million smallholder farmers harvest here annually. African coffees unfold with sparkling acidity and jammy fruit notes, perfumed or delicate florals of lavender and jasmine, cinnamon, black pepper, tropical notes, tart grapefruit or cranberry, and chocolate ranging from dark to rich and creamy. The diversity of flavors — some found in no other region — is why African coffees are celebrated by baristas worldwide.</div>
+      <div class="flavor-tags"><span class="flavor-tag">Berries</span><span class="flavor-tag">Citrus</span><span class="flavor-tag">Floral</span><span class="flavor-tag">Jammy</span><span class="flavor-tag">Dark Chocolate</span></div>
+    </div>
+    <div class="region-card" onclick="toggleRegion(this)">
+      <div class="region-flag">🌏</div>
+      <div class="region-name">Asia / Pacific</div>
+      <div class="region-label">Full body, earthy depth</div>
+      <div class="region-desc">Herbs, earth, and full syrupy body — muted acidity.</div>
+      <div class="region-detail">From the Indonesian archipelago come full-bodied, earthy, herbal coffees with muted acidity — the unique result of semi-washed (wet-hulled) processing. But we also source wonderful coffees outside of Indonesia — from Papua New Guinea (delightfully complex), Vietnam and China (washed). Flavor notes include syrupy body, malty sweetness, maple, toasted marshmallow, butterscotch, lemon acidity, bell pepper, kola nut, and luscious chocolate.</div>
+      <div class="flavor-tags"><span class="flavor-tag">Earthy</span><span class="flavor-tag">Herbal</span><span class="flavor-tag">Full Body</span><span class="flavor-tag">Syrupy</span><span class="flavor-tag">Malty</span></div>
+    </div>
+  </div>
+
+  <div class="section-heading">Country Explorer</div>
+  <p style="font-size:14px;color:var(--muted);margin-bottom:1rem;">Tap a country to learn about its coffee.</p>
+  <div class="country-explorer">
+    <div class="country-tabs">
+      <button class="ctab active" onclick="showCountry(this,'ethiopia')">🇪🇹 Ethiopia</button>
+      <button class="ctab" onclick="showCountry(this,'kenya')">🇰🇪 Kenya</button>
+      <button class="ctab" onclick="showCountry(this,'rwanda')">🇷🇼 Rwanda</button>
+      <button class="ctab" onclick="showCountry(this,'colombia')">🇨🇴 Colombia</button>
+      <button class="ctab" onclick="showCountry(this,'brazil')">🇧🇷 Brazil</button>
+      <button class="ctab" onclick="showCountry(this,'costa-rica')">🇨🇷 Costa Rica</button>
+      <button class="ctab" onclick="showCountry(this,'guatemala')">🇬🇹 Guatemala</button>
+      <button class="ctab" onclick="showCountry(this,'indonesia')">🇮🇩 Indonesia</button>
+      <button class="ctab" onclick="showCountry(this,'yunnan')">🇨🇳 Yunnan</button>
+    </div>
+    <div class="country-panel" id="countryPanel">
+      <h4>🇪🇹 Ethiopia — The Birthplace of Coffee</h4>
+      <p>Coffee drinking has been part of Ethiopian culture for centuries. Only around half of the coffee produced is exported — the rest is consumed domestically. An elaborate, daily coffee ceremony of roasting, grinding, and brewing is still central to social life. In Southwestern Ethiopia, arabica shrubs grow wild in veritable coffee forests — lore has it this is where Kaldi's goats discovered the berries.</p>
+      <p><strong>Flavors:</strong> Incredibly diverse — from fruity and berry-forward naturally processed coffees to bright, floral, and citrusy washed coffees. Heirloom varietals give Ethiopian coffees flavors found nowhere else in the world.</p>
+    </div>
+  </div>
+
+  <div class="section-heading">Farm Sizes</div>
+  <div class="accordion">
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">🏡</div><div class="acc-title">Smallholder Farms (2–5 hectares) — Over 90% of Starbucks' Sources</div><div class="acc-arrow">▾</div></div><div class="acc-body">Most of the coffee Starbucks sources is grown on smallholder farms. These small plots often grow coffee alongside other crops for subsistence farming. When coffee is ready to harvest, the farmer takes their cherries to another farm or mill for processing. Of the more than 450,000 farms Starbucks purchases from, over <strong>90% are smallholders</strong>.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">🏭</div><div class="acc-title">Cooperatives — Strength in Numbers</div><div class="acc-arrow">▾</div></div><div class="acc-body">Associations of smallholder farmers who organize into groups to promote and sell their coffee. Cooperatives can include 100–15,000 farms and are generally centered around a mill where farmers bring their coffee to be processed with profits shared by the group. In essence, each individual farmer is a shareholder.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">🏰</div><div class="acc-title">Coffee Estates (50+ hectares)</div><div class="acc-arrow">▾</div></div><div class="acc-body">Large farms where everything from picking to preparation for shipment can happen on-site. Micro-estates are smaller farms with on-site micro-mills for processing — typically one de-pulper and one small fermentation tank. Starbucks sources from all types, with purchases sometimes representing a farm's entire annual best-quality production.</div></div>
+  </div>
+
+  <div id="quiz3"></div>
+
+  <div class="chapter-nav-footer">
+    <button class="nav-btn" onclick="showChapter(2)">← Coffee Cherry</button>
+    <button class="nav-btn primary" onclick="showChapter(4)">Ethical Sourcing →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ CHAPTER 4: ETHICAL SOURCING -->
+<div class="chapter" id="ch4">
+  <div class="chapter-header">
+    <div class="chapter-num">Chapter 5</div>
+    <h2>Ethical Sourcing</h2>
+    <div class="subtitle">Where Our Heart Is — the people behind every cup.</div>
+  </div>
+
+  <div class="prose">
+    <p>Ethical sourcing is the practice of making sure coffee is purchased in a responsible, sustainable way — helping ensure safe, fair working conditions for farmers and taking into account any environmental or social impacts. It respects the work done by the millions of people who bring the coffee industry to life.</p>
+    <p>When a cup of coffee is purchased, there is a kind of ripple effect around the world that touches many lives. We feel responsible to the hardworking individuals who grow our coffee and invested in the land and crops they devote themselves to. <strong>Starbucks has set out to use its scale to help improve the livelihoods of tens of millions of people in its coffee supply chain.</strong></p>
+  </div>
+
+  <div class="section-heading">Agronomists: On the Ground for Farmers</div>
+  <div class="prose">
+    <p>Starbucks hires agronomists — experts in coffee agriculture and processing who work collaboratively with farmers and suppliers around the globe. They help farmers increase the quality and quantity of coffee grown while protecting the environment. Improvement in both can help farmers earn more money, allowing them to invest in their farms, families, and communities.</p>
+  </div>
+
+  <div class="callout">
+    <p>Every cup they serve, that every cup they sell, has the effort not only of the coffee producer, not only the family's effort, but also has the effort of co-workers like me who are, every day, giving the best of themselves. I invite you to do it with the passion with which we're doing it. That will always lead us to be one of the best coffee companies in the world.</p>
+    <cite>— Eddie Garcia, Agronomist, Guatemala Farmer Support Center</cite>
+  </div>
+
+  <div class="section-heading">Farmer Support Centers (FSCs)</div>
+  <div class="fact-box">
+    <div class="fact-label">9 Centers Worldwide</div>
+    Starbucks' first Farmer Support Center opened in Costa Rica in 2004. There are now FSCs in nine key coffee-producing regions: Alajuela (Costa Rica), Guatemala City, Kigali (Rwanda), Mbeya (Tanzania), Manizales (Colombia), Yunnan (China), Addis Ababa (Ethiopia), North Sumatra (Indonesia), and Chiapas (Mexico). Farmers get access, <strong>free of charge</strong>, to the latest findings of Starbucks' top agronomists — with the goal of building upon regional growing traditions to improve both quality and yield.
+  </div>
+
+  <div class="section-heading">Open-Source Agronomy</div>
+  <div class="prose">
+    <p>Open-source means freely sharing information for the good of all. Starbucks shares everything — from farming best practices to new varieties of climate-resilient arabica coffee — with the rest of the industry. Even those farmers who don't do business with Starbucks benefit from the company's findings.</p>
+    <p>For a large coffee company that purchases from a variety of small suppliers, there is <strong>no value in trying to gain a competitive edge by hoarding trade secrets</strong>. Improving the abilities of all coffee growers to survive climate change benefits the entire industry.</p>
+  </div>
+
+  <div class="section-heading">Investing in Coffee Communities</div>
+  <div class="accordion">
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">💰</div><div class="acc-title">Global Farmer Fund</div><div class="acc-arrow">▾</div></div><div class="acc-body">Providing access to credit at reasonable terms is critical. Farmers live in rural areas where credit is often hard to access — their businesses are often too large for microloans but too small for conventional loans. The Global Farmer Fund gives farmers the ability to make strategic investments in their infrastructure, offering stability to manage ongoing complexities and safeguarding the future of the coffee industry.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">🌳</div><div class="acc-title">100 Million Coffee Trees</div><div class="acc-arrow">▾</div></div><div class="acc-body">Begun in 2015 as the "One Tree for Every Bag" program, this initiative combats the plague of coffee leaf rust in Latin America — a destructive fungus that makes it nearly impossible for farmers to produce high-quality coffee. To date, Starbucks has donated nearly 40 million healthy, rust-resistant trees to farmers, with a goal of 100 million trees by 2025. These new strains replace trees declining in productivity due to age and disease, ensuring the long-term supply of coffee.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">❤️</div><div class="acc-title">The Starbucks Foundation</div><div class="acc-arrow">▾</div></div><div class="acc-body">The Starbucks Foundation has awarded more than $20 million in Origin Grants to organizations working in coffee- and tea-sourcing communities. These support smallholder farming families through vocational training, increased access to water and health services, and greater economic opportunities. There is also a special focus on leadership opportunities for women — helping break down barriers to education and increase access to clean water, sanitation, and economic opportunities, with a goal of improving the lives of at least one million coffee farmers and workers by 2025.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">☕</div><div class="acc-title">Transparent Coffee Buying</div><div class="acc-arrow">▾</div></div><div class="acc-body">All of Starbucks' coffee is purchased by a small team of just seven partners based at the Starbucks Coffee Trading Company (SCTC) in Lausanne, Switzerland. They purchase "transparently" — buying at prices based on quality, offering reliability and price stability. Starbucks pays premiums above commercial market price and requires economic transparency in all contracts, ensuring they know how much of the price paid gets to farmers. Contracts are often finalized years in advance to reduce volatility and foster long-term relationships.</div></div>
+  </div>
+
+  <div class="callout">
+    <p>Starbucks, with the 25-year-old relationship, with the direct relationship, with the volume of coffee that we may sell — we can guarantee many of our associates a price that's sustainable for them to cover their expenses and receive some profit. Starbucks is a buyer that buys volume from us, pays a good price for the coffee and makes us feel very good in a win-win relationship for both parts.</p>
+    <cite>— Carlos Vargas, Manager, CoopeTarrazú, Costa Rica</cite>
+  </div>
+
+  <div id="quiz4"></div>
+
+  <div class="chapter-nav-footer">
+    <button class="nav-btn" onclick="showChapter(3)">← Origins</button>
+    <button class="nav-btn primary" onclick="showChapter(5)">C.A.F.E. Practices →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ CHAPTER 5: CAFE PRACTICES -->
+<div class="chapter" id="ch5">
+  <div class="chapter-header">
+    <div class="chapter-num">Chapter 6</div>
+    <h2>C.A.F.E. Practices</h2>
+    <div class="subtitle">Coffee and Farmer Equity — the framework for ethical sourcing at scale.</div>
+  </div>
+
+  <div class="prose">
+    <p>In 1998, Starbucks partnered with Conservation International to create <strong>C.A.F.E. (Coffee and Farmer Equity) Practices</strong> — one of the coffee industry's first sets of sustainability standards verified by third-party experts. While there are other socially responsible designations, C.A.F.E. Practices is a comprehensive approach that not only sets minimum expectations but promotes continuous improvement through best practices in sustainable coffee production.</p>
+  </div>
+
+  <div class="section-heading">The Four Components</div>
+  <p style="font-size:14px;color:var(--muted);margin-bottom:1rem;">The first two are prerequisites — Starbucks will not purchase coffee unless it meets both of these standards. Tap each component to explore it.</p>
+
+  <div class="cafe-grid">
+    <div class="cafe-card" onclick="toggleCafe(this)">
+      <div class="cafe-bg-letter">Q</div>
+      <div class="cafe-badge prereq">Prerequisite 1</div>
+      <div class="cafe-title">Quality</div>
+      <div class="cafe-sub">Taste in Cup</div>
+      <div class="cafe-body">Starbucks is a specialty-coffee retailer with rigorous quality standards. Every coffee is tasted before purchase by the quality team at the Starbucks Coffee Trading Company (SCTC) in Lausanne, Switzerland. Farmers and suppliers mail a small "offer sample" of green coffee; the team roasts and cups it, then either approves or rejects with an explanation. <strong>Higher quality = higher price paid to the farmer.</strong> Quality evaluation includes cupping for aroma, acidity, body, flavor, and complexity — plus physical evaluation of bean density, moisture content, size, color/shape, and number of defects.</div>
+    </div>
+    <div class="cafe-card" onclick="toggleCafe(this)">
+      <div class="cafe-bg-letter">E</div>
+      <div class="cafe-badge prereq">Prerequisite 2</div>
+      <div class="cafe-title">Economic Transparency</div>
+      <div class="cafe-sub">Price Paid to the Farmer</div>
+      <div class="cafe-body">Participants in C.A.F.E. Practices must submit evidence of payments made throughout the coffee supply chain — from coffee farmer to exporter. Evidence includes receipts to farmers with quantity, type, price, date, and names of buyer and seller. Without economic transparency, there would be no way of knowing how much of the green coffee price actually gets to the farmers. This is critical to the future supply of high-quality coffee, ensuring farmers receive prices needed to invest in their businesses.</div>
+    </div>
+    <div class="cafe-card" onclick="toggleCafe(this)">
+      <div class="cafe-bg-letter">S</div>
+      <div class="cafe-badge component">Component 3</div>
+      <div class="cafe-title">Social Responsibility</div>
+      <div class="cafe-sub">Protecting Workers' Rights</div>
+      <div class="cafe-body">Social Responsibility evaluates hiring practices and working conditions. It ensures workers' rights are protected and that safe, humane conditions exist — including minimum wage (with encouragement to pay more), no child labor, no forced labor, freedom of association and collective bargaining, access to housing/water/sanitation, access to education and medical care, and worker safety training. Compliance with zero-tolerance indicators is mandatory. There are <strong>more than 70 indicators</strong> in the Social Responsibility scorecard. Farms that fail zero-tolerance indicators cannot participate until corrective action is confirmed.</div>
+    </div>
+    <div class="cafe-card" onclick="toggleCafe(this)">
+      <div class="cafe-bg-letter">E</div>
+      <div class="cafe-badge component">Component 4</div>
+      <div class="cafe-title">Environmental Leadership</div>
+      <div class="cafe-sub">Protecting Natural Resources</div>
+      <div class="cafe-body">Coffee-growing countries significantly overlap with the world's most biologically rich and threatened regions. Environmental Leadership ensures coffee is grown and processed in a way that minimizes impacts and contributes positively to the environment. There are <strong>more than 100 indicators</strong> covering waste management, water quality and conservation, energy conservation, biodiversity, and reduced agrochemical use. Zero-tolerance indicators include: no conversion of natural forest to agricultural production, and no use of pesticides banned by the World Health Organization.</div>
+    </div>
+  </div>
+
+  <div class="section-heading">Third-Party Verification</div>
+  <div class="fact-box">
+    <div class="fact-label">Verified by SCS Global Services</div>
+    The Social Responsibility and Environmental Leadership components of C.A.F.E. Practices are verified by approved third-party organizations trained and overseen by SCS Global Services. Starbucks relies on SCS Global Services to ensure the quality and integrity of the verification process — they regularly accompany verifiers during inspections to ensure consistency in reporting back to Starbucks.
+  </div>
+
+  <div class="section-heading">Healthy vs. Unhealthy Trees: Visual Indicators</div>
+  <div class="accordion">
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">✅</div><div class="acc-title">Signs of a Healthy Tree</div><div class="acc-arrow">▾</div></div><div class="acc-body">High yield of cherries · Free of pests and disease · Healthy soil with nutrients · Adequate space between trees for airflow · Well pruned to 5–6 feet for easier harvesting and to prevent moisture buildup that encourages fungi.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">⚠️</div><div class="acc-title">Signs of an Unhealthy Tree</div><div class="acc-arrow">▾</div></div><div class="acc-body">Lower yield of cherries · Pests and disease affecting leaves (e.g., coffee leaf rust) · Lack of nutrients in soil · Not enough space between trees · Lack of pruning — resulting in difficulty harvesting and higher disease risk.</div></div>
+  </div>
+
+  <div class="callout">
+    <p>C.A.F.E. Practices has given us a model and an example of how we can produce in concordance with the environment — how we can take that responsibility as producers to keep growing our gold beans but taking care of the environment, with both social and economic responsibility, which is basically a group of elements that has to go together.</p>
+    <cite>— Ricardo Zuñiga, Agronomic Engineer, CoopeTarrazú, Costa Rica</cite>
+  </div>
+
+  <div id="quiz5"></div>
+
+  <div class="chapter-nav-footer">
+    <button class="nav-btn" onclick="showChapter(4)">← Ethical Sourcing</button>
+    <button class="nav-btn primary" onclick="showChapter(0)">↺ Start Over</button>
+  </div>
+</div>
+
+</div><!-- /content -->
+
+<script>
+// ─────────────────────────────────────────
+// CHAPTER NAVIGATION
+// ─────────────────────────────────────────
+function showChapter(idx) {
+  document.querySelectorAll('.chapter').forEach((c, i) => c.classList.toggle('active', i === idx));
+  document.querySelectorAll('.chapter-btn').forEach((b, i) => b.classList.toggle('active', i === idx));
+  const pct = Math.round(((idx + 1) / 6) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressPct').textContent = pct + '%';
+  document.getElementById('progressLabel').textContent = 'Chapter ' + (idx + 1) + ' of 6';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function toggleAcc(el) { el.classList.toggle('open'); }
+function toggleRegion(el) { const was = el.classList.contains('active'); document.querySelectorAll('.region-card').forEach(c => c.classList.remove('active')); if (!was) el.classList.add('active'); }
+function toggleVarietal(el) { const was = el.classList.contains('active'); document.querySelectorAll('.varietal-card').forEach(c => c.classList.remove('active')); if (!was) el.classList.add('active'); }
+function toggleCafe(el) { el.classList.toggle('open'); }
+
+// ─────────────────────────────────────────
+// PROCESSING TABS
+// ─────────────────────────────────────────
+const processData = {
+  washed: {
+    title: 'Washed (Wet) Processing',
+    body: `<p>The most widely used method worldwide. Requires access to clean water. Steps: Receiving → De-pulping (machine slices fruit, beans pop out) → Fermentation tank (18–36 hours) or demucilaging machine → Drying in parchment on patios or raised beds (3–7 days) → Resting in bags up to two months → Hulling.</p><p>With mucilage quickly removed, it has minimal influence on the cup. The result is a <strong>clean, bright, nuanced cup with pleasing acidity and crisp finish</strong>. Most commonly used in East Africa and Central America.</p><div><span class="flavor-note">Clean Finish</span><span class="flavor-note">Bright Acidity</span><span class="flavor-note">Nuanced</span><span class="flavor-note">Crisp</span></div>`
+  },
+  semi: {
+    title: 'Semi-Washed (Wet-Hulled) Processing',
+    body: `<p>Used primarily by smallholder farmers in Indonesia — known in Indonesian as <em>giling basah</em>. Steps: De-pulping with a hand-cranked luwak → Rinsing/rough mucilage removal → Partial drying → Transport to mill → Continued drying → Wet-hulling (while beans are still semi-wet, removing parchment) → Final drying → Sorting and bagging.</p><p>Unique to Indonesia, this process contributes chiefly to Indonesian coffees' recognizable profile: <strong>earthy, herbal flavors with big, syrupy body and greatly muted acidity</strong>.</p><div><span class="flavor-note">Earthy</span><span class="flavor-note">Herbal</span><span class="flavor-note">Full Body</span><span class="flavor-note">Syrupy</span><span class="flavor-note">Low Acidity</span></div>`
+  },
+  natural: {
+    title: 'Natural (Sun-Dried / Dry) Processing',
+    body: `<p>The oldest processing method — most common in East Africa and Brazil. <strong>No water is used.</strong> Steps: Receiving → Drying whole cherries in thin layers on patios or raised beds, turned often (several days until hard like raisins) → Hulling (pulp, mucilage, and parchment removed together) → Final resting, sorting, and bagging.</p><p>As cherries dry, the fruit stays on the bean, infusing it with flavor — sugars from the fruit add sweetness. The result: <strong>full body and intense fruity flavors</strong> — African naturals often taste of fresh cherry or blueberry; Latin American naturals taste of dried fruit like raisin, plum, or fig.</p><div><span class="flavor-note">Full Body</span><span class="flavor-note">Berry</span><span class="flavor-note">Cherry</span><span class="flavor-note">Dried Fruit</span><span class="flavor-note">Sweet</span></div>`
+  },
+  honey: {
+    title: 'Honey Processing',
+    body: `<p>Common in Costa Rica and parts of Central America. A hybrid of washed and natural — skips fermentation and leaves mucilage clinging to the parchment to dry with the bean. Classified by color (Yellow to Black) depending on the amount of mucilage left and drying conditions. Yellow honey = less mucilage, drier/faster drying. Black honey = more mucilage, longer drying time. No actual honey involved — the name comes from the sticky, sugary nature of mucilage itself.</p><p>Result: <strong>distinctly sweet but without intense fruit flavors of natural coffees</strong> — typically creamy body and muted acidity, and can actually taste a little like honey.</p><div><span class="flavor-note">Sweet</span><span class="flavor-note">Creamy Body</span><span class="flavor-note">Muted Acidity</span><span class="flavor-note">Smooth</span></div>`
+  },
+  pulped: {
+    title: 'Pulped Natural Processing',
+    body: `<p>Most commonly found in Brazil. Shares characteristics of both washed and natural methods. Steps: De-pulping (skin and pulp removed mechanically) → Demucilaging machine adjusted to leave a desired amount of mucilage → Drying on patios with significant mucilage still attached → Hulling at a mill.</p><p>There is no fermentation process. Result: <strong>flavorful, sweet cup with more body and less acidity than washed coffees</strong>. Brazil's reliability and the pulped natural method's consistency enable the country's large-scale coffee production.</p><div><span class="flavor-note">Sweet</span><span class="flavor-note">Rich Body</span><span class="flavor-note">Mild Acidity</span><span class="flavor-note">Flavorful</span></div>`
+  }
+};
+
+function showProcess(btn, key) {
+  document.querySelectorAll('.ptab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const d = processData[key];
+  document.getElementById('processContent').innerHTML = `<h4>${d.title}</h4>${d.body}`;
+}
+
+// ─────────────────────────────────────────
+// COUNTRY EXPLORER
+// ─────────────────────────────────────────
+const countryData = {
+  ethiopia: {
+    flag: '🇪🇹', name: 'Ethiopia — The Birthplace of Coffee',
+    body: `<p>Coffee drinking has been part of Ethiopian culture for centuries — only around half of the coffee produced is exported. An elaborate daily coffee ceremony is still central to social life. In Southwestern Ethiopia, arabica shrubs grow wild in veritable coffee forests. Starbucks opened a Farmer Support Center in Addis Ababa in 2014.</p><p><strong>Flavors:</strong> Incredibly diverse — from fruity, berry-forward natural coffees to bright, floral, and citrusy washed coffees. Home to thousands of heirloom varietals found nowhere else in the world.</p>`
+  },
+  kenya: {
+    flag: '🇰🇪', name: 'Kenya — Home to Treasured Coffees',
+    body: `<p>Kenya introduced coffee late in the 19th century and crafted its own distinctive approach. Graced with high plateaus around Mt. Kenya (the second-highest peak in Africa) and rich volcanic soil, Kenya is known for cooperatives of smallholder farms and a rich tradition of fully washed coffees.</p><p><strong>Flavors:</strong> Intensely flavored and beautifully aromatic — complex notes of black currant, fresh berries, tart grapefruit. Kenya also has two coffee harvests a year: a main harvest and a second "fly-crop" (mitaca). Starbucks has been offering Kenyan coffees for more than 40 years.</p>`
+  },
+  rwanda: {
+    flag: '🇷🇼', name: 'Rwanda — Land of a Thousand Hills',
+    body: `<p>Coffee was substantial in Rwanda's economy before the devastating 1994 genocide. In the years that followed, coffee production played a major role in rebuilding the country's society and economy. The Hingakawa women's group, part of co-op Abakundakawa, found a path forward through coffee — embracing reconciliation, revitalization, and improved livelihoods. Starbucks opened a Farmer Support Center in Kigali in 2009.</p><p><strong>Flavors:</strong> Starbucks Reserve® Rwanda Hingakawa featured sweet citrus, honey, and dark chocolate notes.</p>`
+  },
+  colombia: {
+    flag: '🇨🇴', name: 'Colombia — Perfect Conditions for Perfect Coffee',
+    body: `<p>Nestled on the northern Andes mountain chain, Colombia's many volcanoes make the soil ideal for coffee. A large span of the country enables multiple microclimates with unique flavor profiles — Starbucks has featured many Colombian single-origins reflecting this diversity. Starbucks opened a Farmer Support Center in Manizales in 2012. Since 2014, Colombian Starbucks stores serve 100% locally sourced and roasted coffee.</p><p><strong>Flavors:</strong> Range widely — from floral aromas with juicy lemon and brown sugar (Cauca region) to black currant with dark chocolate (Antioquia region). Two coffee harvests a year.</p>`
+  },
+  brazil: {
+    flag: '🇧🇷', name: 'Brazil — Arabica Producer Supreme',
+    body: `<p>Brazil is the world's largest producer of arabica coffee. With smooth, rolling hills ideal for sprawling farms and cooperatives, Brazil is a leader in best practices for large-scale production and one of the most mechanized coffee origins. Brazil's reliability and volume enable Starbucks to offer Brazilian coffee in many blends globally.</p><p><strong>Flavors:</strong> In 2015, a Brazilian coffee from Sítio Baixadão farm won the Brazil Late Harvest Cup of Excellence with a record-breaking 95.18 points — the highest-scoring pulped-natural Brazil ever produced. Starbucks bid on the entire 2,000-pound lot.</p>`
+  },
+  'costa-rica': {
+    flag: '🇨🇷', name: 'Costa Rica — Small Country, Huge Impact',
+    body: `<p>Despite its small size, Costa Rica is very important to the coffee industry and to Starbucks. With a government committed to coffee quality and sustainability, it often pioneers best practices. Hacienda Alsacia — Starbucks' own coffee farm — is located on the slopes of Poás Volcano here. The first Farmer Support Center opened in San José in 2004 and relocated to Hacienda Alsacia in 2016.</p><p><strong>Flavors:</strong> Some of the finest coffees in the world — known for honey processing and a wide range of profiles from bright and clean washed to creamy and sweet honey-processed.</p>`
+  },
+  guatemala: {
+    flag: '🇬🇹', name: 'Guatemala — Natural Beauty & Exquisite Coffee',
+    body: `<p>Guatemala's many active volcanoes and mineral-rich soil have produced some of the finest coffees in the world, grown on steep mountainsides. Though relatively small (~42,000 sq mi), it has 14 distinct ecosystems and extraordinary climate diversity. As of 2019, more than 30 million disease-resilient trees have been donated in Mexico, Guatemala, and El Salvador as part of Starbucks' 100 Million Trees program.</p><p><strong>Flavors:</strong> High altitudes, cool evening temperatures, and abundant sunlight contribute to Guatemala's specialty-coffee quality — complex, often with notes of dark chocolate, apple, and spice.</p>`
+  },
+  indonesia: {
+    flag: '🇮🇩', name: 'Indonesia — Volcanic Archipelago Extraordinaire',
+    body: `<p>Indonesia is made up of thousands of volcanic islands spanning ~3,200 miles of equatorial ocean. Sumatra has been a staple offering at Starbucks since 1971. The unique semi-washed (wet-hulled / giling basah) processing method is indigenous to Indonesia. The families who own and work small, rugged coffee farms across the archipelago cultivate beans with full-bodied flavors that are nothing short of miraculous. Starbucks opened a Farmer Support Center in North Sumatra in 2016.</p><p><strong>Flavors:</strong> Full body, earthy and herbal, with greatly muted acidity — an essential ingredient in many Starbucks signature blends.</p>`
+  },
+  yunnan: {
+    flag: '🇨🇳', name: 'Yunnan Province — China\'s Coffee Capital',
+    body: `<p>On the slopes of the Eastern Himalayas in Southwest China, warm, humid air heats coffee trees during the day and thinner air cools them at night, creating dense beans with stunning flavors. Coffee growing in Yunnan dates to the late 1800s. Starbucks opened a Farmer Support Center in Yunnan in 2012 and has trained nearly 20,000 farmers in sustainable practices. In 2009, Starbucks released its first coffee including Yunnan beans.</p><p><strong>Flavors:</strong> Balanced, medium-bodied with herbal, spicy flavors and mild, crisp acidity.</p>`
+  }
+};
+
+function showCountry(btn, key) {
+  document.querySelectorAll('.ctab').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const d = countryData[key];
+  document.getElementById('countryPanel').innerHTML = `<h4>${d.flag} ${d.name}</h4>${d.body}`;
+}
+
+// ─────────────────────────────────────────
+// QUIZZES
+// ─────────────────────────────────────────
+const quizzes = {
+  quiz0: { questions: [
+    { q: "What was coffee first called in Yemen, and what does it mean?", opts: ["Caffè — meaning strong drink", "Qahwa — meaning that which prevents sleep", "Kopi — meaning black water", "Mocha — after the port city"], answer: 1, feedback: "In Yemen, coffee was called qahwa — literally 'that which prevents sleep.' The port city of Mocha became the world's major market hub for arabica coffee, lending its name to one of the most famous coffee varietals." },
+    { q: "What event made coffee the patriotic American drink of choice in 1773?", opts: ["The opening of the first American coffeehouse", "The invention of the drip coffee maker", "The Boston Tea Party — many Americans believed it was their duty to avoid tea", "Alfred Peet introducing specialty coffee in Berkeley"], answer: 2, feedback: "The Boston Tea Party in 1773 was the catalyst for the surge in American coffee culture. Demonstrators dumped an entire shipment of British East India Company tea into Boston harbor to protest taxation. After that, with many Americans believing it was their patriotic duty to avoid tea, coffee rose in popularity and overtook tea as the daily hot beverage of choice." },
+    { q: "What did Howard Schultz see in Milan that inspired the Starbucks we know today?", opts: ["The world's first espresso machine", "Italian espresso bar culture and the concept of a third place", "The largest coffee farm in the world", "A French café au lait tradition"], answer: 1, feedback: "In 1982, Howard Schultz was sent to Milan on a business trip. After experiencing an Italian espresso bar, he became enamored with the concept and aesthetics. He had a vision of bringing the Italian coffeehouse tradition to the U.S. — a place for conversation and community, a 'third place' between work and home." }
+  ]},
+  quiz1: { questions: [
+    { q: "Why does Starbucks purchase only arabica coffee and not robusta?", opts: ["Robusta is more expensive to source", "Arabica has higher caffeine content", "Arabica produces coffee with refined flavor, body, and acidity that Starbucks prefers", "Robusta trees are too tall to harvest"], answer: 2, feedback: "Coffea arabica, when grown at high altitudes, produces high-quality coffee with the refined flavor, body, and acidity most specialty-coffee buyers look for. Robusta, while hardy and disease-resistant, has a less refined, sometimes harsh flavor and is often used as a lower-cost filler. Starbucks does not purchase robusta coffee." },
+    { q: "How long can a healthy coffee tree produce cherries?", opts: ["5–10 years", "10–15 years", "25–30 years", "50+ years"], answer: 2, feedback: "A healthy coffee tree has the potential to produce cherries for 25–30 years. This makes the investment in proper seedling selection, nursery care, and farm management extremely worthwhile over the long term." },
+    { q: "What is the purpose of Hacienda Alsacia's Core Collection?", opts: ["To produce coffee exclusively for Starbucks Reserve", "To care for the 100 most genetically diverse arabica strains sourced from Ethiopia — to develop resilient hybrid varieties", "To serve as a visitor attraction", "To train baristas in agronomy"], answer: 1, feedback: "The Core Collection is the 100 most genetically diverse strains of arabica coffee in the world, sourced more than 50 years ago from Ethiopia. Carlos Mario Rodriguez cares for this collection at Hacienda Alsacia with the goal of using its genetic diversity to develop the perfect coffee plant — one that can resist disease, survive drought and heat, and produce coffee that meets Starbucks' high-quality standards." }
+  ]},
+  quiz2: { questions: [
+    { q: "What is mucilage, and why does it matter so much for flavor?", opts: ["The outer skin of the cherry — it adds bitterness", "A sticky, honey-like coating under the pulp — the amount of time it contacts the bean directly influences flavor, body, and acidity", "The parchment layer that protects the bean — it adds no flavor", "The silver skin that flakes off during roasting"], answer: 1, feedback: "Mucilage is the sticky, honey-like coating underneath the pulp of the coffee cherry. The amount of time mucilage stays in contact with the bean — and how much mucilage there is — is one of the biggest influences on a coffee's body, acidity, and flavor. This is why different processing methods produce such dramatically different cup profiles from the same cherry." },
+    { q: "Which processing method produces the most intensely fruity, full-bodied coffee?", opts: ["Washed processing", "Natural (sun-dried) processing", "Semi-washed (wet-hulled) processing", "Honey processing"], answer: 1, feedback: "Natural (sun-dried) processing allows the whole cherry — skin, pulp, and mucilage — to dry right on the bean. Sugars from the fruit infuse the bean over days of drying, resulting in full body and intense fruity flavors. African naturals often have notes of fresh cherry or blueberry; Latin American naturals can have raisin, plum, or fig." },
+    { q: "What is 'selective harvesting' and why does Starbucks require it?", opts: ["Only harvesting the largest cherries on each tree", "Using machines to strip all cherries at once regardless of ripeness", "Returning to the same tree multiple times to pick only the ripest cherries at their peak", "Harvesting only at dawn when temperatures are cooler"], answer: 2, feedback: "Selective harvesting means returning to the same tree multiple times during a harvest season to pick only the ripest, ruby-red cherries. High elevations mean different areas of the same farm ripen at different times — even one tree or branch can have cherries that ripen faster than others. This careful approach leads to the high quality that both farmers and Starbucks are after." }
+  ]},
+  quiz3: { questions: [
+    { q: "What three elements make up terroir?", opts: ["Variety, processing, and roast level", "Soil, altitude, and microclimate", "Temperature, rainfall, and sunlight", "Farmer expertise, bean size, and fermentation time"], answer: 1, feedback: "Terroir is the culmination of soil, altitude, and microclimate unique to a growing location. Together, these three elements are one of the key reasons that coffee grown in different places produces beans with unique cup characteristics — even two farms using the same varietal and processing method can taste completely different because of their terroir." },
+    { q: "What are the characteristic flavor notes of Latin American coffees?", opts: ["Earthy, herbal, full body", "Floral, berry, sparkling acidity", "Nuts, cocoa, soft spice — smooth and lingering", "Tropical, savory, muted acidity"], answer: 2, feedback: "Latin American coffees are typically known for smooth, lingering mouthfeels with notes of chocolate and toffee, baking spices like cinnamon and cardamom, and clean dry finishes like walnuts, cocoa nibs, and toasted almonds — though this same region also produces bright, fruity and floral coffees." },
+    { q: "Over 90% of the 450,000+ farms Starbucks sources coffee from are what type?", opts: ["Coffee estates over 50 hectares", "Cooperatives of more than 100 farms", "Smallholder farms of 2–5 hectares", "Government-run state farms"], answer: 2, feedback: "Of the more than 450,000 farms Starbucks purchases coffee from, over 90% are smallholders — farms between two and five hectares, often growing coffee alongside other crops for subsistence farming. This is why programs like C.A.F.E. Practices and Farmer Support Centers are so important — they help the many small farms that form the backbone of Starbucks' supply chain." }
+  ]},
+  quiz4: { questions: [
+    { q: "What does 'open-source agronomy' mean at Starbucks?", opts: ["Using automated machines to replace human farmers", "Freely sharing research findings, best practices, and new varietals with the entire industry — even farmers who don't supply Starbucks", "A digital platform where baristas can access coffee recipes", "Proprietary farming techniques kept confidential for competitive advantage"], answer: 1, feedback: "Open-source agronomy means freely sharing information for the good of all. Starbucks shares everything from farming best practices to new varieties of climate-resilient arabica with the rest of the industry. Even farmers who don't do business with Starbucks benefit from these findings. For a large company purchasing from small suppliers, there is no value in hoarding trade secrets — improving all growers' abilities to survive climate change benefits the entire industry." },
+    { q: "What are the two prerequisites of C.A.F.E. Practices — without which Starbucks will NOT purchase coffee?", opts: ["Environmental Leadership and Social Responsibility", "Quality and Economic Transparency", "Organic certification and Fair Trade certification", "Bean density and moisture content"], answer: 1, feedback: "The two prerequisites of C.A.F.E. Practices are Quality (the coffee must meet Starbucks' rigorous taste standards, evaluated by the SCTC team in Lausanne) and Economic Transparency (participants must demonstrate how much of the purchase price actually gets to the farmer). Starbucks will not purchase coffee unless it meets both standards." },
+    { q: "What is the 100 Million Coffee Trees initiative designed to address?", opts: ["Overproduction of robusta coffee", "Coffee leaf rust (la roya) — a devastating fungus ravaging Latin American coffee crops", "Reducing plastic packaging in coffee bags", "Training baristas in latte art"], answer: 1, feedback: "Coffee leaf rust (la roya) is a destructive fungal disease that attacks coffee trees and makes it nearly impossible for farmers to produce high-quality coffee. The 100 Million Coffee Trees initiative (begun as One Tree for Every Bag in 2015) aims to donate 100 million healthy, rust-resistant trees to farmers by 2025 — replacing aging and diseased trees with strong new strains to ensure the long-term supply of coffee." }
+  ]}
+};
+
+function buildQuiz(containerId, quizKey) {
+  const container = document.getElementById(containerId);
+  if (!container || !quizzes[quizKey]) return;
+  const quiz = quizzes[quizKey];
+  let current = 0, score = 0;
+  function render() {
+    if (current >= quiz.questions.length) {
+      container.innerHTML = `<div class="quiz-wrap"><div class="quiz-label">Chapter Quiz Complete</div><div class="quiz-score show"><div class="score-num">${score}/${quiz.questions.length}</div><div class="score-label">Questions Correct</div><p style="margin-top:1rem;font-size:14px;color:var(--muted);">${score===quiz.questions.length?'Perfect score — you\'re a coffee storyteller!':score>=quiz.questions.length-1?'Excellent work!':'Good effort! Review and try again.'}</p></div></div>`;
+      return;
+    }
+    const q = quiz.questions[current];
+    container.innerHTML = `<div class="quiz-wrap"><div class="quiz-label">Chapter Quiz</div><div class="quiz-progress">Question ${current+1} of ${quiz.questions.length}</div><div class="quiz-q">${q.q}</div><div class="quiz-options">${q.opts.map((o,i)=>`<button class="quiz-opt" onclick="answerQ(this,${i},${q.answer},'${quizKey}',${current})">${o}</button>`).join('')}</div><div class="quiz-feedback" id="qfb_${quizKey}"></div><button class="quiz-next" id="qnx_${quizKey}" onclick="nextQ('${quizKey}')">Next →</button></div>`;
+  }
+  window['qs_'+quizKey] = { cur: ()=>current, inc: ()=>{current++;}, addS: ()=>{score++;}, render };
+  render();
+}
+
+function answerQ(btn, chosen, correct, key, qIdx) {
+  const s = window['qs_'+key]; if (!s) return;
+  btn.parentElement.querySelectorAll('.quiz-opt').forEach(o => o.disabled = true);
+  const fb = document.getElementById('qfb_'+key), nxt = document.getElementById('qnx_'+key);
+  const q = quizzes[key].questions[qIdx];
+  if (chosen === correct) { btn.classList.add('correct'); fb.textContent = '✓ '+q.feedback; fb.className = 'quiz-feedback correct show'; s.addS(); }
+  else { btn.classList.add('wrong'); btn.parentElement.querySelectorAll('.quiz-opt')[correct].classList.add('correct'); fb.textContent = '✗ '+q.feedback; fb.className = 'quiz-feedback wrong show'; }
+  nxt.classList.add('show');
+}
+
+function nextQ(key) { const s = window['qs_'+key]; if (s) { s.inc(); s.render(); } }
+
+['quiz0','quiz1','quiz2','quiz3','quiz4'].forEach(id => buildQuiz(id, id));
+</script>
+</body>
+</html>
