@@ -1,0 +1,905 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Starbucks Coffee Academy — Barista Basics 2024</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Libre+Baskerville:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap');
+
+  :root {
+    --cream: #F5F0E8;
+    --espresso: #2C1A0E;
+    --roast: #6B3A1F;
+    --caramel: #C47A2B;
+    --gold: #E8A93A;
+    --muted: #7A5C3A;
+    --border: rgba(107,58,31,0.2);
+    --card: #FFFDF8;
+    --green: #1E3932;
+    --green-light: #00704A;
+    --text: #1A1008;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); }
+
+  /* HERO */
+  .hero { background: var(--espresso); color: var(--cream); padding: 4rem 2rem 3rem; text-align: center; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(196,122,43,0.15) 0%, transparent 70%); pointer-events: none; }
+  .hero-badge { display: inline-block; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); border: 1px solid rgba(232,169,58,0.4); padding: 6px 16px; border-radius: 2px; margin-bottom: 1.5rem; }
+  .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 400; line-height: 1.15; margin-bottom: 1rem; }
+  .hero h1 em { color: var(--gold); font-style: italic; }
+  .hero p { font-size: 1rem; color: rgba(245,240,232,0.7); max-width: 560px; margin: 0 auto 2rem; line-height: 1.7; }
+  .progress-bar-wrap { max-width: 400px; margin: 0 auto; }
+  .progress-label { display: flex; justify-content: space-between; font-size: 12px; color: rgba(245,240,232,0.5); margin-bottom: 8px; }
+  .progress-track { height: 3px; background: rgba(245,240,232,0.15); border-radius: 2px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--gold); border-radius: 2px; transition: width 0.5s ease; }
+
+  /* NAV */
+  .chapter-nav { background: var(--espresso); border-top: 1px solid rgba(245,240,232,0.08); padding: 0 1.5rem; display: flex; overflow-x: auto; scrollbar-width: none; position: sticky; top: 0; z-index: 100; }
+  .chapter-nav::-webkit-scrollbar { display: none; }
+  .chapter-btn { flex-shrink: 0; padding: 14px 16px; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: rgba(245,240,232,0.45); background: none; border: none; border-bottom: 2px solid transparent; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.2s; white-space: nowrap; }
+  .chapter-btn:hover { color: rgba(245,240,232,0.8); }
+  .chapter-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  /* CONTENT */
+  .content { max-width: 820px; margin: 0 auto; padding: 3rem 1.5rem 6rem; }
+  .chapter { display: none; }
+  .chapter.active { display: block; animation: fadeIn 0.4s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+  .chapter-header { margin-bottom: 2.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
+  .chapter-num { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--caramel); margin-bottom: 0.5rem; }
+  .chapter-header h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 400; color: var(--espresso); line-height: 1.2; }
+  .chapter-header .subtitle { font-family: 'Libre Baskerville', serif; font-style: italic; color: var(--muted); margin-top: 0.5rem; font-size: 1rem; }
+
+  .prose { font-size: 16px; line-height: 1.8; color: #2a1a0a; }
+  .prose p { margin-bottom: 1.25rem; }
+  .prose strong { font-weight: 500; color: var(--roast); }
+
+  /* CALLOUT */
+  .callout { background: var(--espresso); color: var(--cream); padding: 1.5rem 2rem; border-radius: 4px; margin: 2rem 0; position: relative; overflow: hidden; }
+  .callout::before { content: '\201C'; font-family: 'Playfair Display', serif; font-size: 5rem; color: rgba(232,169,58,0.2); position: absolute; top: -10px; left: 10px; line-height: 1; }
+  .callout p { font-family: 'Libre Baskerville', serif; font-style: italic; font-size: 1.05rem; line-height: 1.7; position: relative; z-index: 1; color: rgba(245,240,232,0.9); }
+  .callout cite { display: block; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: var(--gold); margin-top: 0.75rem; font-style: normal; }
+
+  /* FACT BOX */
+  .fact-box { background: var(--card); border: 1px solid var(--border); border-left: 3px solid var(--caramel); border-radius: 4px; padding: 1.25rem 1.5rem; margin: 1.5rem 0; font-size: 15px; line-height: 1.7; color: var(--roast); }
+  .fact-box .fact-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--caramel); margin-bottom: 0.5rem; font-weight: 500; }
+
+  /* SECTION HEADING */
+  .section-heading { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 600; color: var(--espresso); margin: 2.5rem 0 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border); }
+
+  /* ACCORDION */
+  .accordion { margin: 1.5rem 0; }
+  .acc-item { border: 1px solid var(--border); border-radius: 6px; overflow: hidden; margin-bottom: 0.75rem; background: var(--card); transition: box-shadow 0.2s; }
+  .acc-item:hover { box-shadow: 0 2px 12px rgba(44,26,14,0.07); }
+  .acc-header { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.25rem; cursor: pointer; user-select: none; }
+  .acc-icon { width: 34px; height: 34px; border-radius: 50%; background: var(--espresso); color: var(--gold); display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+  .acc-title { font-weight: 500; font-size: 15px; flex: 1; }
+  .acc-arrow { font-size: 12px; color: var(--muted); transition: transform 0.2s; }
+  .acc-item.open .acc-arrow { transform: rotate(180deg); }
+  .acc-body { display: none; padding: 0 1.25rem 1.25rem; font-size: 14px; color: #4a2e16; line-height: 1.75; border-top: 1px solid var(--border); padding-top: 1rem; }
+  .acc-item.open .acc-body { display: block; }
+
+  /* STEP CARDS */
+  .steps-list { display: grid; gap: 0.75rem; margin: 1.5rem 0; }
+  .step-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; display: flex; gap: 1rem; align-items: flex-start; }
+  .step-num { width: 36px; height: 36px; border-radius: 50%; background: var(--espresso); color: var(--gold); display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 600; flex-shrink: 0; }
+  .step-body h4 { font-weight: 500; font-size: 15px; margin-bottom: 0.25rem; color: var(--espresso); }
+  .step-body p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  /* VALUES GRID */
+  .values-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+  .value-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; cursor: pointer; transition: all 0.2s; }
+  .value-card:hover { box-shadow: 0 4px 16px rgba(44,26,14,0.1); transform: translateY(-2px); }
+  .value-card.active { border-color: var(--caramel); background: rgba(196,122,43,0.04); }
+  .value-emoji { font-size: 2rem; margin-bottom: 0.5rem; }
+  .value-name { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 600; color: var(--espresso); margin-bottom: 0.25rem; }
+  .value-short { font-size: 13px; color: var(--muted); line-height: 1.5; }
+  .value-detail { display: none; font-size: 13px; color: #4a2e16; line-height: 1.7; border-top: 1px solid var(--border); margin-top: 0.75rem; padding-top: 0.75rem; }
+  .value-card.active .value-detail { display: block; }
+
+  /* POSITION TABS */
+  .pos-tabs { display: flex; gap: 0; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin: 1.5rem 0; }
+  .pos-tab { flex: 1; padding: 12px 8px; text-align: center; cursor: pointer; font-size: 12px; letter-spacing: 0.5px; color: var(--muted); border: none; background: var(--card); font-family: 'DM Sans', sans-serif; transition: all 0.2s; border-right: 1px solid var(--border); }
+  .pos-tab:last-child { border-right: none; }
+  .pos-tab:hover { background: rgba(196,122,43,0.06); }
+  .pos-tab.active { background: var(--espresso); color: var(--gold); }
+  .pos-detail { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; font-size: 14px; color: #4a2e16; line-height: 1.75; margin-top: 0.75rem; animation: fadeIn 0.3s ease; }
+  .pos-detail h4 { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--espresso); margin-bottom: 0.5rem; }
+
+  /* TEMP GAUGE */
+  .temp-gauge { display: grid; gap: 0.5rem; margin: 1.5rem 0; }
+  .temp-row { display: flex; align-items: center; gap: 1rem; background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1rem 1.25rem; }
+  .temp-color { width: 14px; height: 14px; border-radius: 50%; flex-shrink: 0; }
+  .temp-label { font-weight: 500; font-size: 14px; flex: 1; color: var(--espresso); }
+  .temp-val { font-size: 13px; color: var(--muted); font-family: 'Libre Baskerville', serif; }
+  .temp-note { font-size: 11px; color: var(--caramel); margin-top: 2px; }
+
+  /* ESPRESSO SHOTS */
+  .shots-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(160px, 1fr)); gap: 0.75rem; margin: 1.5rem 0; }
+  .shot-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1rem; text-align: center; }
+  .shot-name { font-family: 'Playfair Display', serif; font-size: 0.95rem; font-weight: 600; color: var(--espresso); }
+  .shot-italian { font-size: 11px; color: var(--caramel); letter-spacing: 0.5px; margin-bottom: 0.4rem; }
+  .shot-desc { font-size: 12px; color: var(--muted); line-height: 1.5; }
+
+  /* TEA TABS */
+  .tea-tabs { background: var(--card); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin: 1.5rem 0; }
+  .tea-tab-bar { display: flex; flex-wrap: wrap; gap: 0.5rem; background: rgba(44,26,14,0.04); border-bottom: 1px solid var(--border); padding: 0.75rem; }
+  .ttab { padding: 6px 14px; border-radius: 20px; font-size: 12px; border: 1px solid var(--border); background: none; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.2s; color: var(--muted); }
+  .ttab:hover { border-color: var(--caramel); color: var(--caramel); }
+  .ttab.active { background: var(--espresso); color: var(--gold); border-color: var(--espresso); }
+  .tea-panel { padding: 1.5rem; min-height: 100px; }
+  .tea-panel h4 { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--espresso); margin-bottom: 0.5rem; }
+  .tea-panel p { font-size: 14px; color: #4a2e16; line-height: 1.75; }
+
+  /* LATTE QUIZ (SERVICE RECOVERY) */
+  .latte-model { display: grid; gap: 0.75rem; margin: 1.5rem 0; }
+  .latte-row { background: var(--card); border: 1px solid var(--border); border-radius: 8px; overflow: hidden; cursor: pointer; }
+  .latte-header { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.25rem; }
+  .latte-letter { width: 40px; height: 40px; border-radius: 50%; background: var(--espresso); color: var(--gold); display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 1.2rem; font-weight: 600; flex-shrink: 0; }
+  .latte-word { font-weight: 500; font-size: 15px; flex: 1; color: var(--espresso); }
+  .latte-arrow { font-size: 12px; color: var(--muted); transition: transform 0.2s; }
+  .latte-row.open .latte-arrow { transform: rotate(180deg); }
+  .latte-body { display: none; padding: 0 1.25rem 1.25rem; font-size: 14px; color: #4a2e16; line-height: 1.75; border-top: 1px solid var(--border); padding-top: 1rem; }
+  .latte-row.open .latte-body { display: block; }
+
+  /* 4 FUNDAMENTALS */
+  .fund-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 1rem; margin: 1.5rem 0; }
+  @media (max-width: 500px) { .fund-grid { grid-template-columns: 1fr; } }
+  .fund-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden; }
+  .fund-card:hover { box-shadow: 0 4px 20px rgba(44,26,14,0.1); }
+  .fund-card.open { border-color: var(--caramel); }
+  .fund-bg { font-family: 'Playfair Display', serif; font-size: 4rem; color: rgba(44,26,14,0.05); position: absolute; top: 0; right: 8px; line-height: 1; }
+  .fund-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
+  .fund-title { font-weight: 500; font-size: 16px; color: var(--espresso); margin-bottom: 0.25rem; }
+  .fund-body { display: none; font-size: 13px; color: #4a2e16; line-height: 1.75; border-top: 1px solid var(--border); padding-top: 0.75rem; margin-top: 0.75rem; }
+  .fund-card.open .fund-body { display: block; }
+
+  /* BEVERAGE SIZES */
+  .sizes-wrap { display: flex; gap: 1.5rem; flex-wrap: wrap; margin: 1.5rem 0; align-items: flex-end; }
+  .size-cup { display: flex; flex-direction: column; align-items: center; gap: 0.5rem; }
+  .cup-visual { background: var(--espresso); border-radius: 4px 4px 8px 8px; display: flex; align-items: center; justify-content: center; }
+  .size-name { font-family: 'Playfair Display', serif; font-size: 0.85rem; font-weight: 600; color: var(--espresso); }
+  .size-oz { font-size: 11px; color: var(--muted); }
+
+  /* ALLERGEN CHIPS */
+  .allergen-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 1rem 0; }
+  .allergen-chip { padding: 6px 14px; background: rgba(139,69,19,0.1); border: 1px solid rgba(139,69,19,0.25); border-radius: 20px; font-size: 13px; color: var(--roast); font-weight: 500; }
+
+  /* QUIZ */
+  .quiz-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin: 2rem 0; }
+  .quiz-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--caramel); margin-bottom: 1rem; }
+  .quiz-q { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--espresso); margin-bottom: 1.25rem; line-height: 1.4; }
+  .quiz-options { display: grid; gap: 0.5rem; margin-bottom: 1rem; }
+  .quiz-opt { padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; font-size: 14px; background: none; text-align: left; font-family: 'DM Sans', sans-serif; transition: all 0.2s; color: var(--text); }
+  .quiz-opt:hover { border-color: var(--caramel); background: rgba(196,122,43,0.04); }
+  .quiz-opt.correct { background: rgba(0,112,74,0.1); border-color: var(--green-light); color: var(--green); }
+  .quiz-opt.wrong { background: rgba(139,0,0,0.07); border-color: #8B0000; color: #8B0000; }
+  .quiz-feedback { font-size: 14px; line-height: 1.6; padding: 0.75rem 1rem; border-radius: 6px; display: none; }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.correct { background: rgba(0,112,74,0.08); color: var(--green); }
+  .quiz-feedback.wrong { background: rgba(139,0,0,0.07); color: #8B0000; }
+  .quiz-next { margin-top: 1rem; padding: 0.6rem 1.5rem; background: var(--espresso); color: var(--gold); border: none; border-radius: 4px; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; display: none; font-family: 'DM Sans', sans-serif; }
+  .quiz-next.show { display: inline-block; }
+  .quiz-progress { font-size: 12px; color: var(--muted); margin-bottom: 1rem; }
+  .quiz-score { text-align: center; padding: 1.5rem; display: none; }
+  .quiz-score.show { display: block; }
+  .quiz-score .score-num { font-family: 'Playfair Display', serif; font-size: 3rem; color: var(--espresso); line-height: 1; }
+  .quiz-score .score-label { color: var(--muted); font-size: 14px; margin-top: 0.25rem; }
+
+  /* NAV FOOTER */
+  .chapter-nav-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+  .nav-btn { padding: 10px 20px; border: 1px solid var(--border); border-radius: 4px; background: none; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; font-family: 'DM Sans', sans-serif; color: var(--muted); transition: all 0.2s; }
+  .nav-btn:hover { border-color: var(--caramel); color: var(--caramel); }
+  .nav-btn.primary { background: var(--espresso); color: var(--gold); border-color: var(--espresso); }
+  .nav-btn:disabled { opacity: 0.3; cursor: default; }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-badge">Starbucks Coffee Academy · Barista Basics</div>
+  <h1>The <em>Barista</em> Guide</h1>
+  <p>Your complete introduction to the Starbucks Experience — from our mission and values, to crafting espresso, steaming milk, brewing tea, and delivering legendary customer service.</p>
+  <div class="progress-bar-wrap">
+    <div class="progress-label">
+      <span id="progressLabel">Chapter 1 of 7</span>
+      <span id="progressPct">14%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill" style="width:14%"></div>
+    </div>
+  </div>
+</div>
+
+<nav class="chapter-nav">
+  <button class="chapter-btn active" onclick="showChapter(0)">Mission & Values</button>
+  <button class="chapter-btn" onclick="showChapter(1)">Your Role</button>
+  <button class="chapter-btn" onclick="showChapter(2)">Customer Service</button>
+  <button class="chapter-btn" onclick="showChapter(3)">Coffee & Quality</button>
+  <button class="chapter-btn" onclick="showChapter(4)">Espresso Bar</button>
+  <button class="chapter-btn" onclick="showChapter(5)">Tea & Cold Beverages</button>
+  <button class="chapter-btn" onclick="showChapter(6)">Store Operations</button>
+  <button class="chapter-btn" onclick="showChapter(7)">🏆 Practice Quiz</button>
+</nav>
+
+<div class="content">
+
+<!-- ═══════════════ CH0: MISSION & VALUES -->
+<div class="chapter active" id="ch0">
+  <div class="chapter-header">
+    <div class="chapter-num">Chapter 1</div>
+    <h2>Mission, Values &amp; The Starbucks Experience</h2>
+    <div class="subtitle">A different kind of company — built on human connection.</div>
+  </div>
+
+  <div class="callout">
+    <p>With every cup, with every conversation, with every community — we nurture the limitless possibilities of human connection.</p>
+    <cite>— Starbucks Mission Statement</cite>
+  </div>
+
+  <div class="section-heading">What Makes Starbucks Different</div>
+  <div class="accordion">
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">💡</div><div class="acc-title">We Innovate Products</div><div class="acc-arrow">▾</div></div><div class="acc-body">Starbucks continuously develops new beverages, food, and coffee offerings — from seasonal favorites to Reserve experiences — always pushing the boundaries of what's possible in the cup.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">🏠</div><div class="acc-title">We Create a Third Place</div><div class="acc-arrow">▾</div></div><div class="acc-body">The "Third Place" is a relaxing place other than home (first place) or work (second place) — a place free from outside worries where people feel a sense of belonging. It is created when we fully engage with our customers: connecting, laughing, and uplifting them. Today we also recognize a fourth place — the digital or virtual space.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">💚</div><div class="acc-title">We Empower Our Partners</div><div class="acc-arrow">▾</div></div><div class="acc-body">Starbucks calls its employees "partners" because they share in the company's success and are empowered to be part of something bigger. You are not just a barista — you are a brand ambassador, a storyteller, and a community builder wearing the green apron.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">🌍</div><div class="acc-title">We Do Business with a Social Conscience</div><div class="acc-arrow">▾</div></div><div class="acc-body">Being globally responsible means helping farmers and suppliers thrive for long-term sustainability. Creating opportunities means pathways to training, employment, and civic engagement. Strengthening communities means investing through service, disaster relief, and food donations. These aren't PR moves — they are core to why Starbucks exists.</div></div>
+  </div>
+
+  <div class="section-heading">Our Five Values</div>
+  <p style="font-size:14px;color:var(--muted);margin-bottom:1rem;">When we show up at our best, we deliver performance through the lens of humanity. Tap each value to explore it.</p>
+  <div class="values-grid">
+    <div class="value-card" onclick="toggleValue(this)">
+      <div class="value-emoji">🎯</div>
+      <div class="value-name">Craft</div>
+      <div class="value-short">Delight in the rigor of the details.</div>
+      <div class="value-detail">We delight in the rigor of the details — no matter what our job is. We learn and teach in the pursuit of growth. We deliver excellence with passion and creativity.</div>
+    </div>
+    <div class="value-card" onclick="toggleValue(this)">
+      <div class="value-emoji">📈</div>
+      <div class="value-name">Results</div>
+      <div class="value-short">Consistently achieve goals with integrity.</div>
+      <div class="value-detail">We consistently achieve our goals with focus, integrity, and drive. We continuously innovate to stay ahead. We exceed the expectations of the people we serve.</div>
+    </div>
+    <div class="value-card" onclick="toggleValue(this)">
+      <div class="value-emoji">🦁</div>
+      <div class="value-name">Courage</div>
+      <div class="value-short">Embrace difficult conversations — do the right thing.</div>
+      <div class="value-detail">We embrace difficult conversations, with respect, to make us all better. We pursue audacious ideas beyond our comfort zone. We do the right things, even when it's hard.</div>
+    </div>
+    <div class="value-card" onclick="toggleValue(this)">
+      <div class="value-emoji">🤝</div>
+      <div class="value-name">Belonging</div>
+      <div class="value-short">Every person is seen, valued, respected.</div>
+      <div class="value-detail">We actively listen and connect with warmth and transparency. We recognize and appreciate every person for who they are. We treat each other with dignity and care.</div>
+    </div>
+    <div class="value-card" onclick="toggleValue(this)">
+      <div class="value-emoji">😊</div>
+      <div class="value-name">Joy</div>
+      <div class="value-short">Take pride in your work and have fun doing it.</div>
+      <div class="value-detail">We take pride in our work and have fun while doing it. We celebrate each other and our wins. We create great vibes to bring the best out of others.</div>
+    </div>
+  </div>
+
+  <div class="section-heading">Our Promises</div>
+  <div class="steps-list">
+    <div class="step-card"><div class="step-num">👥</div><div class="step-body"><h4>For Our Partners</h4><p>We bridge to a better future.</p></div></div>
+    <div class="step-card"><div class="step-num">☕</div><div class="step-body"><h4>For Our Customers</h4><p>We uplift the everyday.</p></div></div>
+    <div class="step-card"><div class="step-num">🌱</div><div class="step-body"><h4>For Our Farmers</h4><p>We ensure the future of coffee for all.</p></div></div>
+    <div class="step-card"><div class="step-num">🏘️</div><div class="step-body"><h4>For Our Communities</h4><p>We contribute positively.</p></div></div>
+    <div class="step-card"><div class="step-num">🌿</div><div class="step-body"><h4>For Our Environment</h4><p>We give more than we take.</p></div></div>
+    <div class="step-card"><div class="step-num">📊</div><div class="step-body"><h4>For Our Shareholders</h4><p>We generate long-term returns.</p></div></div>
+  </div>
+
+  <div id="quiz0"></div>
+  <div class="chapter-nav-footer">
+    <button class="nav-btn" disabled>← Previous</button>
+    <button class="nav-btn primary" onclick="showChapter(1)">Your Role →</button>
+  </div>
+</div>
+
+<!-- ═══════════════ CH1: YOUR ROLE -->
+<div class="chapter" id="ch1">
+  <div class="chapter-header">
+    <div class="chapter-num">Chapter 2</div>
+    <h2>Your Role as a Barista</h2>
+    <div class="subtitle">Wearing the green apron — and what it means.</div>
+  </div>
+
+  <div class="prose">
+    <p>As a barista, you are responsible for working together to create the Starbucks Experience in every customer's day while delivering expertly crafted products. You bring our Mission, Promises, and Values to life — for customers and each other — while proudly wearing the green apron.</p>
+  </div>
+
+  <div class="section-heading">The Barista Approach</div>
+  <div class="accordion">
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">💛</div><div class="acc-title">Be Committed to Customers</div><div class="acc-arrow">▾</div></div><div class="acc-body">Create a unique, personalized experience for every customer. Demonstrate knowledge of our coffee, products, and offers. Make every moment right — each customer is a unique human being who may have different needs than the customer before them.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">⭐</div><div class="acc-title">Be Focused on Quality</div><div class="acc-arrow">▾</div></div><div class="acc-body">Serve the highest quality beverage every time. Connect with customers, prepare quality beverage and food products, and complete tasks that keep the store clean, safe, and ready. Quality is not optional — it is the standard.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">🤜</div><div class="acc-title">Be Dedicated to Each Other</div><div class="acc-arrow">▾</div></div><div class="acc-body">Recognize your partners' strengths and provide feedback for continuous improvement. Contribute to the success of the team and support others to do their best work. When the team wins, everyone wins.</div></div>
+  </div>
+
+  <div class="section-heading">The Barista Pattern (Every Shift)</div>
+  <div class="steps-list">
+    <div class="step-card"><div class="step-num">1</div><div class="step-body"><h4>Prepare</h4><p>Check in with yourself — are you in dress code with hands washed? Check in with your team — what position and goals are set for today? What new store information is there? Know who you're working with.</p></div></div>
+    <div class="step-card"><div class="step-num">2</div><div class="step-body"><h4>Craft & Connect</h4><p>Connect with customers and craft quality beverages and food. This is the heart of your shift — every interaction is an opportunity to create the Starbucks Experience.</p></div></div>
+    <div class="step-card"><div class="step-num">3</div><div class="step-body"><h4>Transition</h4><p>Check out with your team — show appreciation for your fellow partners! Check out with yourself: "How did I create the Starbucks Experience today?" and "What will I do differently on my next shift?"</p></div></div>
+  </div>
+
+  <div class="section-heading">Star Skills</div>
+  <div class="fact-box">
+    <div class="fact-label">The Three Core Skills of Every Great Barista</div>
+    <strong>1. Maintain and enhance self-esteem</strong> — Treat every partner and customer with respect and dignity; uplift those around you.<br><br>
+    <strong>2. Listen and acknowledge</strong> — Actively listen. Show that you've heard and understood what someone said or felt.<br><br>
+    <strong>3. Ask and provide help</strong> — Don't wait to be asked. Proactively offer assistance to customers and teammates.
+  </div>
+
+  <div class="section-heading">Deployment Principles</div>
+  <div class="accordion">
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">👁️</div><div class="acc-title">Maintain Customer Focus</div><div class="acc-arrow">▾</div></div><div class="acc-body">Every decision made during a shift should prioritize the customer experience. When things get busy or complicated, the guiding question is always: how does this affect our customers?</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">📌</div><div class="acc-title">Clarify Roles</div><div class="acc-arrow">▾</div></div><div class="acc-body">Every partner should know exactly what position they are working before the shift begins. Unclear roles lead to confusion, gaps in service, and customer frustration. Clear roles = smooth shifts.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">🔄</div><div class="acc-title">Work in Routine</div><div class="acc-arrow">▾</div></div><div class="acc-body">Routines ensure every task is completed the same way every time — creating consistency, reducing inefficiency, and making your responsibilities easier to fulfill. Routines also make your work more balanced across the team.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">⚖️</div><div class="acc-title">Stay Balanced · Reduce Motion · Reduce Waiting</div><div class="acc-arrow">▾</div></div><div class="acc-body">Keep the workload balanced between all partners. Minimize unnecessary movement — efficient positioning saves energy and time. Reduce waiting for customers and between steps of a task — every second counts during peak.</div></div>
+  </div>
+
+  <div id="quiz1"></div>
+  <div class="chapter-nav-footer">
+    <button class="nav-btn" onclick="showChapter(0)">← Mission</button>
+    <button class="nav-btn primary" onclick="showChapter(2)">Customer Service →</button>
+  </div>
+</div>
+
+<!-- ═══════════════ CH2: CUSTOMER SERVICE -->
+<div class="chapter" id="ch2">
+  <div class="chapter-header">
+    <div class="chapter-num">Chapter 3</div>
+    <h2>Customer Service</h2>
+    <div class="subtitle">Make every customer feel special — every time, without exception.</div>
+  </div>
+
+  <div class="callout">
+    <p>Customers may not always remember what you said, but they will remember how you made them feel.</p>
+    <cite>— Starbucks Experience Principle</cite>
+  </div>
+
+  <div class="section-heading">The Customer Service Commitment</div>
+  <div class="steps-list">
+    <div class="step-card"><div class="step-num">1</div><div class="step-body"><h4>Smile & Make Eye Contact</h4><p>The first non-verbal signal that says: "I see you, and I'm glad you're here." A genuine smile is the foundation of every interaction.</p></div></div>
+    <div class="step-card"><div class="step-num">2</div><div class="step-body"><h4>Offer a Friendly & Genuine Greeting</h4><p>Not a scripted line — a real, warm welcome. Customers can feel the difference between a genuine greeting and a robotic one.</p></div></div>
+    <div class="step-card"><div class="step-num">3</div><div class="step-body"><h4>Learn the Customer's Name & Drink</h4><p>Using a customer's name transforms a transaction into a connection. Remembering their usual drink tells them they matter — they're not just order #47.</p></div></div>
+    <div class="step-card"><div class="step-num">4</div><div class="step-body"><h4>Say Thank You</h4><p>A sincere thank you acknowledges the customer's choice to spend their time and money with Starbucks. Never underestimate its power.</p></div></div>
+    <div class="step-card"><div class="step-num">5</div><div class="step-body"><h4>Make Every Moment Right</h4><p>Notice what each customer needs — not just what they ordered. Sometimes they need speed; sometimes they need warmth. Awareness, empathy, and action are the tools.</p></div></div>
+  </div>
+
+  <div class="section-heading">Passion for Service</div>
+  <div class="accordion">
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">👀</div><div class="acc-title">Awareness — Caring to Notice</div><div class="acc-arrow">▾</div></div><div class="acc-body">Notice customers, partners, and the environment in your store. Is a customer waiting too long? Does someone look lost? Is the lobby table messy right next to someone trying to work? Awareness means paying attention with intention — not just going through the motions.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">💙</div><div class="acc-title">Empathy — The Emotional Connection</div><div class="acc-arrow">▾</div></div><div class="acc-body">Empathy is the ability to understand and share the feelings of another. When a customer is frustrated, try to genuinely understand where that frustration is coming from — not just solve the technical problem. A customer who feels understood will forgive almost anything.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">⚡</div><div class="acc-title">Action — Serving Others</div><div class="acc-arrow">▾</div></div><div class="acc-body">Awareness and empathy are worthless without action. Acting in the service of others means taking initiative — not waiting to be asked, not passing the problem to someone else, not making excuses. See it, feel it, fix it.</div></div>
+  </div>
+
+  <div class="section-heading">Service Recovery: The L.A.T.T.E. Model</div>
+  <p style="font-size:14px;color:var(--muted);margin-bottom:1rem;">When problems happen, it does not matter who is at fault — your job is to make things right. Tap each letter to learn the step.</p>
+  <div class="latte-model">
+    <div class="latte-row" onclick="toggleLatte(this)"><div class="latte-header"><div class="latte-letter">L</div><div class="latte-word">Listen</div><div class="latte-arrow">▾</div></div><div class="latte-body">Listen without interrupting the customer. Let the customer fully express their emotions. Do not jump to solutions before they have finished speaking — they need to feel heard first. This is the most important step and the one baristas most commonly skip.</div></div>
+    <div class="latte-row" onclick="toggleLatte(this)"><div class="latte-header"><div class="latte-letter">A</div><div class="latte-word">Apologize</div><div class="latte-arrow">▾</div></div><div class="latte-body">Apologize without condition — never make excuses or place blame. "I'm sorry that happened" is always appropriate. "That wasn't my fault" is never appropriate. An unconditional apology acknowledges the customer's experience, not assigns guilt.</div></div>
+    <div class="latte-row" onclick="toggleLatte(this)"><div class="latte-header"><div class="latte-letter">T</div><div class="latte-word">Take Action</div><div class="latte-arrow">▾</div></div><div class="latte-body">Take action quickly to make it right. Don't delay, don't over-discuss — act. Remake the beverage, offer a replacement, find a solution. Speed of recovery matters enormously: a fast resolution often leaves the customer more satisfied than if nothing had gone wrong at all.</div></div>
+    <div class="latte-row" onclick="toggleLatte(this)"><div class="latte-header"><div class="latte-letter">T</div><div class="latte-word">Thank</div><div class="latte-arrow">▾</div></div><div class="latte-body">Thank the customer for giving us an opportunity to make it right. This reframes the complaint as a gift — they could have left without saying anything and never come back. Instead, they trusted us enough to speak up. That deserves genuine gratitude.</div></div>
+    <div class="latte-row" onclick="toggleLatte(this)"><div class="latte-header"><div class="latte-letter">E</div><div class="latte-word">Ensure Satisfaction</div><div class="latte-arrow">▾</div></div><div class="latte-body">Watch customer cues after taking action. If the customer is still not satisfied, ask them directly: "What can I do to make this right for you?" Don't assume the problem is solved — confirm it. A resolved complaint only counts if the customer actually leaves happy.</div></div>
+  </div>
+
+  <div id="quiz2"></div>
+  <div class="chapter-nav-footer">
+    <button class="nav-btn" onclick="showChapter(1)">← Your Role</button>
+    <button class="nav-btn primary" onclick="showChapter(3)">Coffee & Quality →</button>
+  </div>
+</div>
+
+<!-- ═══════════════ CH3: COFFEE & QUALITY -->
+<div class="chapter" id="ch3">
+  <div class="chapter-header">
+    <div class="chapter-num">Chapter 4</div>
+    <h2>Coffee &amp; Quality</h2>
+    <div class="subtitle">The Four Fundamentals of a perfect cup — every single time.</div>
+  </div>
+
+  <div class="section-heading">The Four Tasting Steps</div>
+  <div class="steps-list">
+    <div class="step-card"><div class="step-num">1</div><div class="step-body"><h4>Smell</h4><p>Always smell coffee before you taste it. Inhale deeply. Your nose can detect one trillion different aromas. The aroma sets expectations and begins the flavor experience before a single sip.</p></div></div>
+    <div class="step-card"><div class="step-num">2</div><div class="step-body"><h4>Slurp</h4><p>A good, noisy slurp. Don't be shy — this sprays the coffee across your entire tongue and palate, letting you experience all the subtleties. Professionals do it loudly on purpose.</p></div></div>
+    <div class="step-card"><div class="step-num">3</div><div class="step-body"><h4>Locate</h4><p>Think about how the coffee feels in your mouth. What is its weight or thickness? Where on your tongue do you experience the flavors? Different taste zones pick up different characteristics.</p></div></div>
+    <div class="step-card"><div class="step-num">4</div><div class="step-body"><h4>Describe</h4><p>What words would you choose? Describe the aroma, flavors, and mouthfeel. Does your tongue detect acidity? What other flavors come to mind for comparison? Building this vocabulary takes practice but is enormously rewarding.</p></div></div>
+  </div>
+
+  <div class="section-heading">The Four Tasting Characteristics</div>
+  <div class="accordion">
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">👃</div><div class="acc-title">Aroma</div><div class="acc-arrow">▾</div></div><div class="acc-body">Aroma is the way coffee smells. Your nose can pick up about one trillion different aromas — what it smells like to you may be different than what it smells like to someone else. Smelling and describing the aroma is the best way to start learning about a coffee. Is it floral? Chocolaty? Fruity? Nutty?</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">⚡</div><div class="acc-title">Acidity</div><div class="acc-arrow">▾</div></div><div class="acc-body">Acidity is the feeling on the sides and tip of your tongue — the tangy, lively, palate-cleansing sensation. It's not about sourness or bitterness; it's about brightness. High-altitude coffees like Kenyan or Ethiopian often have vibrant, sparkling acidity. A Blonde Roast highlights acidity while a Dark Roast mutes it.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">⚖️</div><div class="acc-title">Body</div><div class="acc-arrow">▾</div></div><div class="acc-body">Body is the weight or thickness of the coffee on your tongue when you slurp it. A light body feels thin and delicate (like tea). A heavy body feels rich and full (like cream). Dark Roast highlights fuller body; Blonde Roast has a lighter body. The type of filter also affects body — metal filters let through more oils, creating more body.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">👅</div><div class="acc-title">Flavor</div><div class="acc-arrow">▾</div></div><div class="acc-body">The taste of coffee. When describing flavor, start with the basics and compare to other flavors you know. Maybe the coffee tastes sweet like chocolate or caramel. Maybe it has a fruitier sweetness like cherry or raspberry. Maybe it tastes nutty, spicy, or earthy. The more coffees you taste, the richer your flavor vocabulary becomes.</div></div>
+  </div>
+
+  <div class="section-heading">The Four Fundamentals of Brewing</div>
+  <p style="font-size:14px;color:var(--muted);margin-bottom:1rem;">Proportion, Grind, Water, and Freshness ensure we always brew delicious coffee. Tap each to explore.</p>
+  <div class="fund-grid">
+    <div class="fund-card" onclick="toggleFund(this)">
+      <div class="fund-bg">P</div>
+      <div class="fund-icon">⚖️</div>
+      <div class="fund-title">Proportion</div>
+      <div class="fund-body">The right ratio of coffee to water allows for proper extraction of full flavors. Starbucks uses <strong>2 tablespoons (10g) of coffee per 6 fl oz (180 mL) of water</strong>. Too much water → weak, under-extracted. Too little water → strong but potentially over-extracted. Proportion affects both strength and extraction.</div>
+    </div>
+    <div class="fund-card" onclick="toggleFund(this)">
+      <div class="fund-bg">G</div>
+      <div class="fund-icon">⚙️</div>
+      <div class="fund-title">Grind</div>
+      <div class="fund-body">Always use the correct grind for your brewing method: <strong>Coarse</strong> for coffee press · <strong>Medium</strong> for flat-bottom filter · <strong>Fine</strong> for cone-shaped filter · <strong>Extra fine</strong> for espresso. Finer grinds increase surface area and speed up extraction; coarser grinds slow it down. Using the wrong grind produces under- or over-extracted coffee.</div>
+    </div>
+    <div class="fund-card" onclick="toggleFund(this)">
+      <div class="fund-bg">W</div>
+      <div class="fund-icon">💧</div>
+      <div class="fund-title">Water</div>
+      <div class="fund-body">Coffee is <strong>98% water</strong> — if the water doesn't taste good, neither will the coffee. At Starbucks, all water is filtered. The perfect brewing temperature is <strong>195°–205°F (90°–96°C)</strong>. All hot water taps at Starbucks are calibrated to the proper temperature. Never use boiling water (212°F / 100°C) — it can scorch the coffee and create bitter flavors.</div>
+    </div>
+    <div class="fund-card" onclick="toggleFund(this)">
+      <div class="fund-bg">F</div>
+      <div class="fund-icon">🌿</div>
+      <div class="fund-title">Freshness</div>
+      <div class="fund-body">In 1989, Starbucks introduced the <strong>FlavorLock™ bag</strong> — equipped with a one-way valve that lets coffee gases escape while keeping oxygen out, preserving freshness after roasting. The four enemies of fresh coffee are: <strong>Oxygen · Light · Heat · Moisture</strong>. Always store opened bags away from these enemies.</div>
+    </div>
+  </div>
+
+  <div class="section-heading">Roast Profiles</div>
+  <div class="accordion">
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">🌅</div><div class="acc-title">Blonde Roast — Light & Mellow</div><div class="acc-arrow">▾</div></div><div class="acc-body">Starbucks® Blonde Roast highlights the acidity of the coffee while having a lighter body with mellow flavors. The shorter roast time allows the bean's origin flavors to shine through — often featuring citrus, floral, or soft sweet notes.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">☕</div><div class="acc-title">Medium Roast — Smooth & Balanced</div><div class="acc-arrow">▾</div></div><div class="acc-body">Starbucks® Medium Roast produces a smooth and balanced cup of coffee — the middle ground between acidity and body. This is the most popular roast category globally, including the beloved Pike Place® Roast.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">🌑</div><div class="acc-title">Dark Roast — Bold & Robust</div><div class="acc-arrow">▾</div></div><div class="acc-body">Starbucks® Dark Roast highlights its fuller body and robust, bold flavors. The longer roast time develops caramelized sugars and deep, rich flavor complexity. The original Starbucks offering — roasted dark in the tradition Alfred Peet established.</div></div>
+  </div>
+
+  <div id="quiz3"></div>
+  <div class="chapter-nav-footer">
+    <button class="nav-btn" onclick="showChapter(2)">← Customer Service</button>
+    <button class="nav-btn primary" onclick="showChapter(4)">Espresso Bar →</button>
+  </div>
+</div>
+
+<!-- ═══════════════ CH4: ESPRESSO BAR -->
+<div class="chapter" id="ch4">
+  <div class="chapter-header">
+    <div class="chapter-num">Chapter 5</div>
+    <h2>The Espresso Bar</h2>
+    <div class="subtitle">The heart of the store — precision, passion, and perfect shots.</div>
+  </div>
+
+  <div class="fact-box">
+    <div class="fact-label">Espresso Definition</div>
+    Espresso is a concentrated shot of freshly ground and brewed, or "pulled," coffee. It consists of Latin American and Asia/Pacific coffee. The taste is <strong>sweet and intense with a caramelly, somewhat nutty aftertaste</strong>. It also features a noticeable, but not dominant, coffee acidity. The perfect shot should brew in <strong>18–23 seconds</strong>.
+  </div>
+
+  <div class="section-heading">The Three Layers of a Perfect Shot</div>
+  <div class="steps-list">
+    <div class="step-card"><div class="step-num" style="background:rgba(240,220,180,0.6);color:var(--espresso)">C</div><div class="step-body"><h4>Crema — The Top Layer</h4><p>Foamy, light-brown top of the shot. The crema is created by CO₂ gas emulsified with coffee oils under pressure. A rich, persistent crema indicates a fresh, well-extracted shot. It begins to dissipate immediately — a key reason to serve espresso without delay.</p></div></div>
+    <div class="step-card"><div class="step-num" style="background:#5a3020;color:var(--cream)">B</div><div class="step-body"><h4>Body — The Middle Layer</h4><p>The middle layer, medium-brown in color. The body of the shot contains the majority of the espresso flavor compounds — the complex mix of sweetness, acidity, and the characteristic caramel and nut notes that define Starbucks® espresso.</p></div></div>
+    <div class="step-card"><div class="step-num" style="background:#1a0800;color:var(--cream)">H</div><div class="step-body"><h4>Heart — The Bottom Layer</h4><p>The dark brown base of the shot, which is the source of much of the coffee taste. The heart contains the most concentrated flavor compounds — the intense, deep espresso character that anchors the entire beverage.</p></div></div>
+  </div>
+
+  <div class="section-heading">The 7 Variables of a Perfect Espresso Shot</div>
+  <div class="accordion">
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">1</div><div class="acc-title">Tamp</div><div class="acc-arrow">▾</div></div><div class="acc-body">Tamping evenly compresses the ground coffee into the portafilter basket. Uneven tamping creates channels where water flows through unevenly — resulting in inconsistent extraction and a flawed shot. Consistent, level pressure is key.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">2</div><div class="acc-title">Rate of Pour</div><div class="acc-arrow">▾</div></div><div class="acc-body">The speed at which espresso flows from the portafilter is a key indicator of extraction quality. Too fast (under 18 sec) = under-extracted, sour. Too slow (over 23 sec) = over-extracted, bitter. The Mastrena® II monitors this automatically and adjusts grind settings accordingly.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">3</div><div class="acc-title">Dose</div><div class="acc-arrow">▾</div></div><div class="acc-body">The amount of ground coffee used per shot. Too little coffee = thin, weak espresso. Too much = overly concentrated and potentially bitter. Precision in dosing creates reproducible, consistent shots every time.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">4</div><div class="acc-title">Grind</div><div class="acc-arrow">▾</div></div><div class="acc-body">The particle size of the ground coffee directly controls extraction rate. Extra fine grind for espresso. Even slight grind changes affect shot time dramatically — this is why the Mastrena® II makes micro-adjustments automatically based on real-time shot monitoring.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">5</div><div class="acc-title">Coffee Boiler Temperature</div><div class="acc-arrow">▾</div></div><div class="acc-body">Water temperature directly affects extraction. The machine maintains a precise temperature throughout each shot. If temperature fluctuates, even with perfect grind and dose, the shot quality will vary. Machine calibration and maintenance protect this variable.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">6</div><div class="acc-title">Machine Maintenance</div><div class="acc-arrow">▾</div></div><div class="acc-body">A clean, well-maintained machine is non-negotiable. Coffee oils accumulate rapidly and can make a perfectly pulled shot taste rancid. Backflushing, cleaning group heads, and descaling are not optional tasks — they directly affect every shot the machine pulls.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">7</div><div class="acc-title">The Barista</div><div class="acc-arrow">▾</div></div><div class="acc-body">Every other variable can be perfect — but without an engaged, skilled, attentive barista, quality is not guaranteed. The barista notices when shots are off, adjusts variables, maintains equipment, and ultimately owns the quality of every cup that leaves the bar.</div></div>
+  </div>
+
+  <div class="section-heading">Espresso Shot Terminology</div>
+  <div class="shots-grid">
+    <div class="shot-card"><div class="shot-name">Single</div><div class="shot-italian">Solo</div><div class="shot-desc">1 espresso shot</div></div>
+    <div class="shot-card"><div class="shot-name">Double</div><div class="shot-italian">Doppio</div><div class="shot-desc">2 espresso shots (standard)</div></div>
+    <div class="shot-card"><div class="shot-name">Triple</div><div class="shot-italian">Triple</div><div class="shot-desc">3 espresso shots</div></div>
+    <div class="shot-card"><div class="shot-name">Quad</div><div class="shot-italian">Quad</div><div class="shot-desc">4 espresso shots</div></div>
+    <div class="shot-card"><div class="shot-name">Ristretto</div><div class="shot-italian">Ristretto</div><div class="shot-desc">Shorter, more concentrated shot</div></div>
+    <div class="shot-card"><div class="shot-name">Long Shot</div><div class="shot-italian">Lungo</div><div class="shot-desc">Longer, more diluted shot</div></div>
+    <div class="shot-card"><div class="shot-name">Decaf</div><div class="shot-italian">Decaf</div><div class="shot-desc">Decaffeinated espresso</div></div>
+    <div class="shot-card"><div class="shot-name">Half Decaf</div><div class="shot-italian">Split Shot</div><div class="shot-desc">½ regular + ½ decaf shots</div></div>
+  </div>
+
+  <div class="section-heading">Espresso Beverages</div>
+  <div class="accordion">
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">☕</div><div class="acc-title">Espresso — Solo or Doppio</div><div class="acc-arrow">▾</div></div><div class="acc-body">Some customers enjoy espresso on its own, without adding anything to it. Served in a small shot glass, and enjoyed as-is. Must be served immediately — crema and flavor change within seconds of pulling.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">🌊</div><div class="acc-title">Americano — Espresso + Hot Water</div><div class="acc-arrow">▾</div></div><div class="acc-body">Caffè Americanos are shots of espresso mixed with hot water. The result has a similar strength to brewed coffee but a distinctly different flavor character — the espresso's sweetness and body come through in a way that drip coffee does not replicate.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">🥛</div><div class="acc-title">Latte — Espresso + Steamed Milk + Thin Foam</div><div class="acc-arrow">▾</div></div><div class="acc-body">Caffè Lattes are espresso, steamed milk, and a thin layer of foam on top. The ratio of milk to espresso is high — making this a smooth, creamy, approachable beverage. The standard milk for lattes is whole milk (default in the CAP region).</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">💨</div><div class="acc-title">Cappuccino — Espresso + Less Milk + Deep Foam</div><div class="acc-arrow">▾</div></div><div class="acc-body">Very similar to a Caffè Latte. The only difference is the amount of steamed milk and foam — Cappuccinos have <em>less steamed milk</em> and a <em>deep layer of foam</em>. The result is a drier, more intense beverage where espresso character shines through the foam.</div></div>
+  </div>
+
+  <div class="section-heading">Milk Steaming Temperature Guide</div>
+  <div class="temp-gauge">
+    <div class="temp-row"><div class="temp-color" style="background:#90CAF9"></div><div class="temp-label">Kids Temperature</div><div class="temp-val">130°F (54°C)</div></div>
+    <div class="temp-row"><div class="temp-color" style="background:#FFCC80"></div><div class="temp-label">Warm Temperature</div><div class="temp-val">140°F (60°C)</div></div>
+    <div class="temp-row"><div class="temp-color" style="background:#E8A93A"></div><div class="temp-label">Regular (Standard)</div><div class="temp-val">150°–170°F (66°–77°C)</div></div>
+    <div class="temp-row"><div class="temp-color" style="background:#C0392B"></div><div class="temp-label">⚠️ Do NOT Serve Above</div><div class="temp-val">195°F (90°C)</div></div>
+  </div>
+
+  <div class="section-heading">Milk Steaming Routine</div>
+  <div class="steps-list">
+    <div class="step-card"><div class="step-num">1</div><div class="step-body"><h4>Pour Milk</h4><p>Pour a fresh pitcher of milk for each beverage — using the appropriate volume for the beverage size. <strong>Milk should NEVER be re-steamed.</strong> Use designated pitchers for different milks to reduce allergen contamination.</p></div></div>
+    <div class="step-card"><div class="step-num">2</div><div class="step-body"><h4>Aerate Milk</h4><p>Introduce air into the cold milk before steaming. Place the steam wand tip just under the surface and create a gentle hissing sound. Aeration must happen early — once milk heats above ~100°F, proteins denature and foam becomes impossible to create smoothly.</p></div></div>
+    <div class="step-card"><div class="step-num">3</div><div class="step-body"><h4>Auto Steam Milk</h4><p>Use the auto-steam function on the Mastrena® II to heat to the correct temperature. The machine stops automatically at the right level. Always use a calibrated steaming thermometer when steaming for children's temperatures or specific customer requests.</p></div></div>
+    <div class="step-card"><div class="step-num">4</div><div class="step-body"><h4>Sanitize Wand</h4><p>Sanitize the steam wand after each use to reduce allergen contamination. Wipe with a clean, sanitized cloth. Also rinse steaming pitchers, bar spoons, and thermometers free of all visible residue after each use.</p></div></div>
+    <div class="step-card"><div class="step-num">5</div><div class="step-body"><h4>Groom Milk</h4><p>Swirl the pitcher gently to combine the milk and foam into a smooth, velvety texture — like wet paint. This is the microfoam needed for latte art and quality beverages. Pour promptly — milk separates over time.</p></div></div>
+  </div>
+
+  <div class="section-heading">Espresso Bar Routine</div>
+  <div class="steps-list">
+    <div class="step-card"><div class="step-num">1</div><div class="step-body"><h4>Steam Milk</h4><p>Follow the Milk Steaming Routine — pour, aerate, auto-steam, sanitize, groom.</p></div></div>
+    <div class="step-card"><div class="step-num">2</div><div class="step-body"><h4>Queue Shots</h4><p>Use shot glasses for personal cups and Caramel Macchiatos. Pull shots in the correct order and sequence for the drinks on the bar.</p></div></div>
+    <div class="step-card"><div class="step-num">3</div><div class="step-body"><h4>Pump Syrup</h4><p>Use full pumps to ensure consistently great flavor. Never estimate — a partial pump in a 20-shot rush will lead to inconsistent drinks that disappoint customers.</p></div></div>
+    <div class="step-card"><div class="step-num">4</div><div class="step-body"><h4>Finish & Connect</h4><p>Pour milk into the cup, add ice or topping to finish the beverage, and call the drink and the customer's name if written on the cup. Make eye contact, smile, and say thank you. Ensure the customer has everything they need — straw, cup carrier, sleeve.</p></div></div>
+  </div>
+
+  <div id="quiz4"></div>
+  <div class="chapter-nav-footer">
+    <button class="nav-btn" onclick="showChapter(3)">← Coffee & Quality</button>
+    <button class="nav-btn primary" onclick="showChapter(5)">Tea & Cold Beverages →</button>
+  </div>
+</div>
+
+<!-- ═══════════════ CH5: TEA & COLD BEVERAGES -->
+<div class="chapter" id="ch5">
+  <div class="chapter-header">
+    <div class="chapter-num">Chapter 6</div>
+    <h2>Tea &amp; Cold Beverages</h2>
+    <div class="subtitle">From the same plant as your morning cup — but an entirely different world.</div>
+  </div>
+
+  <div class="fact-box">
+    <div class="fact-label">One Plant, Many Teas</div>
+    All tea comes from one plant: <strong>Camellia sinensis</strong>. Tea plants typically grow in tropical or sub-tropical regions at higher elevations — most tea is grown in Asia and Africa. The primary difference between tea types is <strong>oxidation</strong> — how tea is processed after picking. When picked tea leaves are exposed to oxygen, oxidation (or fermentation) occurs, transforming the leaf's color, aroma, and flavor.
+  </div>
+
+  <div class="section-heading">Types of Tea & Brewing Times</div>
+  <div class="tea-tabs">
+    <div class="tea-tab-bar">
+      <button class="ttab active" onclick="showTea(this,'white')">White</button>
+      <button class="ttab" onclick="showTea(this,'green')">Green</button>
+      <button class="ttab" onclick="showTea(this,'oolong')">Oolong</button>
+      <button class="ttab" onclick="showTea(this,'black')">Black</button>
+      <button class="ttab" onclick="showTea(this,'herbal')">Herbal</button>
+    </div>
+    <div class="tea-panel" id="teaPanel">
+      <h4>🤍 White Tea — 3 Minutes</h4>
+      <p>White tea is the least processed of all teas. Leaves and buds are simply dried after picking with minimal or no oxidation. The result is an incredibly delicate, light, and subtly sweet tea with floral and fresh notes. Brew with water at 195°F (90°C) for 3 minutes — white tea is sensitive to overbrewing, which can turn it bitter.</p>
+    </div>
+  </div>
+
+  <div class="section-heading">The Four Fundamentals of Tea</div>
+  <div class="accordion">
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">💧</div><div class="acc-title">Water — Always Filtered</div><div class="acc-arrow">▾</div></div><div class="acc-body">Just as with coffee, the quality of water directly affects the quality of tea. Always use filtered water. Unfiltered tap water can contain chlorine and mineral impurities that drastically alter the delicate flavor compounds of tea — especially white and green teas.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">⏱️</div><div class="acc-title">Time — Brewing Times by Tea Type</div><div class="acc-arrow">▾</div></div><div class="acc-body"><strong>Green & White Tea: 3 minutes</strong> — delicate, sensitive to over-steeping. <br><strong>Black & Herbal Tea: 5 minutes</strong> — robust, can handle longer contact. <br><strong>Oolong Tea: 7 minutes</strong> — partially oxidized, needs longer to develop. Exceeding recommended time results in harsh, bitter, astringent tea.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">🌡️</div><div class="acc-title">Temperature — 195°F (90°C)</div><div class="acc-arrow">▾</div></div><div class="acc-body">Tea should be brewed at approximately 195°F (90°C) — slightly below boiling. Boiling water can scorch delicate tea leaves (especially green and white), destroying the nuanced flavors and producing harsh bitterness. Unlike coffee, which brews at 195°–205°F, tea generally prefers the lower end of this range.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">🌿</div><div class="acc-title">Freshness — Store in Sealed Containers</div><div class="acc-arrow">▾</div></div><div class="acc-body">Always store tea in a tightly closed container away from heat, moisture, and direct sunlight. Stale tea loses its aromatic complexity and flavor vibrancy. Tea absorbs odors easily, so it should be stored away from strong-smelling ingredients or products.</div></div>
+  </div>
+
+  <div class="section-heading">Cold Beverage Routines</div>
+  <div class="accordion">
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">🧊</div><div class="acc-title">Iced Shaken Tea Routine</div><div class="acc-arrow">▾</div></div><div class="acc-body">1. Pour syrups or tea · 2. Pour liquid or water · 3. Add syrups (2-3-4 pumps by size) · 4. Finish and connect. Shaking the tea with ice creates a refreshing, well-chilled beverage with the ingredients fully combined.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">🍵</div><div class="acc-title">Iced Matcha Latte Routine</div><div class="acc-arrow">▾</div></div><div class="acc-body">The most popular iced tea latte — Iced Pure Matcha Latte: 1. Add milk · 2. Pour content into blender pitcher · 3. Add syrup · 4. Add matcha powder to blender pitcher · 5. Blend · 6. Finish & connect. Preparation varies for different iced tea lattes — always refer to Beverage Recipe Cards.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">🫧</div><div class="acc-title">Cold Foam Layer Build</div><div class="acc-arrow">▾</div></div><div class="acc-body">For Cold Brew with Cold Foam: 1. Add 150 ml non-fat milk to Cold Foam pitcher · 2. Add syrup if applicable · 3. Blend using button 4. Top the finished beverage with ½ cm of luscious Cold Foam. Non-fat milk creates the ideal texture for cold foam — its protein structure produces a denser, more stable foam than whole milk.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">🌀</div><div class="acc-title">Blended Beverage Routine</div><div class="acc-arrow">▾</div></div><div class="acc-body">1. Pump coffee · 2. Pour milk · 3. Pour cup content · 4. Add flavor and ice · 5. Pump base · 6. Blend · 7. Finish and connect · 8. Clean up. Following this sequence every time ensures consistent flavor, texture, and quality across every blended beverage.</div></div>
+  </div>
+
+  <div id="quiz5"></div>
+  <div class="chapter-nav-footer">
+    <button class="nav-btn" onclick="showChapter(4)">← Espresso Bar</button>
+    <button class="nav-btn primary" onclick="showChapter(6)">Store Operations →</button>
+  </div>
+</div>
+
+<!-- ═══════════════ CH6: STORE OPERATIONS -->
+<div class="chapter" id="ch6">
+  <div class="chapter-header">
+    <div class="chapter-num">Chapter 7</div>
+    <h2>Store Operations</h2>
+    <div class="subtitle">Clean, safe, and ready — the foundation that makes everything else possible.</div>
+  </div>
+
+  <div class="section-heading">The Four Barista Positions</div>
+  <div class="pos-tabs">
+    <div class="pos-tab active" onclick="showPos(this,'register')">Register</div>
+    <div class="pos-tab" onclick="showPos(this,'bar')">Bar</div>
+    <div class="pos-tab" onclick="showPos(this,'custsupport')">Customer Support</div>
+    <div class="pos-tab" onclick="showPos(this,'support')">Support Role</div>
+  </div>
+  <div class="pos-detail" id="posDetail">
+    <h4>📋 Register Barista</h4>
+    <p>Warmly greets and connects with customers · Takes orders and confirms names · Collects payment · Ensures customers know where to pick up food and beverages · Marks cups and bags · Gathers food, coffee, and tea · Follows the POS Routine: <strong>Welcome → Mark → Ring In → Tender → Gather → Finish and Connect</strong>.</p>
+  </div>
+
+  <div class="section-heading">Beverage Sizes</div>
+  <div class="sizes-wrap">
+    <div class="size-cup"><div class="cup-visual" style="width:42px;height:52px;"></div><div class="size-name">Short</div><div class="size-oz">8 oz · Hot only</div></div>
+    <div class="size-cup"><div class="cup-visual" style="width:48px;height:62px;"></div><div class="size-name">Tall</div><div class="size-oz">12 oz</div></div>
+    <div class="size-cup"><div class="cup-visual" style="width:55px;height:72px;"></div><div class="size-name">Grande</div><div class="size-oz">16 oz</div></div>
+    <div class="size-cup"><div class="cup-visual" style="width:62px;height:84px;"></div><div class="size-name">Venti</div><div class="size-oz">20 oz hot · 24 oz cold</div></div>
+  </div>
+
+  <div class="section-heading">Food Allergens — Know All Seven</div>
+  <div class="prose"><p>A food allergy is the body's immune response to a food it mistakenly believes is harmful. Any of these allergens can be in the foods and beverages we serve. Always refer to food labels and the Approved Product List (APL) for ingredient information.</p></div>
+  <div class="allergen-chips">
+    <span class="allergen-chip">🥛 Milk</span>
+    <span class="allergen-chip">🥚 Eggs</span>
+    <span class="allergen-chip">🌾 Wheat</span>
+    <span class="allergen-chip">🫘 Soy</span>
+    <span class="allergen-chip">🥜 Nuts</span>
+    <span class="allergen-chip">🐟 Fish</span>
+    <span class="allergen-chip">🦐 Shellfish</span>
+  </div>
+
+  <div class="section-heading">Food Safety Essentials</div>
+  <div class="accordion">
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">🌡️</div><div class="acc-title">Temperature Danger Zone</div><div class="acc-arrow">▾</div></div><div class="acc-body">Foods that require Temperature Control for Safety (TCS) — also called Potentially Hazardous Foods — support rapid bacterial growth. The danger zone is <strong>5°–60°C (41°–140°F)</strong>. Keep cold foods cold and hot foods hot. Never leave TCS foods in the danger zone for more than 4 hours total. Refrigeration Temperature Monitoring (RTM) is recorded frequently throughout the day.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">📦</div><div class="acc-title">FIFO — First In, First Out</div><div class="acc-arrow">▾</div></div><div class="acc-body">Always use the oldest product first. When restocking, move existing product to the front and put new product behind it. FIFO prevents waste, ensures customers always receive the freshest product, and maintains quality standards across all food categories.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">🐛</div><div class="acc-title">Pest Control — Don't Let Them In</div><div class="acc-arrow">▾</div></div><div class="acc-body">Controlling pests requires a proactive, cooperative effort. Three rules: <strong>Don't let them in</strong> (inspect deliveries, seal entry points) · <strong>Don't give them a place to hide</strong> (remove clutter, keep floors accessible) · <strong>Don't feed them</strong> (no food debris, keep the store clean). Report any pest activity immediately and review pest inspection reports.</div></div>
+  </div>
+
+  <div class="section-heading">Handwashing — The Most Important Hygiene Habit</div>
+  <div class="fact-box">
+    <div class="fact-label">Hand Wash Routine</div>
+    <strong>Wet → Soap → Scrub → Rinse → Dry and Sanitize</strong><br><br>
+    Always wash hands: before starting your shift · after coughing/sneezing · after eating, drinking, or smoking · after touching face, hair, or skin · before putting on food gloves · after register duties (cash, cards) · after a break · after using the restroom · after handling trash · after touching a customer's personal cup · after cleaning tasks.
+  </div>
+
+  <div class="section-heading">Food Warming Categories</div>
+  <div class="accordion">
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">🔥</div><div class="acc-title">Always Warm — Required Before Serving</div><div class="acc-arrow">▾</div></div><div class="acc-body">Items that must be warmed before serving — like breakfast sandwiches. These are never served cold. Warming is not optional; it is the standard preparation method for this category.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">🥐</div><div class="acc-title">Recommended Warm — Warming Improves Quality</div><div class="acc-arrow">▾</div></div><div class="acc-body">Items like a butter croissant — warming improves flavor and texture, but if a customer will not consume within 10 minutes or requests it unwarmed, it can be served at room temperature.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">🍌</div><div class="acc-title">Warm Upon Request — Customer's Choice</div><div class="acc-arrow">▾</div></div><div class="acc-body">Items like banana bread that can be warmed if the customer asks. Do not proactively warm unless requested.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">🎂</div><div class="acc-title">Do Not Warm — Items with Icing or Fresh Ingredients</div><div class="acc-arrow">▾</div></div><div class="acc-body">Items like cake slices should never be warmed — icing will melt and fresh ingredients will be compromised. If a customer requests warming, politely explain that warming would damage the item.</div></div>
+  </div>
+
+  <div class="section-heading">Selling Skills</div>
+  <div class="steps-list">
+    <div class="step-card"><div class="step-num">1</div><div class="step-body"><h4>Observe</h4><p>What are customers looking at? What draws their attention? Observation gives you information to start a meaningful conversation and make a relevant recommendation.</p></div></div>
+    <div class="step-card"><div class="step-num">2</div><div class="step-body"><h4>Connect & Discover</h4><p>Discover customer needs by asking open-ended questions. This allows you to make personalized recommendations that meet their actual needs — not just your favorites.</p></div></div>
+    <div class="step-card"><div class="step-num">3</div><div class="step-body"><h4>Recommend</h4><p>Make recommendations and offer the right products based on what you've discovered. A genuine, knowledgeable recommendation feels like a gift — not a sales pitch.</p></div></div>
+    <div class="step-card"><div class="step-num">4</div><div class="step-body"><h4>Thank & Close</h4><p>Some customers purchase immediately; some need time. Always say thank you to show appreciation for connecting with us — whether they buy now or later, they will remember how they were treated.</p></div></div>
+  </div>
+
+  <div id="quiz6"></div>
+  <div class="chapter-nav-footer">
+    <button class="nav-btn" onclick="showChapter(5)">← Tea & Cold Beverages</button>
+    <button class="nav-btn primary" onclick="showChapter(0)">↺ Start Over</button>
+  </div>
+</div>
+
+<!-- PRACTICE QUIZ CHAPTER -->
+<div class="chapter" id="ch7">
+  <div class="chapter-header">
+    <div class="chapter-num">Practice Mode</div>
+    <h2>🏆 Full Practice Quiz</h2>
+    <div class="subtitle">50 questions across all topics — test everything you've learned.</div>
+  </div>
+  <div class="fact-box">
+    <div class="fact-label">How It Works</div>
+    Answer all 50 questions one at a time. Each answer reveals detailed feedback. Your final score appears at the end. Questions cover every chapter — Mission &amp; Values, Your Role, Customer Service, Coffee &amp; Quality, Espresso Bar, Tea &amp; Cold Beverages, and Store Operations.
+  </div>
+  <div id="quizPractice"></div>
+  <div class="chapter-nav-footer">
+    <button class="nav-btn" onclick="showChapter(6)">← Store Operations</button>
+    <button class="nav-btn primary" onclick="showChapter(0)">↺ Start Over</button>
+  </div>
+</div>
+
+</div><!-- /content -->
+
+<script>
+// ──────────────────────────────────
+// NAVIGATION
+// ──────────────────────────────────
+function showChapter(idx) {
+  document.querySelectorAll('.chapter').forEach((c,i) => c.classList.toggle('active', i===idx));
+  document.querySelectorAll('.chapter-btn').forEach((b,i) => b.classList.toggle('active', i===idx));
+  const pct = Math.round(((idx+1)/8)*100);
+  document.getElementById('progressFill').style.width = pct+'%';
+  document.getElementById('progressPct').textContent = pct+'%';
+  document.getElementById('progressLabel').textContent = 'Chapter '+(idx+1)+' of 8';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ──────────────────────────────────
+// INTERACTIVE ELEMENTS
+// ──────────────────────────────────
+function toggleAcc(el) { el.classList.toggle('open'); }
+function toggleValue(el) { const w = el.classList.contains('active'); document.querySelectorAll('.value-card').forEach(c=>c.classList.remove('active')); if(!w) el.classList.add('active'); }
+function toggleLatte(el) { el.classList.toggle('open'); }
+function toggleFund(el) { el.classList.toggle('open'); }
+
+// ──────────────────────────────────
+// POSITIONS
+// ──────────────────────────────────
+const posData = {
+  register: { title: '📋 Register Barista', body: 'Warmly greets and connects with customers · Takes orders and confirms names · Collects payment · Ensures customers know where to pick up food and beverages · Marks cups and bags · Gathers food, coffee, and tea.<br><br><strong>POS Routine:</strong> Welcome → Mark → Ring In → Tender → Gather → Finish and Connect.' },
+  bar: { title: '☕ Bar Barista', body: 'Crafts drinks for customers at the espresso bar and cold beverage station. Follows the Beverage Routine and Blended Beverage Routine.<br><br><strong>Espresso Bar Routine:</strong> Steam milk → Queue shots → Pump syrup → Finish and connect.<br><br>A planted position — remains at their station, working in routine to fill orders quickly and create connections with each customer.' },
+  custsupport: { title: '🌟 Customer Support', body: 'Creates the Starbucks Experience throughout the store by keeping it organised, clean, and fully stocked. Supports planted baristas so they can stay focused on customers.<br><br><strong>4 Main Steps:</strong> 1. Brew coffee · 2. Engage customer (check customers, buss tables, sanitise high-touch areas, spot clean lobby) · 3. Rinse, load, and restock "for here" wares · 4. Perform cycle task, duty roaster task, and station restock.' },
+  support: { title: '🔧 Support Role', body: 'Helps planted baristas stay in routine. Supports multiple stations — prioritising support by determining where there is the greatest need. The support role keeps the entire operation balanced, especially during peak periods when planted baristas need to stay focused on their primary responsibilities.' }
+};
+function showPos(btn, key) {
+  document.querySelectorAll('.pos-tab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const d = posData[key];
+  document.getElementById('posDetail').innerHTML = `<h4>${d.title}</h4><p>${d.body}</p>`;
+}
+
+// ──────────────────────────────────
+// TEA
+// ──────────────────────────────────
+const teaData = {
+  white: { title: '🤍 White Tea — 3 Minutes', body: 'White tea is the least processed of all teas. Leaves and buds are simply dried after picking with minimal or no oxidation. The result is an incredibly delicate, light, and subtly sweet tea with floral and fresh notes. Brew at 195°F (90°C) for exactly 3 minutes — white tea is very sensitive to overbrewing, which turns it bitter and astringent.' },
+  green: { title: '🍃 Green Tea — 3 Minutes', body: 'Green tea is unoxidized — the leaves are quickly heated (steamed or pan-fired) after picking to stop oxidation. This preserves the fresh, grassy, vegetal character and a pleasant, mild bitterness. Brew at 195°F (90°C) for 3 minutes. Famous varieties include matcha (powdered green tea) and sencha.' },
+  oolong: { title: '🟤 Oolong Tea — 7 Minutes', body: 'Oolong tea is partially oxidized — falling between green and black tea. The oxidation level varies widely (15–85%), creating an enormous range of flavors from floral and fruity to woody and roasted. Because of its complexity, oolong needs the longest steeping time: 7 minutes at 195°F (90°C).' },
+  black: { title: '⬛ Black Tea — 5 Minutes', body: 'Black tea is fully oxidized — the leaves are allowed to oxidize completely, turning dark brown/black. This creates bold, robust flavors with rich body and a natural sweetness. Classic black teas include English Breakfast, Earl Grey, and Darjeeling. Brew at 195°F (90°C) for 5 minutes. Black tea can handle milk and sweetener well.' },
+  herbal: { title: '🌸 Herbal Tea — 5 Minutes', body: 'Herbal teas are technically not "true" teas — they do not come from Camellia sinensis. They are infusions of herbs, spices, flowers, and fruits. Naturally caffeine-free. Flavors range enormously: chamomile (floral, calming), peppermint (cool, refreshing), hibiscus (tart, fruity), and more. Brew at 195°F (90°C) for 5 minutes.' }
+};
+function showTea(btn, key) {
+  document.querySelectorAll('.ttab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const d = teaData[key];
+  document.getElementById('teaPanel').innerHTML = `<h4>${d.title}</h4><p>${d.body}</p>`;
+}
+
+// ──────────────────────────────────
+// QUIZZES
+// ──────────────────────────────────
+const quizzes = {
+  quiz0: { questions: [
+    { q: "What is the Starbucks 'Third Place'?", opts: ["The back of the store where coffee is roasted", "A relaxing place other than home (first) or work (second) — a place where people feel a sense of belonging", "The digital app experience", "The third Starbucks store ever opened"], answer: 1, feedback: "The Third Place is a relaxing place other than home (first place) or work (second place). It's a place free from the worries of outside — created when we fully engage with customers, connecting, laughing, and uplifting them. Note: there's also a Fourth Place — the digital/virtual space." },
+    { q: "Which Starbucks value is described as: 'We embrace difficult conversations, with respect, to make us all better'?", opts: ["Craft", "Results", "Courage", "Belonging"], answer: 2, feedback: "Courage. This value covers three behaviors: embracing difficult conversations with respect, pursuing audacious ideas beyond our comfort zone, and doing the right things even when it's hard. Courage is what drives growth — for individuals and the company." },
+    { q: "What does the Starbucks Promise say to farmers?", opts: ["We uplift the everyday", "We bridge to a better future", "We ensure the future of coffee for all", "We give more than we take"], answer: 2, feedback: "The promise to farmers is: 'We ensure the future of coffee for all.' The full set of promises covers partners (bridge to a better future), customers (uplift the everyday), farmers (ensure the future of coffee), communities (contribute positively), environment (give more than we take), and shareholders (generate long-term returns)." }
+  ]},
+  quiz1: { questions: [
+    { q: "What are the three Star Skills every barista should practice?", opts: ["Smile, Speed, Accuracy", "Maintain and enhance self-esteem · Listen and acknowledge · Ask and provide help", "Craft, Connect, Clean", "Observe, Recommend, Thank"], answer: 1, feedback: "The three Star Skills are: Maintain and enhance self-esteem (treat everyone with dignity), Listen and acknowledge (show you've heard and understood), and Ask and provide help (proactively offer assistance). These skills create the foundation of every meaningful customer interaction." },
+    { q: "What question should you ask yourself at the end of every shift?", opts: ["How many drinks did I make?", "Did I follow the dress code?", "'How did I create the Starbucks Experience for partners and customers today?' and 'What will I do differently next shift?'", "Was the store clean when I left?"], answer: 2, feedback: "During the Transition phase of the Barista Pattern, you check out with yourself by asking: 'How did I create the Starbucks Experience for partners and customers today?' and 'What will I do differently on my next shift?' This reflection habit is what turns good baristas into great ones." }
+  ]},
+  quiz2: { questions: [
+    { q: "In the L.A.T.T.E. service recovery model, what does 'A' stand for?", opts: ["Assess the situation", "Apologize — without condition, never making excuses or placing blame", "Ask what the customer wants", "Act immediately"], answer: 1, feedback: "A stands for Apologize — apologize without condition. Never make excuses or place blame. 'I'm sorry that happened' is always appropriate. An unconditional apology acknowledges the customer's experience without assigning guilt — and it's the step that most de-escalates an upset customer." },
+    { q: "What are the three components of Passion for Service?", opts: ["Smile, Connect, Serve", "Listen, Act, Thank", "Awareness, Empathy, and Action", "Greet, Remember, Thank"], answer: 2, feedback: "Passion for service is a craft refined through: Awareness (caring to notice — customers, partners, and the environment), Empathy (the ability to understand and share the feelings of another), and Action (acting in the service of others). All three are required — awareness and empathy without action accomplish nothing." },
+    { q: "What should you do if a customer is still not satisfied after you've taken action?", opts: ["Politely explain store policy", "Escalate to your shift supervisor only", "Ask the customer directly: 'What can I do to make this right for you?'", "Offer a coupon from behind the counter"], answer: 2, feedback: "The final step of L.A.T.T.E. is Ensure Satisfaction — watch customer cues and if they are still not satisfied, ask them directly what you can do to make it right. Never assume the problem is solved just because you've taken an action. The customer's experience determines whether recovery was successful." }
+  ]},
+  quiz3: { questions: [
+    { q: "What is the Starbucks recommended brewing ratio?", opts: ["1 tablespoon per 8 oz of water", "2 tablespoons (10g) of coffee per 6 fl oz (180 mL) of water", "3 tablespoons per 12 oz of water", "1 scoop per 10 oz of water"], answer: 1, feedback: "Starbucks recommends 2 tablespoons (10g) of coffee per 6 fl oz (180 mL) of water. This 18:1 ratio allows for proper extraction of the coffee's full flavors. Too much water = under-extracted and weak. Too little water = potentially over-extracted and harsh." },
+    { q: "What are the four enemies of fresh coffee?", opts: ["Heat, Cold, Humidity, Pressure", "Oxygen, Light, Heat, Moisture", "Time, Air, Temperature, Grinding", "Darkness, Freezing, Odor, Staleness"], answer: 1, feedback: "The four enemies of fresh coffee are Oxygen, Light, Heat, and Moisture. These are why Starbucks uses the FlavorLock™ bag — a one-way valve bag that lets coffee gases escape while keeping oxygen out, preserving freshness right after roasting." },
+    { q: "Which grind size should you use for a coffee press?", opts: ["Extra fine", "Fine", "Medium", "Coarse"], answer: 3, feedback: "Coarse grind for a coffee press (French press). Grind sizes: Extra fine = espresso · Fine = cone-shaped filter · Medium = flat-bottom filter · Coarse = coffee press. Using the wrong grind for your brew method results in under-extraction (too coarse) or over-extraction (too fine) and poor flavor." }
+  ]},
+  quiz4: { questions: [
+    { q: "What is the correct standard milk steaming temperature for adults?", opts: ["130°F (54°C)", "140°F (60°C)", "150°–170°F (66°–77°C)", "195°F (90°C)"], answer: 2, feedback: "The standard steaming temperature is 150°–170°F (66°–77°C). Kids' temperature is 130°F. Warm temperature is 140°F. Never serve milk above 195°F — this is the safety limit. Always use a calibrated thermometer for children's beverages and specific temperature requests." },
+    { q: "What are the three layers of a perfect espresso shot, from top to bottom?", opts: ["Heart, Body, Crema", "Crema, Body, Heart", "Foam, Coffee, Grounds", "Golden, Dark, Black"], answer: 1, feedback: "From top to bottom: Crema (foamy, light-brown top — indicates freshness and quality), Body (middle layer, medium-brown — contains most flavor compounds), and Heart (dark brown base — the most concentrated layer, source of much of the coffee taste)." },
+    { q: "How long should a perfect espresso shot brew?", opts: ["5–10 seconds", "18–23 seconds", "30–40 seconds", "1–2 minutes"], answer: 1, feedback: "A perfect espresso shot should brew in 18–23 seconds. Under 18 seconds = under-extracted, sour taste. Over 23 seconds = over-extracted, bitter taste. The rate of pour is one of the 7 variables of espresso quality, and the Mastrena® II monitors this automatically." }
+  ]},
+  quiz5: { questions: [
+    { q: "All tea comes from one plant. What is it called?", opts: ["Coffea arabica", "Camellia sinensis", "Thea viridis", "Herba orientalis"], answer: 1, feedback: "All tea (white, green, oolong, black) comes from Camellia sinensis. The difference between tea types is oxidation — how long the leaves are exposed to oxygen after picking. Herbal 'teas' are technically infusions and do not come from Camellia sinensis." },
+    { q: "Which tea type requires the longest brewing time and why?", opts: ["White tea — because it's delicate", "Black tea — because it's fully oxidized", "Oolong tea — 7 minutes, because it's partially oxidized and needs longer to develop its complex flavors", "Green tea — because it needs to steep completely"], answer: 2, feedback: "Oolong tea requires 7 minutes — the longest of all types. Because oolong is partially oxidized (between green and black), it has more complex flavor compounds that need more time to fully develop in the cup. Green and white teas steep for only 3 minutes; black and herbal for 5 minutes." }
+  ]},
+  quiz6: { questions: [
+    { q: "What is FIFO and why does it matter?", opts: ["First In, First Out — use the oldest product first to ensure freshness and reduce waste", "Fast Ingredient, Fresh Output — the standard for hot food preparation", "Food Inspection and Follow-through Operations — a food safety audit process", "First Interaction, Final Outcome — the customer experience model"], answer: 0, feedback: "FIFO = First In, First Out. Always use the oldest product first. When restocking, move existing product to the front and put new product behind it. FIFO prevents waste, ensures customers receive the freshest product, and maintains quality standards across all food categories." },
+    { q: "What is the Temperature Danger Zone for potentially hazardous foods?", opts: ["Below 0°C / 32°F", "5°–60°C (41°–140°F)", "60°–90°C (140°–194°F)", "Above 90°C / 194°F"], answer: 1, feedback: "The Temperature Danger Zone is 5°–60°C (41°–140°F). Potentially Hazardous Foods (also called TCS foods — Temperature Control for Safety) support rapid bacterial growth in this range. Keep cold foods below 5°C and hot foods above 60°C. Refrigerator temperatures are monitored and recorded throughout the day (RTM)." },
+    { q: "A customer complains their latte is too cold. You remake it and hand it back. They taste it and still seem unhappy. What should you do?", opts: ["Apologize again and walk away", "Explain that the temperature was correct per our standards", "Ask them directly: 'What can I do to make this right for you?'", "Offer them a loyalty stamp and move on"], answer: 2, feedback: "This is the Ensure Satisfaction step of L.A.T.T.E. — watch customer cues and if they're still not satisfied, ask them directly what you can do. Never assume the action you took was sufficient. The customer's actual experience determines whether service recovery was successful — not your intentions." }
+  ]}
+};
+
+
+
+function ansQ(btn, chosen, correct, key, qIdx) {
+  const s = window['qs_'+key]; if (!s) return;
+  btn.parentElement.querySelectorAll('.quiz-opt').forEach(o=>o.disabled=true);
+  const fb = document.getElementById('qf_'+key), nxt = document.getElementById('qn_'+key);
+  const q = quizzes[key].questions[qIdx];
+  if (chosen===correct) { btn.classList.add('correct'); fb.textContent='✓ '+q.feedback; fb.className='quiz-feedback correct show'; s.addS(); }
+  else { btn.classList.add('wrong'); btn.parentElement.querySelectorAll('.quiz-opt')[correct].classList.add('correct'); fb.textContent='✗ '+q.feedback; fb.className='quiz-feedback wrong show'; }
+  nxt.classList.add('show');
+}
+function nxtQ(key) { const s=window['qs_'+key]; if(s){s.inc();s.render();} }
+
+// ──────────────────────────────────
+// 50-QUESTION PRACTICE QUIZ
+// ──────────────────────────────────
+const practiceQuestions = [
+  // MISSION & VALUES (Q1–8)
+  { q: "What are Starbucks' five core values?", opts: ["Craft, Results, Courage, Belonging, Joy", "Quality, Service, Speed, Cleanliness, Connection", "Coffee, Community, Culture, Creativity, Care", "People, Planet, Profit, Products, Passion"], answer: 0, feedback: "The five Starbucks values are Craft, Results, Courage, Belonging, and Joy. When partners show up at their best, these values guide how they deliver performance through the lens of humanity." },
+  { q: "The Starbucks mission statement says we nurture the limitless possibilities of what?", opts: ["Great coffee", "Human connection", "Our communities", "Partner success"], answer: 1, feedback: "The Starbucks mission: 'With every cup, with every conversation, with every community — we nurture the limitless possibilities of human connection.' Human connection is at the very center of everything Starbucks does." },
+  { q: "Which Starbucks value is described as 'We take pride in our work and have fun while doing it'?", opts: ["Craft", "Courage", "Belonging", "Joy"], answer: 3, feedback: "Joy. This value includes three behaviors: taking pride in your work and having fun doing it, celebrating each other and our wins, and creating great vibes to bring the best out of others." },
+  { q: "Which Starbucks value says 'We consistently achieve our goals with focus, integrity, and drive'?", opts: ["Craft", "Results", "Courage", "Joy"], answer: 1, feedback: "Results. This value also includes continuously innovating to stay ahead and exceeding the expectations of the people we serve. Results-oriented partners are focused, driven, and hold themselves accountable." },
+  { q: "Which Starbucks value says 'We delight in the rigor of the details — no matter what our job is'?", opts: ["Results", "Craft", "Belonging", "Courage"], answer: 1, feedback: "Craft. This value is about delivering excellence with passion and creativity, and learning and teaching in the pursuit of growth. Every detail — from the crema on an espresso to the cleanliness of the condiment bar — is an expression of Craft." },
+  { q: "Starbucks promises to 'contribute positively' for which stakeholder group?", opts: ["Partners", "Customers", "Farmers", "Communities"], answer: 3, feedback: "Starbucks promises to 'contribute positively' for our communities. The full set: Partners (bridge to a better future), Customers (uplift the everyday), Farmers (ensure the future of coffee), Communities (contribute positively), Environment (give more than we take), Shareholders (generate long-term returns)." },
+  { q: "What does Starbucks mean when it says it 'does business with a social conscience'?", opts: ["All profits go to charity", "The company is nonprofit", "Being globally responsible, creating opportunities, and strengthening communities", "Starbucks avoids controversial topics"], answer: 2, feedback: "Doing business with a social conscience means: being globally responsible (helping farmers and suppliers thrive), creating opportunities (pathways to training, employment, civic engagement), and strengthening communities (service, disaster relief, food donations). These aren't PR moves — they're core to why Starbucks exists." },
+  { q: "What is the 'Fourth Place' in Starbucks' model?", opts: ["A premium Reserve store", "The drive-through", "The digital or virtual space", "The back-of-house workspace"], answer: 2, feedback: "Starbucks recognizes four places: Home (first), Work (second), the Starbucks store/Third Place, and the digital or virtual space (fourth). The Fourth Place acknowledges how customers now connect with Starbucks through apps, social media, and digital experiences." },
+
+  // YOUR ROLE (Q9–15)
+  { q: "What are the three phases of the Barista Pattern every shift?", opts: ["Open, Serve, Close", "Prepare, Craft & Connect, Transition", "Check In, Work, Check Out", "Setup, Rush, Cleanup"], answer: 1, feedback: "Every shift follows: Prepare (check in with yourself and your team, learn today's goals and information) → Craft & Connect (serve customers and craft quality beverages) → Transition (check out with your team, appreciate partners, reflect on the shift)." },
+  { q: "What should you check during the 'Prepare' phase of your shift?", opts: ["Only your uniform and hygiene", "Whether the store is clean", "Your dress code, team positions, today's goals, who you're working with, and any new store information", "The daily sales target"], answer: 2, feedback: "During Prepare, you check in with yourself (dress code, hands washed, mindset), check in with your team (position/routine, today's goals, who's on the team), and confirm any new store information. This sets the foundation for a smooth, focused shift." },
+  { q: "What is the goal of a 'planted position'?", opts: ["Standing near the entrance to greet customers", "Remaining at a station to produce high-quality products, work in routine, ensure order accuracy, and connect with customers", "Floating between all areas of the store", "Managing the customer queue"], answer: 1, feedback: "A planted barista remains at their station, working in routine to fill customer orders quickly and create connections. The goal is consistency and focus — being planted means you're not being pulled away to do other tasks, so quality and connection stay high." },
+  { q: "What is the role of a 'Support' barista?", opts: ["Taking orders at the register", "Crafting espresso beverages", "Helping planted baristas stay in routine by supporting multiple stations where needed most", "Serving food to customers at their tables"], answer: 2, feedback: "The Support role keeps the entire operation balanced. Support baristas help planted baristas stay focused by filling in wherever the greatest need exists — whether that's restocking, cleaning, or helping with a surge at one station." },
+  { q: "Which deployment principle helps ensure work is divided fairly across partners?", opts: ["Reduce motion", "Stay balanced", "Maintain customer focus", "Clarify roles"], answer: 1, feedback: "Stay Balanced means keeping the workload distributed evenly among all partners. An unbalanced shift leaves some partners overwhelmed and others idle — both reduce quality and morale. Combined with Reduce Motion and Reduce Waiting, staying balanced creates an efficient, energized team." },
+  { q: "The 'Belonging' value says we do what?", opts: ["Deliver results with focus and drive", "Pursue audacious ideas beyond our comfort zone", "Actively listen and connect with warmth and transparency, recognize every person for who they are, and treat each other with dignity and care", "Delight in the rigor of the details"], answer: 2, feedback: "Belonging is about creating an environment where every person is seen, valued, and respected. The three behaviors: actively listen and connect with warmth and transparency; recognize and appreciate every person for who they are; treat each other with dignity and care." },
+  { q: "What does Starbucks call its employees, and why?", opts: ["Associates — a retail industry standard term", "Team members — to emphasize collaboration", "Partners — because they share in the company's success and are part of something bigger", "Crew — reflecting the store's operational team"], answer: 2, feedback: "Starbucks calls employees 'partners' because they genuinely share in the company's success — through stock programs and a culture of belonging. More than a job title, it signals that every person wearing the green apron is invested in the mission, not just completing tasks." },
+
+  // CUSTOMER SERVICE (Q16–23)
+  { q: "What is the first step of the Starbucks Customer Service Commitment?", opts: ["Learn the customer's name and drink", "Offer a friendly greeting", "Smile and make eye contact", "Say thank you"], answer: 2, feedback: "Step 1 is Smile and Make Eye Contact — the first non-verbal signal that says 'I see you, and I'm glad you're here.' It sets the tone before a single word is spoken. A genuine smile costs nothing and is the most powerful tool a barista has." },
+  { q: "Why is learning a customer's name considered so important?", opts: ["It's required by store policy", "It helps prevent drink mix-ups", "Using a customer's name transforms a transaction into a genuine connection — it tells them they matter", "It makes calling out orders faster"], answer: 2, feedback: "Learning a customer's name transforms an impersonal transaction into a human connection. It signals that this customer isn't just order #47 — they're a person who matters. Regulars whose names are remembered become loyal customers for life." },
+  { q: "In the L.A.T.T.E. model, what does 'L' stand for?", opts: ["Locate the problem", "Listen without interrupting — let the customer fully express their emotions", "Lead with empathy", "Look for a solution"], answer: 1, feedback: "L stands for Listen — listen without interrupting the customer. Let them fully express their emotions before jumping to solutions. This is the most frequently skipped step and the most important one. A customer who feels heard is halfway to satisfied before you've done anything else." },
+  { q: "What does 'T' (the second T) stand for in L.A.T.T.E.?", opts: ["Think of a solution", "Train the customer on policy", "Thank the customer for giving us an opportunity to make it right", "Take notes for future improvement"], answer: 2, feedback: "The second T is Thank — thank the customer for giving Starbucks an opportunity to make it right. This reframes the complaint as a gift. The customer could have left silently and never returned; instead they trusted us enough to speak up. That deserves genuine gratitude." },
+  { q: "A customer walks in looking frustrated. You haven't spoken yet. Which Passion for Service component are you using when you notice this?", opts: ["Action", "Empathy", "Awareness", "Communication"], answer: 2, feedback: "This is Awareness — caring to notice. Noticing a customer's body language before they say a word is a key barista skill. Awareness gives you information to act proactively. Maybe they need a faster interaction, a warm greeting, or just someone to acknowledge them." },
+  { q: "What does it mean to 'Make every moment right'?", opts: ["Always remake any drink a customer asks to change", "Notice what each customer truly needs — not just what they ordered — and respond accordingly", "Never let a customer leave unhappy, no matter the cost", "Offer every customer a free item if they wait more than 3 minutes"], answer: 1, feedback: "Making every moment right means noticing what each individual customer needs — sometimes that's speed, sometimes warmth, sometimes just quiet efficiency. It requires awareness and empathy, then acting on what you observe. Every customer has a different 'right moment.'" },
+  { q: "What is wrong with saying 'That wasn't my fault' during a service recovery?", opts: ["It sounds rude to the customer", "It may not be true", "It makes the customer feel their experience doesn't matter and violates the unconditional apology principle", "It's too informal"], answer: 2, feedback: "An apology should be unconditional — never make excuses or place blame. Saying 'that wasn't my fault' may be factually true but it tells the customer their feelings don't matter. An unconditional apology acknowledges their experience without assigning guilt. What matters is resolution, not who caused the problem." },
+  { q: "According to the Customer Service Commitment, what should you never skip regardless of how busy the store is?", opts: ["Cleaning the lobby", "Making a connection with customers", "Restocking supplies", "Checking your phone for new orders"], answer: 1, feedback: "The document is explicit: 'There will be times when the store is busy or there is a lot going on. But nothing is more important than making a connection with our customers.' Connection is the non-negotiable constant — everything else can flex, but connection stays." },
+
+  // COFFEE & QUALITY (Q24–31)
+  { q: "What percentage of a cup of brewed coffee is water?", opts: ["75%", "88%", "98%", "100%"], answer: 2, feedback: "Coffee is approximately 98% water — which is why water quality is one of the Four Fundamentals of brewing. If the water doesn't taste good, neither will the coffee. Starbucks filters all store water to ensure it meets the precise mineral balance needed for great extraction." },
+  { q: "What is the correct water temperature for brewing coffee at Starbucks?", opts: ["175°–185°F (79°–85°C)", "195°–205°F (90°–96°C)", "212°F (100°C) — boiling", "150°–160°F (66°–71°C)"], answer: 1, feedback: "195°–205°F (90°–96°C) is the ideal brewing temperature. Too hot (boiling = 212°F) scorches the coffee, creating bitter, burnt flavors. Too cool and extraction is incomplete, leaving a weak, sour cup. All Starbucks hot water taps are calibrated to this range." },
+  { q: "What grind size should you use for a flat-bottom filter?", opts: ["Coarse", "Medium", "Fine", "Extra fine"], answer: 1, feedback: "Medium grind for a flat-bottom filter. The full grind guide: Extra fine = espresso · Fine = cone-shaped filter · Medium = flat-bottom filter · Coarse = coffee press. The grind determines how quickly water passes through — always match it to your brew method." },
+  { q: "What was revolutionary about the Starbucks FlavorLock™ bag introduced in 1989?", opts: ["It kept coffee beans refrigerated automatically", "It used a one-way valve to let gases escape while keeping oxygen out — preserving freshness after roasting", "It was the first resealable coffee bag", "It kept coffee beans separated from other products"], answer: 1, feedback: "The FlavorLock™ bag's one-way valve is the key innovation — it lets the CO₂ gases naturally released by freshly roasted coffee escape (preventing the bag from bursting) while preventing oxygen from getting in. Oxygen is one of the four enemies of fresh coffee that cause staling." },
+  { q: "What characteristic of coffee is described as 'the tangy sensation on the sides and tip of your tongue'?", opts: ["Body", "Flavor", "Acidity", "Aroma"], answer: 2, feedback: "Acidity is the lively, tangy, palate-cleansing sensation felt on the sides and tip of the tongue. It's not bitterness or sourness — it's brightness. Starbucks Blonde Roast highlights acidity; Dark Roast mutes it. High-altitude origins like Kenya and Ethiopia are known for vibrant acidity." },
+  { q: "What does 'body' refer to when tasting coffee?", opts: ["The color of the coffee", "The strength or caffeine level", "The weight or thickness of the coffee on your tongue", "The foam on top of a beverage"], answer: 2, feedback: "Body refers to the weight or thickness of the coffee on your tongue. Light body feels thin and delicate (like tea). Full body feels rich and substantial (like cream). Dark Roast produces a fuller body; Blonde Roast is lighter. The type of filter also affects body — metal filters allow more oils through." },
+  { q: "The Starbucks Blonde Roast is characterized by what?", opts: ["Fuller body and robust, bold flavors", "Smooth and balanced cup", "Highlighted acidity, lighter body, and mellow flavors", "Intense bitterness and dark color"], answer: 2, feedback: "Starbucks Blonde Roast highlights the acidity of the coffee while having a lighter body with mellow flavors. The shorter roast time preserves more of the bean's original origin character — often with citrus, floral, or soft sweet notes. It's the lightest of the three roast profiles." },
+  { q: "Why should you smell coffee before tasting it?", opts: ["To check for spoilage", "To cool it down slightly", "Because aroma begins the flavor experience — your nose can detect about one trillion different aromas", "It's a tradition but has no practical benefit"], answer: 2, feedback: "Smelling is Step 1 of the four tasting steps (Smell, Slurp, Locate, Describe) because aroma is half of flavor. Your olfactory system can detect approximately one trillion different aromas, and smelling first sets expectations and primes your palate. The retronasal passage connects smell and taste into what we experience as 'flavor.'" },
+
+  // ESPRESSO BAR (Q32–40)
+  { q: "What makes espresso different from regular brewed coffee?", opts: ["It uses a different type of coffee bean", "It is brewed under pressure — forcing hot water through finely ground coffee to create a concentrated shot", "It is brewed at a lower temperature", "It uses more water per serving"], answer: 1, feedback: "Espresso is made by forcing very hot water under high pressure through finely ground coffee. This pressure extraction creates a concentrated, intense shot with crema — something impossible to achieve through standard drip brewing. The Mastrena® II espresso machine is specifically engineered for this process." },
+  { q: "What is the 'crema' on an espresso shot?", opts: ["Milk foam added to the top", "Caramel drizzle on the shot", "The foamy, light-brown top layer — created by CO₂ emulsified with coffee oils under pressure", "The bitter residue left over from extraction"], answer: 2, feedback: "Crema is the foamy, light-brown top layer of an espresso shot. It forms when CO₂ gas becomes emulsified with coffee oils during the high-pressure extraction. A rich, persistent crema indicates a fresh, well-pulled shot. Crema begins to dissipate immediately, which is why espresso must be served or incorporated into beverages right away." },
+  { q: "What is a 'Ristretto'?", opts: ["A very large espresso shot", "A decaffeinated espresso", "A shorter, more concentrated espresso shot", "An espresso with a splash of water"], answer: 2, feedback: "A Ristretto is a shorter espresso shot — using the same dose of coffee but less water, resulting in a more concentrated, sweeter, and less bitter shot. The Ristretto extraction stops before the less desirable bitter compounds are drawn out, making it a preferred choice for many specialty lattes." },
+  { q: "What is a 'Doppio'?", opts: ["1 espresso shot", "2 espresso shots (double)", "3 espresso shots", "A shorter espresso shot"], answer: 1, feedback: "Doppio (from Italian for 'double') means 2 espresso shots. The standard size for most Starbucks espresso beverages is a Doppio — 2 shots. The full terminology: Solo (1), Doppio (2), Triple (3), Quad (4), Ristretto (shorter), Long Shot (longer), Decaf (decaffeinated)." },
+  { q: "How does a Cappuccino differ from a Latte?", opts: ["A Cappuccino uses a different espresso blend", "A Cappuccino has less steamed milk and a deep layer of foam; a Latte has more steamed milk and only a thin layer of foam", "A Cappuccino is served cold; a Latte is always hot", "A Cappuccino has more espresso shots"], answer: 1, feedback: "Both beverages use espresso and steamed milk, but the ratio differs. A Latte has lots of steamed milk and only a thin layer of foam — it's smooth and creamy. A Cappuccino has less steamed milk and a deep, substantial layer of foam — the result is drier, lighter, and the espresso character comes through more clearly." },
+  { q: "What does 'Half Decaf' mean on an order?", opts: ["Half the usual number of espresso shots, all decaf", "Half the beverage is decaffeinated — 1/2 regular espresso shot(s) and 1/2 decaf espresso shot(s)", "A beverage with 50% less caffeine than standard", "Decaf espresso with half-fat milk"], answer: 1, feedback: "Half Decaf means exactly half of the espresso shots are regular and half are decaffeinated. For a Doppio (2 shots), that would be 1 regular shot and 1 decaf shot. It's a popular choice for customers who want to reduce caffeine intake without eliminating it entirely." },
+  { q: "Why must milk NEVER be re-steamed?", opts: ["It causes the machine to overheat", "Re-steaming destroys the milk proteins that create microfoam, degrades flavor, and creates food safety risks from repeated temperature cycling", "The store would run out of milk faster", "It takes too long during peak hours"], answer: 1, feedback: "Re-steaming milk is a serious quality and food safety issue. The first steaming aerates the milk and creates microfoam by denaturing proteins. A second steaming destroys the remaining protein structure, eliminates any foam quality, and introduces a scalded, flat flavor. Always steam a fresh pitcher for each beverage." },
+  { q: "What are the milk types available at a Starbucks store (standard options)?", opts: ["Only whole and nonfat", "Whole, 2%, nonfat, soy, heavy cream, coconut, half-and-half", "Whole, skim, oat, almond, coconut", "2%, whole, and soy only"], answer: 1, feedback: "Standard Starbucks milk options include: 2%, Whole, Nonfat, Half-and-Half, Soy, Heavy Cream, and Coconut. Whole milk is the default for the CAP region. Designated steaming pitchers should be used for each milk type to prevent allergen cross-contamination — especially important for customers with dairy allergies." },
+  { q: "During the espresso bar routine, what happens in the 'Finish and Connect' step?", opts: ["Clean the steam wand and sanitize the station", "Pour the milk into the cup, add any ice or topping, call the drink and customer's name, make eye contact, smile, say thank you, and ensure they have straws, sleeve, and carrier", "Log the completed drink in the POS system", "Prepare cups for the next round of orders"], answer: 1, feedback: "Finish and Connect is the crucial final touchpoint. It's not just handing over a cup — it's a moment of genuine human connection. Call the drink and name, make eye contact, smile, thank the customer, and ensure they have everything they need. This last moment is what customers remember most." },
+
+  // TEA & COLD BEVERAGES (Q41–45)
+  { q: "What is 'oxidation' in the context of tea processing?", opts: ["The heating process that kills bacteria in tea leaves", "When picked tea leaves are exposed to oxygen — transforming their color, aroma, and flavor", "Adding antioxidants to preserve tea freshness", "The drying process after tea leaves are harvested"], answer: 1, feedback: "Oxidation occurs when picked tea leaves are exposed to oxygen — enzymes in the leaves react with oxygen to transform their chemistry. This is what determines tea type: no oxidation = green/white tea; partial oxidation = oolong; full oxidation = black tea. Herbal teas skip this process entirely as they aren't made from tea leaves." },
+  { q: "What type of milk is used for making Cold Foam?", opts: ["Whole milk — for maximum creaminess", "2% milk — the standard", "Nonfat milk — its protein structure creates a denser, more stable foam", "Heavy cream — for richness"], answer: 2, feedback: "Cold Foam uses 150 ml of nonfat milk. Nonfat milk's protein structure (without the fat content that weighs down foam) creates a denser, more stable cold foam. The blender uses button 4 to achieve the right airy, luscious texture — about ½ cm of cold foam tops the finished beverage." },
+  { q: "How long should you brew black tea?", opts: ["1–2 minutes", "3 minutes", "5 minutes", "7 minutes"], answer: 2, feedback: "Black tea brews for 5 minutes at 195°F (90°C). Brewing times: White & Green = 3 min · Black & Herbal = 5 min · Oolong = 7 min. Black tea is fully oxidized and robust enough to handle 5 minutes without becoming overly astringent — unlike delicate green or white teas which turn bitter quickly." },
+  { q: "What is the correct order for the Blended Beverage Routine?", opts: ["Ice, milk, powder, blend, syrup, finish", "Pump coffee → Pour milk → Pour cup content → Add flavor and ice → Pump base → Blend → Finish and connect → Clean up", "Blend all ingredients first, then add ice", "Syrup, ice, milk, coffee, blend, finish"], answer: 1, feedback: "The Blended Beverage Routine is: Pump coffee → Pour milk → Pour cup content → Add flavor and ice → Pump base → Blend → Finish and connect → Clean up. Following this exact sequence every time ensures consistent flavor, texture, and quality — and prevents common mistakes like forgetting the base or adding ingredients in the wrong order." },
+  { q: "What characteristic of tea is described as the 'weight' or 'mouthfeel'?", opts: ["Aroma", "Appearance", "Body", "Flavor"], answer: 2, feedback: "Body in tea refers to its 'weight' or 'mouthfeel' — does the tea feel full-bodied and substantial, or delicate and light? The four tea tasting characteristics mirror coffee: Aroma (how it smells), Appearance (color and clarity of the liquor), Body (weight/mouthfeel), and Flavor (how it tastes)." },
+
+  // STORE OPERATIONS (Q46–50)
+  { q: "What is a 'Cycle Task' in the Customer Support position?", opts: ["A task completed every customer interaction", "A regularly recurring task like restocking the food case, emptying trash, spot cleaning floors, cleaning glass panels, or cleaning restrooms", "A weekly deep-cleaning responsibility", "A task shared between all barista positions simultaneously"], answer: 1, feedback: "Cycle Tasks are recurring tasks completed throughout the shift on rotation — including restocking the food case, emptying trash, spot cleaning floors, cleaning glass panels, and cleaning restrooms. They ensure the store stays consistently clean and ready, not just clean at opening and closing." },
+  { q: "What is the 'Approved Product List (APL)'?", opts: ["A list of approved Starbucks suppliers", "A resource covering food shelf life, thaw time, nutritional info, dietary categories, allergen information, and serving requirements for all products", "The daily list of products available in-store", "A list of products approved for discount by store managers"], answer: 1, feedback: "The APL is the comprehensive reference for everything food-related: shelf life, thaw time, nutritional information, dietary categories (vegetarian/vegan), food and beverage pairings, special preparation requirements, allergen information, and more. If a barista ever has a question about a food item, the APL is the source of truth." },
+  { q: "What is the difference between 'Vegetarian' and 'Vegan' food options?", opts: ["They are the same thing", "Vegetarian excludes meat, poultry, and fish only. Vegan excludes all animal-origin ingredients including milk, eggs, honey, and gelatin", "Vegan excludes only meat; vegetarian excludes all animal products", "Vegetarian items can include eggs; vegan items cannot include anything"], answer: 1, feedback: "Vegetarian means no animal by-products including meat, poultry, and fish — but may include dairy and eggs. Vegan is stricter: no ingredients of animal origin at all, including milk, eggs, honey, and gelatin. Many customers have specific dietary needs, so knowing these distinctions precisely is important for making accurate recommendations." },
+  { q: "What is the hot beverage size that is only available as hot (not cold)?", opts: ["Tall", "Grande", "Short", "Venti"], answer: 2, feedback: "Short (8 oz) is only available as a hot beverage. Hot beverage sizes are Short (8 oz), Tall (12 oz), Grande (16 oz), and Venti (20 oz). Cold beverage sizes are Tall, Grande, and Venti (24 oz for cold Venti vs 20 oz for hot)." },
+  { q: "A customer asks for a 'warm' temperature on their latte. What temperature should you steam their milk to?", opts: ["130°F (54°C)", "140°F (60°C)", "150°F (66°C)", "170°F (77°C)"], answer: 1, feedback: "Warm temperature is 140°F (60°C). The full temperature guide: Kids = 130°F · Warm = 140°F · Regular (standard adult) = 150°–170°F · Do not serve above 195°F. Always use a calibrated steaming thermometer when fulfilling specific temperature requests — the auto-steam function handles standard temperature but not custom requests." }
+];
+
+// Shuffle and build practice quiz
+const shuffled = [...practiceQuestions].sort(() => Math.random() - 0.5);
+quizzes['quizPractice'] = { questions: shuffled };
+
+function buildQuiz(id, key) {
+  const container = document.getElementById(id);
+  if (!container || !quizzes[key]) return;
+  const quiz = quizzes[key];
+  let cur = 0, score = 0;
+  function render() {
+    if (cur >= quiz.questions.length) {
+      const pct = Math.round((score/quiz.questions.length)*100);
+      const msg = pct===100?'Perfect score — you\'re ready for anything!':pct>=80?'Excellent — you\'ve mastered the basics!':pct>=60?'Good effort! Review the chapters and try again.':'Keep studying — you\'ve got this!';
+      container.innerHTML = `<div class="quiz-wrap"><div class="quiz-label">${id==='quizPractice'?'Practice Quiz Complete':'Chapter Quiz Complete'}</div><div class="quiz-score show"><div class="score-num">${score}/${quiz.questions.length}</div><div class="score-label">Questions Correct — ${pct}%</div><p style="margin-top:1rem;font-size:14px;color:var(--muted)">${msg}</p>${id==='quizPractice'?`<button class="nav-btn primary" style="margin-top:1rem" onclick="resetPractice()">↺ Retake Quiz</button>`:''}  </div></div>`;
+      return;
+    }
+    const q = quiz.questions[cur];
+    container.innerHTML = `<div class="quiz-wrap"><div class="quiz-label">${id==='quizPractice'?'Practice Quiz — 50 Questions':'Chapter Quiz'}</div><div class="quiz-progress">Question ${cur+1} of ${quiz.questions.length}</div><div class="quiz-q">${q.q}</div><div class="quiz-options">${q.opts.map((o,i)=>`<button class="quiz-opt" onclick="ansQ(this,${i},${q.answer},'${id}',${cur})">${o}</button>`).join('')}</div><div class="quiz-feedback" id="qf_${id}"></div><button class="quiz-next" id="qn_${id}" onclick="nxtQ('${id}')">Next →</button></div>`;
+  }
+  window['qs_'+id] = { render, inc:()=>{cur++;}, addS:()=>{score++;} };
+  render();
+}
+
+function resetPractice() {
+  const reshuffled = [...practiceQuestions].sort(() => Math.random() - 0.5);
+  quizzes['quizPractice'] = { questions: reshuffled };
+  buildQuiz('quizPractice', 'quizPractice');
+}
+
+['quiz0','quiz1','quiz2','quiz3','quiz4','quiz5','quiz6','quizPractice'].forEach(id => buildQuiz(id, id));
+</script>
+</body>
+</html>
