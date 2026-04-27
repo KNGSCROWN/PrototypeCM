@@ -1,0 +1,797 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Starbucks Coffee Academy — Barista Trainer</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Libre+Baskerville:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap');
+
+  :root {
+    --cream: #F5F0E8;
+    --espresso: #2C1A0E;
+    --roast: #6B3A1F;
+    --caramel: #C47A2B;
+    --gold: #E8A93A;
+    --muted: #7A5C3A;
+    --border: rgba(107,58,31,0.2);
+    --card: #FFFDF8;
+    --green: #1E3932;
+    --green-light: #00704A;
+    --text: #1A1008;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); }
+
+  /* HERO */
+  .hero { background: var(--espresso); color: var(--cream); padding: 4rem 2rem 3rem; text-align: center; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(196,122,43,0.15) 0%, transparent 70%); pointer-events: none; }
+  .hero-badge { display: inline-block; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); border: 1px solid rgba(232,169,58,0.4); padding: 6px 16px; border-radius: 2px; margin-bottom: 1.5rem; }
+  .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 400; line-height: 1.15; margin-bottom: 1rem; }
+  .hero h1 em { color: var(--gold); font-style: italic; }
+  .hero p { font-size: 1rem; color: rgba(245,240,232,0.7); max-width: 560px; margin: 0 auto 2rem; line-height: 1.7; }
+  .progress-bar-wrap { max-width: 400px; margin: 0 auto; }
+  .progress-label { display: flex; justify-content: space-between; font-size: 12px; color: rgba(245,240,232,0.5); margin-bottom: 8px; }
+  .progress-track { height: 3px; background: rgba(245,240,232,0.15); border-radius: 2px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--gold); border-radius: 2px; transition: width 0.5s ease; }
+
+  /* NAV */
+  .chapter-nav { background: var(--espresso); border-top: 1px solid rgba(245,240,232,0.08); padding: 0 1.5rem; display: flex; overflow-x: auto; scrollbar-width: none; position: sticky; top: 0; z-index: 100; }
+  .chapter-nav::-webkit-scrollbar { display: none; }
+  .chapter-btn { flex-shrink: 0; padding: 14px 16px; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: rgba(245,240,232,0.45); background: none; border: none; border-bottom: 2px solid transparent; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.2s; white-space: nowrap; }
+  .chapter-btn:hover { color: rgba(245,240,232,0.8); }
+  .chapter-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  /* CONTENT */
+  .content { max-width: 820px; margin: 0 auto; padding: 3rem 1.5rem 6rem; }
+  .chapter { display: none; }
+  .chapter.active { display: block; animation: fadeIn 0.4s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+  .chapter-header { margin-bottom: 2.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
+  .chapter-num { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--caramel); margin-bottom: 0.5rem; }
+  .chapter-header h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 400; color: var(--espresso); line-height: 1.2; }
+  .chapter-header .subtitle { font-family: 'Libre Baskerville', serif; font-style: italic; color: var(--muted); margin-top: 0.5rem; font-size: 1rem; }
+
+  .prose { font-size: 16px; line-height: 1.8; color: #2a1a0a; }
+  .prose p { margin-bottom: 1.25rem; }
+  .prose strong { font-weight: 500; color: var(--roast); }
+
+  /* CALLOUT */
+  .callout { background: var(--espresso); color: var(--cream); padding: 1.5rem 2rem; border-radius: 4px; margin: 2rem 0; position: relative; overflow: hidden; }
+  .callout::before { content: '\201C'; font-family: 'Playfair Display', serif; font-size: 5rem; color: rgba(232,169,58,0.2); position: absolute; top: -10px; left: 10px; line-height: 1; }
+  .callout p { font-family: 'Libre Baskerville', serif; font-style: italic; font-size: 1.05rem; line-height: 1.7; position: relative; z-index: 1; color: rgba(245,240,232,0.9); }
+  .callout cite { display: block; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: var(--gold); margin-top: 0.75rem; font-style: normal; }
+
+  /* FACT BOX */
+  .fact-box { background: var(--card); border: 1px solid var(--border); border-left: 3px solid var(--caramel); border-radius: 4px; padding: 1.25rem 1.5rem; margin: 1.5rem 0; font-size: 15px; line-height: 1.7; color: var(--roast); }
+  .fact-box .fact-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--caramel); margin-bottom: 0.5rem; font-weight: 500; }
+
+  /* SECTION HEADING */
+  .section-heading { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 600; color: var(--espresso); margin: 2.5rem 0 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border); }
+
+  /* ACCORDION */
+  .accordion { margin: 1.5rem 0; }
+  .acc-item { border: 1px solid var(--border); border-radius: 6px; overflow: hidden; margin-bottom: 0.75rem; background: var(--card); transition: box-shadow 0.2s; }
+  .acc-item:hover { box-shadow: 0 2px 12px rgba(44,26,14,0.07); }
+  .acc-header { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.25rem; cursor: pointer; user-select: none; }
+  .acc-icon { width: 34px; height: 34px; border-radius: 50%; background: var(--espresso); color: var(--gold); display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+  .acc-title { font-weight: 500; font-size: 15px; flex: 1; }
+  .acc-arrow { font-size: 12px; color: var(--muted); transition: transform 0.2s; }
+  .acc-item.open .acc-arrow { transform: rotate(180deg); }
+  .acc-body { display: none; padding: 0 1.25rem 1.25rem; font-size: 14px; color: #4a2e16; line-height: 1.75; border-top: 1px solid var(--border); padding-top: 1rem; }
+  .acc-item.open .acc-body { display: block; }
+
+  /* STEP CARDS */
+  .steps-list { display: grid; gap: 0.75rem; margin: 1.5rem 0; }
+  .step-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; display: flex; gap: 1rem; align-items: flex-start; }
+  .step-num { width: 36px; height: 36px; border-radius: 50%; background: var(--espresso); color: var(--gold); display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 600; flex-shrink: 0; }
+  .step-body h4 { font-weight: 500; font-size: 15px; margin-bottom: 0.25rem; color: var(--espresso); }
+  .step-body p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  /* EXPERIENCE LEVEL CARDS */
+  .exp-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+  .exp-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; cursor: pointer; transition: all 0.2s; }
+  .exp-card:hover { box-shadow: 0 4px 16px rgba(44,26,14,0.1); transform: translateY(-2px); }
+  .exp-card.active { border-color: var(--caramel); background: rgba(196,122,43,0.04); }
+  .exp-emoji { font-size: 2rem; margin-bottom: 0.5rem; }
+  .exp-name { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 600; color: var(--espresso); margin-bottom: 0.25rem; }
+  .exp-short { font-size: 13px; color: var(--muted); line-height: 1.5; }
+  .exp-detail { display: none; font-size: 13px; color: #4a2e16; line-height: 1.7; border-top: 1px solid var(--border); margin-top: 0.75rem; padding-top: 0.75rem; }
+  .exp-card.active .exp-detail { display: block; }
+
+  /* LEARNING STYLE TABS */
+  .ls-tabs { border: 1px solid var(--border); border-radius: 8px; overflow: hidden; margin: 1.5rem 0; }
+  .ls-tab-bar { display: flex; background: var(--espresso); }
+  .lstab { flex: 1; padding: 13px 8px; text-align: center; cursor: pointer; font-size: 12px; letter-spacing: 0.5px; color: rgba(245,240,232,0.5); border: none; background: none; font-family: 'DM Sans', sans-serif; transition: all 0.2s; border-right: 1px solid rgba(245,240,232,0.08); }
+  .lstab:last-child { border-right: none; }
+  .lstab:hover { color: rgba(245,240,232,0.8); }
+  .lstab.active { color: var(--gold); background: rgba(232,169,58,0.1); }
+  .ls-detail { padding: 1.5rem; background: var(--card); min-height: 140px; animation: fadeIn 0.3s ease; }
+  .ls-detail h4 { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--espresso); margin-bottom: 0.75rem; }
+  .ls-detail p { font-size: 14px; color: #4a2e16; line-height: 1.75; margin-bottom: 0.5rem; }
+  .ls-tag { display: inline-block; background: var(--espresso); color: var(--gold); font-size: 11px; padding: 3px 10px; border-radius: 12px; margin: 2px; }
+
+  /* FRAMEWORK VISUAL */
+  .framework-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin: 1rem 0; cursor: pointer; transition: all 0.2s; }
+  .framework-card:hover { box-shadow: 0 4px 16px rgba(44,26,14,0.1); }
+  .framework-card.open { border-color: var(--caramel); }
+  .fw-header { display: flex; align-items: center; gap: 1rem; }
+  .fw-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--caramel); margin-bottom: 3px; }
+  .fw-title { font-family: 'Playfair Display', serif; font-size: 1.1rem; font-weight: 600; color: var(--espresso); }
+  .fw-arrow { margin-left: auto; font-size: 12px; color: var(--muted); transition: transform 0.2s; }
+  .framework-card.open .fw-arrow { transform: rotate(180deg); }
+  .fw-body { display: none; margin-top: 1rem; font-size: 14px; color: #4a2e16; line-height: 1.75; border-top: 1px solid var(--border); padding-top: 1rem; }
+  .framework-card.open .fw-body { display: block; }
+  .fw-step { display: flex; gap: 1rem; margin-bottom: 0.75rem; align-items: flex-start; }
+  .fw-step-label { font-weight: 700; color: var(--caramel); min-width: 50px; font-size: 13px; }
+  .fw-step-text { font-size: 13px; color: #4a2e16; }
+
+  /* TEACHING MODEL STEPS */
+  .model-steps { display: grid; gap: 0; margin: 1.5rem 0; border: 1px solid var(--border); border-radius: 8px; overflow: hidden; }
+  .model-step-tab { display: flex; gap: 1rem; align-items: center; padding: 1.1rem 1.25rem; cursor: pointer; background: var(--card); border-bottom: 1px solid var(--border); transition: all 0.2s; }
+  .model-step-tab:last-child { border-bottom: none; }
+  .model-step-tab:hover { background: rgba(196,122,43,0.04); }
+  .model-step-tab.open { background: rgba(44,26,14,0.04); }
+  .model-step-num { width: 34px; height: 34px; border-radius: 50%; background: var(--espresso); color: var(--gold); display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 0.95rem; font-weight: 600; flex-shrink: 0; }
+  .model-step-title { font-weight: 500; font-size: 15px; color: var(--espresso); flex: 1; }
+  .model-step-arrow { font-size: 12px; color: var(--muted); transition: transform 0.2s; }
+  .model-step-tab.open .model-step-arrow { transform: rotate(180deg); }
+  .model-step-body { display: none; padding: 0 1.25rem 1.25rem 4.25rem; font-size: 14px; color: #4a2e16; line-height: 1.75; background: var(--card); border-bottom: 1px solid var(--border); }
+  .model-step-tab.open + .model-step-body { display: block; }
+
+  /* QUIZ */
+  .quiz-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin: 2rem 0; }
+  .quiz-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--caramel); margin-bottom: 1rem; }
+  .quiz-q { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--espresso); margin-bottom: 1.25rem; line-height: 1.4; }
+  .quiz-options { display: grid; gap: 0.5rem; margin-bottom: 1rem; }
+  .quiz-opt { padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; font-size: 14px; background: none; text-align: left; font-family: 'DM Sans', sans-serif; transition: all 0.2s; color: var(--text); }
+  .quiz-opt:hover:not(:disabled) { border-color: var(--caramel); background: rgba(196,122,43,0.04); }
+  .quiz-opt.correct { background: rgba(0,112,74,0.1); border-color: var(--green-light); color: var(--green); }
+  .quiz-opt.wrong { background: rgba(139,0,0,0.07); border-color: #8B0000; color: #8B0000; }
+  .quiz-feedback { font-size: 14px; line-height: 1.6; padding: 0.75rem 1rem; border-radius: 6px; display: none; }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.correct { background: rgba(0,112,74,0.08); color: var(--green); }
+  .quiz-feedback.wrong { background: rgba(139,0,0,0.07); color: #8B0000; }
+  .quiz-next { margin-top: 1rem; padding: 0.6rem 1.5rem; background: var(--espresso); color: var(--gold); border: none; border-radius: 4px; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; display: none; font-family: 'DM Sans', sans-serif; }
+  .quiz-next.show { display: inline-block; }
+  .quiz-progress { font-size: 12px; color: var(--muted); margin-bottom: 1rem; }
+  .quiz-score { text-align: center; padding: 1.5rem; display: none; }
+  .quiz-score.show { display: block; }
+  .quiz-score .score-num { font-family: 'Playfair Display', serif; font-size: 3rem; color: var(--espresso); line-height: 1; }
+  .quiz-score .score-label { color: var(--muted); font-size: 14px; margin-top: 0.25rem; }
+
+  /* SCORE BAR */
+  .score-bar-wrap { max-width: 300px; margin: 1rem auto 0; }
+  .score-bar-track { height: 8px; background: var(--border); border-radius: 4px; overflow: hidden; }
+  .score-bar-fill { height: 100%; background: var(--gold); border-radius: 4px; transition: width 1s ease; }
+
+  /* NAV FOOTER */
+  .chapter-nav-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+  .nav-btn { padding: 10px 20px; border: 1px solid var(--border); border-radius: 4px; background: none; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; font-family: 'DM Sans', sans-serif; color: var(--muted); transition: all 0.2s; }
+  .nav-btn:hover { border-color: var(--caramel); color: var(--caramel); }
+  .nav-btn.primary { background: var(--espresso); color: var(--gold); border-color: var(--espresso); }
+  .nav-btn:disabled { opacity: 0.3; cursor: default; }
+
+  /* BADGE */
+  .topic-badge { display: inline-block; font-size: 10px; letter-spacing: 1px; text-transform: uppercase; padding: 3px 10px; border-radius: 3px; margin-bottom: 0.75rem; background: rgba(196,122,43,0.12); color: var(--caramel); border: 1px solid rgba(196,122,43,0.25); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-badge">Starbucks Coffee Academy · Barista Trainer</div>
+  <h1>The <em>Trainer's</em> Guide</h1>
+  <p>Master the art of teaching — how to create a warm learning environment, recognize learning styles, deliver meaningful feedback, and guide new partners to success using the four-step teaching model.</p>
+  <div class="progress-bar-wrap">
+    <div class="progress-label">
+      <span id="progressLabel">Chapter 1 of 5</span>
+      <span id="progressPct">20%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill" style="width:20%"></div>
+    </div>
+  </div>
+</div>
+
+<nav class="chapter-nav">
+  <button class="chapter-btn active" onclick="showChapter(0)">Role & Environment</button>
+  <button class="chapter-btn" onclick="showChapter(1)">Prior Knowledge</button>
+  <button class="chapter-btn" onclick="showChapter(2)">Learning Styles</button>
+  <button class="chapter-btn" onclick="showChapter(3)">Feedback & Recognition</button>
+  <button class="chapter-btn" onclick="showChapter(4)">Teaching Model</button>
+  <button class="chapter-btn" onclick="showChapter(5)">🏆 Practice Quiz</button>
+</nav>
+
+<div class="content">
+
+<!-- ═══════════════ CH0: ROLE & ENVIRONMENT -->
+<div class="chapter active" id="ch0">
+  <div class="chapter-header">
+    <div class="chapter-num">Chapter 1</div>
+    <h2>The Trainer's Role &amp; Creating the Environment</h2>
+    <div class="subtitle">A great trainer doesn't just teach skills — they build belonging.</div>
+  </div>
+
+  <div class="section-heading">Your Role as a Barista Trainer</div>
+  <div class="accordion">
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">🌱</div><div class="acc-title">Creating a Positive Learning Experience</div><div class="acc-arrow">▾</div></div><div class="acc-body">Your primary job as a trainer is to make learning feel safe, engaging, and achievable. A new partner who feels welcomed and supported will absorb information faster, make fewer mistakes, and stay longer. Every interaction you have with a new partner is a training moment — make each one count.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">💬</div><div class="acc-title">Providing Feedback and Recognition</div><div class="acc-arrow">▾</div></div><div class="acc-body">Feedback helps partners improve by identifying roadblocks and clarifying the correct way to do things. Recognition celebrates what they've done right — and is just as important as corrective feedback. Both types are essential tools in your trainer toolkit. The best trainers deliver both consistently and with genuine care.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">📡</div><div class="acc-title">Communicating Effectively with Your Manager</div><div class="acc-arrow">▾</div></div><div class="acc-body">Your manager relies on you for updates about the new partner's progress. Share observations honestly — both what's going well and where more support is needed. This communication loop helps the manager adjust schedules, offer additional resources, and ensure the new partner's onboarding is on track.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">⭐</div><div class="acc-title">Setting a Good Example</div><div class="acc-arrow">▾</div></div><div class="acc-body">New partners watch everything you do — not just what you explicitly teach. Living the mission and values, upholding Starbucks standards, and treating every customer and partner with dignity every single shift is the most powerful form of training. You are always demonstrating what "good" looks like.</div></div>
+  </div>
+
+  <div class="section-heading">The 4 Basic Training Skills</div>
+  <div class="steps-list">
+    <div class="step-card"><div class="step-num">1</div><div class="step-body"><h4>Assessing Prior Knowledge</h4><p>Understanding what a new partner already knows helps you calibrate your teaching. You avoid wasting time on things they already know and can focus depth where it's truly needed.</p></div></div>
+    <div class="step-card"><div class="step-num">2</div><div class="step-body"><h4>Recognizing Different Learning Styles</h4><p>People absorb information in different ways — visual, auditory, or kinesthetic. Recognizing a partner's style lets you adapt your teaching approach to how they actually learn best.</p></div></div>
+    <div class="step-card"><div class="step-num">3</div><div class="step-body"><h4>Applying the Teaching Model</h4><p>The four-step model — Prepare, Present, Practice, Follow Up — provides a reliable structure for teaching any skill consistently and effectively, every time.</p></div></div>
+    <div class="step-card"><div class="step-num">4</div><div class="step-body"><h4>Providing Feedback and Recognition</h4><p>Knowing when and how to give feedback (to improve) and recognition (to celebrate) is what transforms instruction into growth. Delivery matters as much as content.</p></div></div>
+  </div>
+
+  <div class="section-heading">Creating a Culture of Warmth and Belonging</div>
+  <div class="prose">
+    <p>The training environment is an extension of the Starbucks mission — creating a culture of warmth and belonging where everyone is welcome. A new partner's first impressions of Starbucks culture are formed almost entirely through their experience with their trainer.</p>
+  </div>
+
+  <div class="callout">
+    <p>To create a warm and belonging learning environment, you will need to: prepare ahead of time, build strong relationships, be empathetic to partners with diverse backgrounds, motivate and inspire new partners, and make the partner's training your priority.</p>
+    <cite>— Starbucks Barista Trainer Guide</cite>
+  </div>
+
+  <div class="section-heading">Before Training Starts</div>
+  <div class="steps-list">
+    <div class="step-card"><div class="step-num">📋</div><div class="step-body"><h4>Prep Time — Connect with Your Manager</h4><p>Before the new partner arrives, connect with your manager. Know the available teaching tools and resources needed. Understand the training plan and what skills to cover on which days.</p></div></div>
+    <div class="step-card"><div class="step-num">👥</div><div class="step-body"><h4>Inform the Team</h4><p>Let your existing team know a new partner is joining. A team that's prepared to welcome a new person creates a warmer, smoother onboarding experience. Nobody should be surprised or make the new person feel like an inconvenience.</p></div></div>
+    <div class="step-card"><div class="step-num">🤝</div><div class="step-body"><h4>Build a Strong Relationship</h4><p>Connect with the new partner from the first moment. Learn their name, ask genuine questions, and make them feel that you — personally — are invested in their success. Relationships built in the first training session set the tone for everything that follows.</p></div></div>
+  </div>
+
+  <div class="section-heading">When the Environment Shifts</div>
+  <div class="fact-box">
+    <div class="fact-label">Managing Difficult Moments in Training</div>
+    Things don't always go smoothly. A new partner might make repeated mistakes, feel overwhelmed during a rush, or show signs of frustration. When the environment shifts, the trainer's response is critical:<br><br>
+    <strong>Remain calm</strong> — your energy sets the tone. If you're anxious, they'll be anxious.<br>
+    <strong>Stay positive</strong> — frame challenges as learning opportunities, not failures.<br>
+    <strong>Look for cues</strong> — watch for signs that the partner feels overwhelmed: slowing down, going quiet, making unusual errors. These are signals to pause, check in, and offer support.
+  </div>
+
+  <div id="quiz0"></div>
+  <div class="chapter-nav-footer">
+    <button class="nav-btn" disabled>← Previous</button>
+    <button class="nav-btn primary" onclick="showChapter(1)">Prior Knowledge →</button>
+  </div>
+</div>
+
+<!-- ═══════════════ CH1: PRIOR KNOWLEDGE -->
+<div class="chapter" id="ch1">
+  <div class="chapter-header">
+    <div class="chapter-num">Chapter 2</div>
+    <h2>Assessing Prior Knowledge</h2>
+    <div class="subtitle">Know your partner before you teach your partner.</div>
+  </div>
+
+  <div class="prose">
+    <p>Every new partner arrives with a different story. Some have never worked in a café. Others are transferring from another Starbucks. Still others bring hospitality or service experience from entirely different industries. Your job is to understand where they are starting — so you know where to begin.</p>
+  </div>
+
+  <div class="section-heading">Three Ways to Assess Prior Knowledge</div>
+  <div class="steps-list">
+    <div class="step-card"><div class="step-num">1</div><div class="step-body"><h4>Learn the Story</h4><p>Ask about their background before jumping into any training. Where have they worked before? What did they enjoy? What felt challenging? Even seemingly unrelated jobs often contain transferable skills — customer service, time pressure, precision, teamwork.</p></div></div>
+    <div class="step-card"><div class="step-num">2</div><div class="step-body"><h4>Know Your Partner</h4><p>Beyond work history, understand how they're feeling about starting. Are they nervous? Excited? Coming from a very different industry? Knowing this helps you calibrate your pace, tone, and level of detail. A person who is anxious needs more reassurance; someone confident may need more challenge.</p></div></div>
+    <div class="step-card"><div class="step-num">3</div><div class="step-body"><h4>Ask Follow-Up Questions</h4><p>Don't stop at one question. Follow up on answers to go deeper. If they say "I've worked in food service before" — ask what role, what kind of establishment, what the pace was like. The more you learn, the more targeted your training becomes.</p></div></div>
+  </div>
+
+  <div class="section-heading">Three Levels of Experience</div>
+  <p style="font-size:14px;color:var(--muted);margin-bottom:1rem;">Tap each level to understand how to adapt your training approach.</p>
+  <div class="exp-grid">
+    <div class="exp-card" onclick="toggleExp(this)">
+      <div class="exp-emoji">🌱</div>
+      <div class="exp-name">First Job</div>
+      <div class="exp-short">No previous work experience at all.</div>
+      <div class="exp-detail"><strong>Approach:</strong> Be patient. Slow down. Do not assume any prior knowledge about customer service, food handling, or café equipment. Spend more time explaining and demonstrating each skill. Break tasks into the smallest possible steps. Check for understanding frequently — they may be too nervous to ask questions on their own.</div>
+    </div>
+    <div class="exp-card" onclick="toggleExp(this)">
+      <div class="exp-emoji">⚙️</div>
+      <div class="exp-name">Some Experience</div>
+      <div class="exp-short">Has transferable skills from a previous job.</div>
+      <div class="exp-detail"><strong>Approach:</strong> Build on their prior knowledge — connect what they already know to new Starbucks-specific concepts and steps. Look and listen for verbal and non-verbal cues that they understand (or don't). Don't assume because they nodded that they understood. Follow up to make sure they actually learned the skill or task before moving on.</div>
+    </div>
+    <div class="exp-card" onclick="toggleExp(this)">
+      <div class="exp-emoji">🚀</div>
+      <div class="exp-name">Lots of Experience</div>
+      <div class="exp-short">Previously worked at Starbucks or has strong transferable skills.</div>
+      <div class="exp-detail"><strong>Approach:</strong> May not require detailed explanation of foundational concepts. However, don't skip the process entirely — they still need to learn Starbucks-specific standards, local store procedures, and your team's culture. Watch for overconfidence that leads to shortcuts. Focus on nuances, updates, and why Starbucks does things a specific way.</div>
+    </div>
+  </div>
+
+  <div class="callout">
+    <p>Understanding where a partner is coming from — their story, their confidence, their fears — is not just considerate. It is the most efficient way to teach. When you know your partner, you can speak directly to what they need, skipping what they already know and spending time where it matters most.</p>
+    <cite>— Starbucks Barista Trainer Principle</cite>
+  </div>
+
+  <div id="quiz1"></div>
+  <div class="chapter-nav-footer">
+    <button class="nav-btn" onclick="showChapter(0)">← Role & Environment</button>
+    <button class="nav-btn primary" onclick="showChapter(2)">Learning Styles →</button>
+  </div>
+</div>
+
+<!-- ═══════════════ CH2: LEARNING STYLES -->
+<div class="chapter" id="ch2">
+  <div class="chapter-header">
+    <div class="chapter-num">Chapter 3</div>
+    <h2>Learning Styles</h2>
+    <div class="subtitle">Everyone learns — but not everyone learns the same way.</div>
+  </div>
+
+  <div class="prose">
+    <p>People receive and process information in different ways. As a trainer, recognizing which learning style your partner naturally gravitates toward lets you adapt your teaching method — so your instruction actually sticks. The three learning styles you'll encounter are Visual, Auditory, and Kinesthetic.</p>
+  </div>
+
+  <div class="section-heading">The Three Learning Styles</div>
+  <p style="font-size:14px;color:var(--muted);margin-bottom:1rem;">Tap each style to explore it — how these learners absorb information and the best teaching strategies for each.</p>
+
+  <div class="ls-tabs">
+    <div class="ls-tab-bar">
+      <button class="lstab active" onclick="showLS(this,'visual')">👁️ Visual</button>
+      <button class="lstab" onclick="showLS(this,'auditory')">👂 Auditory</button>
+      <button class="lstab" onclick="showLS(this,'kinesthetic')">🤲 Kinesthetic</button>
+    </div>
+    <div class="ls-detail" id="lsDetail">
+      <h4>👁️ Visual Learners</h4>
+      <p>Visual learners receive information through images, maps, video, and visual demonstrations. They often remember what they <em>saw</em> rather than what they heard.</p>
+      <p><strong>Best teaching strategies:</strong> Demonstrations are extremely powerful for visual learners — show the full task before asking them to try it. Use drawings, diagrams, or physical reference cards. Point to steps on a visual aid while explaining. Always demonstrate before asking them to do it themselves.</p>
+      <div><span class="ls-tag">Demonstrations</span><span class="ls-tag">Drawings</span><span class="ls-tag">Graphics</span><span class="ls-tag">Show, Don't Just Tell</span></div>
+    </div>
+  </div>
+
+  <div class="section-heading">Recognizing Learning Style Cues</div>
+  <div class="accordion">
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">👁️</div><div class="acc-title">Cues for Visual Learners</div><div class="acc-arrow">▾</div></div><div class="acc-body">They may ask "Can you show me?" or "Where does this go?" They might watch you very carefully before attempting a task. They often refer back to written guides or visual cues. They may struggle when given only verbal instructions without a demonstration or visual reference.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">👂</div><div class="acc-title">Cues for Auditory Learners</div><div class="acc-arrow">▾</div></div><div class="acc-body">They tend to talk through problems out loud. They may repeat instructions back to you or ask you to repeat something in different words. They engage well in verbal Q&amp;A and often remember things better when they've discussed them. They can sometimes struggle with purely written or silent-demonstration formats.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">🤲</div><div class="acc-title">Cues for Kinesthetic Learners</div><div class="acc-arrow">▾</div></div><div class="acc-body">They may seem impatient during long explanations and want to "just try it." They learn remarkably fast once they can touch and manipulate the actual equipment. They may struggle to absorb information in a classroom setting or from reading alone. Their body language often shows restlessness during verbal-only instruction.</div></div>
+  </div>
+
+  <div class="fact-box">
+    <div class="fact-label">Trainer Tip — Most Partners Are a Mix</div>
+    Very few people are purely one learning style. Most partners respond best to a combination approach — <strong>show</strong> it (visual), <strong>explain</strong> it (auditory), then <strong>let them try</strong> it (kinesthetic). When in doubt, use all three: demonstrate the skill while narrating the steps, then hand it over for them to practice. This blended approach works for almost every learner.
+  </div>
+
+  <div id="quiz2"></div>
+  <div class="chapter-nav-footer">
+    <button class="nav-btn" onclick="showChapter(1)">← Prior Knowledge</button>
+    <button class="nav-btn primary" onclick="showChapter(3)">Feedback & Recognition →</button>
+  </div>
+</div>
+
+<!-- ═══════════════ CH3: FEEDBACK & RECOGNITION -->
+<div class="chapter" id="ch3">
+  <div class="chapter-header">
+    <div class="chapter-num">Chapter 4</div>
+    <h2>Feedback &amp; Recognition</h2>
+    <div class="subtitle">Feedback helps people improve. Recognition helps people grow.</div>
+  </div>
+
+  <div class="prose">
+    <p>Feedback and recognition are two distinct but equally important trainer tools. Feedback identifies what needs to change and why. Recognition celebrates what was done right and reinforces it. Great trainers use both — consistently, fairly, and with genuine care for the partner's growth.</p>
+  </div>
+
+  <div class="section-heading">The Two Types of Feedback</div>
+  <div class="steps-list">
+    <div class="step-card"><div class="step-num">1</div><div class="step-body"><h4>Recognition — Celebrate What's Right</h4><p>Used to celebrate when a new barista gets something right. Don't wait until someone is perfect to recognize them — catch them doing things well and say so specifically. Recognition reinforces behavior and builds confidence.</p></div></div>
+    <div class="step-card"><div class="step-num">2</div><div class="step-body"><h4>Feedback — Help Them Improve</h4><p>Used when you see behavior or a result that needs to change. Good feedback identifies the specific situation, describes the correct approach, and explains why it matters. It is never personal — it is always about the task or behavior.</p></div></div>
+  </div>
+
+  <div class="section-heading">The Feedback Frameworks</div>
+  <div class="framework-card" onclick="toggleFW(this)">
+    <div class="fw-header">
+      <div><div class="fw-label">Corrective Feedback</div><div class="fw-title">What · What · Why Framework</div></div>
+      <div class="fw-arrow">▾</div>
+    </div>
+    <div class="fw-body">
+      <div class="fw-step"><div class="fw-step-label">WHAT</div><div class="fw-step-text">Identify the time and place where the situation occurred. Be specific — not "you often do this wrong" but "just now, when you were steaming milk for the latte…"</div></div>
+      <div class="fw-step"><div class="fw-step-label">WHAT</div><div class="fw-step-text">Tell them the correct way to complete the task. Demonstrate if needed. Be clear and concrete — not "do better" but "the steam wand tip should be just below the surface, like this."</div></div>
+      <div class="fw-step"><div class="fw-step-label">WHY</div><div class="fw-step-text">Emphasize why it is important to do things the right way and what the impact is on others. Help the partner understand why it matters — not just that it matters. "When we re-steam milk, it loses its texture and flavor, which means the customer gets a lower-quality drink and we don't meet our quality standard."</div></div>
+    </div>
+  </div>
+
+  <div class="framework-card" onclick="toggleFW(this)">
+    <div class="fw-header">
+      <div><div class="fw-label">Recognition</div><div class="fw-title">What · Why Framework</div></div>
+      <div class="fw-arrow">▾</div>
+    </div>
+    <div class="fw-body">
+      <div class="fw-step"><div class="fw-step-label">WHAT</div><div class="fw-step-text">Say specifically what they did well. Not "good job" but "I noticed you checked the milk temperature with the thermometer before serving — that was exactly right."</div></div>
+      <div class="fw-step"><div class="fw-step-label">WHY</div><div class="fw-step-text">Explain why it matters. "That's important because it ensures our customers get their beverage at exactly the temperature they expect — and it protects young customers from being served something too hot." Recognition with a reason reinforces the behavior far more powerfully than praise alone.</div></div>
+    </div>
+  </div>
+
+  <div class="section-heading">Delivery Matters</div>
+  <div class="fact-box">
+    <div class="fact-label">The Three Pillars of Effective Delivery</div>
+    Even perfect feedback delivered poorly won't land. These three elements determine whether your partner is open to what you have to say:<br><br>
+    <strong>Your Connection</strong> — Do they trust you? A strong relationship makes feedback feel safe rather than threatening. Build connection before delivering corrective feedback.<br><br>
+    <strong>Your Tone</strong> — A warm, calm, respectful tone communicates care. A flat, cold, or critical tone communicates judgment. The same words said with different tone produce completely different results.<br><br>
+    <strong>Your Body Language</strong> — Open posture, appropriate eye contact, and facing the partner signals that you're engaged and supportive. Crossed arms or distracted eyes communicate the opposite.
+  </div>
+
+  <div class="section-heading">Provide Support — Do Not Rescue</div>
+  <div class="callout">
+    <p>Resisting the urge to save the barista provides them with an opportunity to learn in a safe place and helps build problem-solving skills. When you jump in too quickly, you solve the problem — but they never learn how to solve it themselves.</p>
+    <cite>— Starbucks Barista Trainer Guide</cite>
+  </div>
+
+  <div class="prose">
+    <p>This principle is one of the most counterintuitive aspects of great training. It feels natural — even kind — to step in and fix a mistake quickly. But every time you rescue a new partner, you take away a learning moment. Let them work through the challenge. Be present. Offer hints or questions if they're truly stuck. But resist the urge to take over.</p>
+  </div>
+
+  <div id="quiz3"></div>
+  <div class="chapter-nav-footer">
+    <button class="nav-btn" onclick="showChapter(2)">← Learning Styles</button>
+    <button class="nav-btn primary" onclick="showChapter(4)">Teaching Model →</button>
+  </div>
+</div>
+
+<!-- ═══════════════ CH4: TEACHING MODEL -->
+<div class="chapter" id="ch4">
+  <div class="chapter-header">
+    <div class="chapter-num">Chapter 5</div>
+    <h2>The Teaching Model</h2>
+    <div class="subtitle">Prepare · Present · Practice · Follow Up — the four steps that turn instruction into mastery.</div>
+  </div>
+
+  <div class="prose">
+    <p>The Teaching Model is the structured framework barista trainers use to teach any new skill consistently and effectively. Whether you're teaching a new partner how to steam milk, pull an espresso shot, or clean the pastry case — you always follow the same four steps. This consistency produces reliable results.</p>
+  </div>
+
+  <div class="section-heading">The Four Steps — Tap Each to Explore</div>
+  <div class="model-steps">
+    <div class="model-step-tab" onclick="toggleModelStep(this)">
+      <div class="model-step-num">1</div>
+      <div class="model-step-title">Prepare</div>
+      <div class="model-step-arrow">▾</div>
+    </div>
+    <div class="model-step-body">
+      <strong>Before you begin teaching, you must prepare:</strong><br><br>
+      • Connect with your manager for any information you need about the training session.<br>
+      • Locate and familiarize yourself with all the tools and resources you'll need — don't be hunting for equipment mid-demonstration.<br>
+      • Connect with the new partner — put them at ease. Greet them warmly, ask how they're doing, let them know you're excited to work with them.<br>
+      • Encourage questions — let them know there's no such thing as a bad question.<br>
+      • Assess prior knowledge — use what you learn to calibrate your approach.<br>
+      • Set expectations — tell the new partner the training framework and the tasks you'll cover together today.
+    </div>
+
+    <div class="model-step-tab" onclick="toggleModelStep(this)">
+      <div class="model-step-num">2</div>
+      <div class="model-step-title">Present</div>
+      <div class="model-step-arrow">▾</div>
+    </div>
+    <div class="model-step-body">
+      <strong>During the presentation phase, demonstrate the skill while explaining three layers:</strong><br><br>
+      • <strong>Major Steps</strong> — the sequence of the task. What happens first, second, third? Give them the big picture before the details.<br>
+      • <strong>Key Points</strong> — the detailed steps within each major step. These are the critical details that determine success or failure.<br>
+      • <strong>Reasons Why</strong> — explain why each step matters. Partners who understand the "why" make better decisions when things don't go to plan.<br><br>
+      <strong>Important reminders:</strong><br>
+      • Be concise — don't overwhelm with information.<br>
+      • Be mindful of the partner's capacity; watch for signs of information overload.<br>
+      • Always offer to repeat the demonstration if they need to see it again. There is no limit on repetitions.
+    </div>
+
+    <div class="model-step-tab" onclick="toggleModelStep(this)">
+      <div class="model-step-num">3</div>
+      <div class="model-step-title">Practice</div>
+      <div class="model-step-arrow">▾</div>
+    </div>
+    <div class="model-step-body">
+      <strong>Now it's the partner's turn — this is where real learning happens:</strong><br><br>
+      • Ask the barista to demonstrate the skill or task <em>while</em> saying the major steps, key points, and the reasons why out loud. Verbalizing the steps while performing them reinforces both procedural and conceptual understanding simultaneously.<br>
+      • Continue practicing the skill until they can demonstrate it correctly — not just once, but consistently.<br>
+      • Provide feedback and recognition throughout the practice phase. Don't wait until the end — give real-time guidance as they work through the skill.
+    </div>
+
+    <div class="model-step-tab" onclick="toggleModelStep(this)">
+      <div class="model-step-num">4</div>
+      <div class="model-step-title">Follow Up</div>
+      <div class="model-step-arrow">▾</div>
+    </div>
+    <div class="model-step-body">
+      <strong>Training doesn't end when the session ends — follow up is essential:</strong><br><br>
+      • Ask the barista for any remaining questions and provide answers. Don't rush this step — lingering confusion becomes embedded mistakes.<br>
+      • Tell the new barista where to find additional support — training materials, managers, experienced partners they can go to.<br>
+      • Check in with the barista during their shift after training — observe how they apply what they learned in a real environment.<br>
+      • Provide recognition and feedback based on what you observe. This closes the loop and reinforces the learning.
+    </div>
+  </div>
+
+  <div class="section-heading">The Full Teaching Loop</div>
+  <div class="steps-list">
+    <div class="step-card"><div class="step-num">🔵</div><div class="step-body"><h4>Why the Sequence Matters</h4><p>Each step of the Teaching Model builds on the last. Prepare sets the foundation. Present provides the map. Practice builds muscle memory and understanding. Follow Up ensures skills are retained and applied correctly in the real environment. Skip any step and the training is incomplete — skills may be learned incorrectly or forgotten quickly.</p></div></div>
+    <div class="step-card"><div class="step-num">🔁</div><div class="step-body"><h4>The Model Works for Any Skill</h4><p>Whether you're teaching how to clean the steam wand, take a customer order, or pour latte art — the four steps work identically. The Teaching Model is not method-specific; it is a universal framework for transferring any skill from trainer to learner reliably.</p></div></div>
+  </div>
+
+  <div id="quiz4"></div>
+  <div class="chapter-nav-footer">
+    <button class="nav-btn" onclick="showChapter(3)">← Feedback & Recognition</button>
+    <button class="nav-btn primary" onclick="showChapter(5)">🏆 Practice Quiz →</button>
+  </div>
+</div>
+
+<!-- ═══════════════ CH5: PRACTICE QUIZ -->
+<div class="chapter" id="ch5">
+  <div class="chapter-header">
+    <div class="chapter-num">Practice Mode</div>
+    <h2>🏆 Full Practice Quiz</h2>
+    <div class="subtitle">50 randomized questions drawn from a bank of 150 — test everything you've learned.</div>
+  </div>
+
+  <div class="fact-box">
+    <div class="fact-label">How It Works</div>
+    Every time you start or retake this quiz, 50 questions are randomly selected from a bank of 150. No two attempts are ever the same. Answer each question and read the detailed feedback. Your score and percentage appear at the end. Use the <strong>↺ Retake</strong> button to get a fresh 50-question set and keep testing yourself until everything clicks.
+  </div>
+
+  <div id="quizPractice"></div>
+
+  <div class="chapter-nav-footer">
+    <button class="nav-btn" onclick="showChapter(4)">← Teaching Model</button>
+    <button class="nav-btn primary" onclick="showChapter(0)">↺ Start Over</button>
+  </div>
+</div>
+
+</div><!-- /content -->
+
+<script>
+// ──────────────────────────────────
+// NAVIGATION
+// ──────────────────────────────────
+function showChapter(idx) {
+  document.querySelectorAll('.chapter').forEach((c,i) => c.classList.toggle('active', i===idx));
+  document.querySelectorAll('.chapter-btn').forEach((b,i) => b.classList.toggle('active', i===idx));
+  const pct = Math.round(((idx+1)/6)*100);
+  document.getElementById('progressFill').style.width = pct+'%';
+  document.getElementById('progressPct').textContent = pct+'%';
+  document.getElementById('progressLabel').textContent = 'Chapter '+(idx+1)+' of 6';
+  window.scrollTo({top:0,behavior:'smooth'});
+}
+
+// ──────────────────────────────────
+// INTERACTIVE ELEMENTS
+// ──────────────────────────────────
+function toggleAcc(el) { el.classList.toggle('open'); }
+function toggleExp(el) { const w=el.classList.contains('active'); document.querySelectorAll('.exp-card').forEach(c=>c.classList.remove('active')); if(!w) el.classList.add('active'); }
+function toggleFW(el) { el.classList.toggle('open'); }
+
+function toggleModelStep(el) {
+  const body = el.nextElementSibling;
+  const isOpen = el.classList.contains('open');
+  document.querySelectorAll('.model-step-tab').forEach(t => t.classList.remove('open'));
+  if (!isOpen) el.classList.add('open');
+}
+
+// ──────────────────────────────────
+// LEARNING STYLES
+// ──────────────────────────────────
+const lsData = {
+  visual: {
+    title: '👁️ Visual Learners',
+    body: `<p>Visual learners receive information through images, maps, video, and visual demonstrations. They remember what they <em>saw</em> rather than what they heard. They are strong observers who benefit greatly from watching a complete demonstration before attempting a task themselves.</p>
+    <p><strong>Best teaching strategies:</strong> Use full demonstrations before asking them to try. Draw diagrams or use visual reference cards. Point to steps on a visual aid while explaining. Leverage beverage recipe cards, posters, and training materials with illustrations.</p>
+    <div><span class="ls-tag">Demonstrations</span><span class="ls-tag">Drawings & Diagrams</span><span class="ls-tag">Graphics</span><span class="ls-tag">Video</span><span class="ls-tag">Show First, Then Tell</span></div>`
+  },
+  auditory: {
+    title: '👂 Auditory Learners',
+    body: `<p>Auditory learners take in information by listening to someone explain it, or by watching and listening to a video. They engage best with verbal explanation and thrive on conversation-based learning. They often remember key points better after talking about them.</p>
+    <p><strong>Best teaching strategies:</strong> Re-phrase key points in different ways until the concept lands. Ask questions to check understanding and to keep them engaged. Change up your speed, volume, and tone of speech to help them stay focused and avoid attention drift during long explanations.</p>
+    <div><span class="ls-tag">Verbal Explanation</span><span class="ls-tag">Re-phrasing</span><span class="ls-tag">Asking Questions</span><span class="ls-tag">Varied Tone & Speed</span><span class="ls-tag">Discussion</span></div>`
+  },
+  kinesthetic: {
+    title: '🤲 Kinesthetic Learners',
+    body: `<p>Kinesthetic learners learn best through hands-on experience. They absorb information by doing — by touching, moving, and physically performing the task. Long verbal explanations before they get to try something can feel frustrating and ineffective for this type of learner.</p>
+    <p><strong>Best teaching strategies:</strong> Have them perform the new skill while you are teaching it — not after you finish explaining, but simultaneously. Let them handle the equipment early. Guide their hands if needed. Keep verbal explanation brief and tied directly to physical action. Practice is their primary learning mechanism.</p>
+    <div><span class="ls-tag">Hands-On Practice</span><span class="ls-tag">Do While Learning</span><span class="ls-tag">Touch the Equipment</span><span class="ls-tag">Repetition</span><span class="ls-tag">Physical Guidance</span></div>`
+  }
+};
+function showLS(btn, key) {
+  document.querySelectorAll('.lstab').forEach(b=>b.classList.remove('active'));
+  btn.classList.add('active');
+  const d = lsData[key];
+  document.getElementById('lsDetail').innerHTML = `<h4>${d.title}</h4>${d.body}`;
+}
+
+// ──────────────────────────────────
+// CHAPTER QUIZZES (small)
+// ──────────────────────────────────
+const chapterQuizzes = {
+  quiz0: { questions: [
+    { q: "What are the four responsibilities of a Barista Trainer?", opts: ["Hiring, scheduling, training, and evaluating", "Creating a positive learning experience, providing feedback and recognition, communicating with manager, and setting a good example", "Teaching espresso, milk steaming, customer service, and cleaning", "Opening the store, training, closing, and reporting"], answer: 1, feedback: "The four trainer responsibilities are: creating a positive learning experience, providing feedback and recognition, communicating effectively with the manager, and setting a good example for living the mission and values. Each is distinct and equally important." },
+    { q: "What should a trainer do when they notice a new partner seems overwhelmed?", opts: ["Speed up the training to get through the material faster", "End the training session for the day", "Remain calm, stay positive, and look for cues that the partner may feel overwhelmed — then offer support", "Hand the partner to a manager immediately"], answer: 2, feedback: "When the environment shifts, the trainer's response matters enormously. Remain calm (your energy sets the tone), stay positive (frame challenges as learning opportunities), and watch for cues of overwhelm. Slowing down, going quiet, or making unusual errors are all signals to pause and check in." },
+    { q: "What is the trainer's first step BEFORE a new partner arrives?", opts: ["Set up the espresso machine", "Prep time — connect with your manager and know the tools and resources needed", "Create a quiz for the new partner", "Review the new partner's resume"], answer: 1, feedback: "Before the new partner arrives, prep time means connecting with your manager to understand the training plan, available tools, and resources needed. Going in unprepared signals to a new partner that their training isn't a priority — the exact opposite of what you want to convey." }
+  ]},
+  quiz1: { questions: [
+    { q: "A new partner has no work history at all. Which training approach should you use?", opts: ["Assume they'll pick it up quickly and move fast", "Be patient — spend more time explaining and demonstrating each skill, and check for understanding frequently", "Only use visual materials since they have no experience", "Skip the assessment and follow the standard training plan exactly"], answer: 1, feedback: "For a first-job partner, patience and thoroughness are essential. Never assume any prior knowledge. Break tasks into the smallest possible steps, spend more time on demonstrations, and check for understanding frequently — they may be too nervous to ask questions on their own." },
+    { q: "What are the three ways to assess a new partner's prior knowledge?", opts: ["Test them, observe them, and ask their manager", "Learn their story, know your partner, and ask follow-up questions", "Watch them work, time them, and grade them", "Ask about their education, certifications, and references"], answer: 1, feedback: "The three approaches are: Learn the Story (background, past jobs), Know Your Partner (their current mindset, confidence level, nerves), and Ask Follow-Up Questions (dig deeper into what they said to understand their true experience level). Together these give you a complete picture." },
+    { q: "A partner says 'I've worked in food service before.' What should a trainer do next?", opts: ["Skip the food safety training since they already know it", "Assume they know all Starbucks procedures", "Ask follow-up questions — what role, what kind of place, what the pace was like — to understand the depth of their experience", "Immediately start advanced training"], answer: 2, feedback: "Follow-up questions are the third pillar of assessing prior knowledge. 'I've worked in food service' could mean fast food, fine dining, or anything in between — with vastly different relevance to Starbucks. Go deeper before making assumptions about what to teach or skip." }
+  ]},
+  quiz2: { questions: [
+    { q: "Which learning style learns best through hands-on experience?", opts: ["Visual", "Auditory", "Kinesthetic", "Analytical"], answer: 2, feedback: "Kinesthetic learners learn best with hands-on experience. The best teaching method for kinesthetic learners is to have them perform the new skill while you are teaching it — not after you explain it, but simultaneously. Physical doing is their primary learning channel." },
+    { q: "How should you teach an auditory learner most effectively?", opts: ["Use only written materials", "Show diagrams and pictures", "Re-phrase key points, ask questions, and change up speed, volume, and tone of speech", "Have them perform tasks immediately without explanation"], answer: 2, feedback: "Auditory learners engage through listening. Best strategies: re-phrase key points in different ways, ask questions to keep them engaged and check understanding, and vary your speed, volume, and tone to keep their attention. Monotone, fast delivery is the worst approach for an auditory learner." },
+    { q: "When is the best time to have a kinesthetic learner perform a new skill?", opts: ["After you've finished fully explaining everything", "While you are teaching it — simultaneously with the instruction", "Only after they've watched a video", "At the end of the training week as a final assessment"], answer: 1, feedback: "For kinesthetic learners, the best time to perform is while you are teaching — not after you finish explaining. Simultaneous doing and learning maximizes retention for this style. Brief, action-tied explanation is far more effective than long verbal instruction followed by practice." }
+  ]},
+  quiz3: { questions: [
+    { q: "What are the three steps of the 'What, What, Why' feedback framework?", opts: ["Who, What, When", "Identify the situation, tell the correct way, explain why it matters", "Greet, Assess, Correct", "Listen, Advise, Follow up"], answer: 1, feedback: "What (identify the time and place of the situation) → What (tell them the correct way to complete the task) → Why (explain why it's important to do it right and what impact it has on others). This three-step framework turns correction into genuine learning rather than criticism." },
+    { q: "What is the principle of 'provide support, do not rescue'?", opts: ["Always step in quickly to prevent mistakes", "Never help a struggling partner — let them fail", "Resist the urge to take over — let partners work through challenges to build problem-solving skills, while staying present to support", "Only help if the manager is watching"], answer: 2, feedback: "Resisting the urge to save the barista provides them with a learning opportunity and builds problem-solving skills. When you rescue too quickly, you solve the problem but they never learn how to solve it themselves. Be present and supportive — offer hints or questions — but don't take over." },
+    { q: "What are the three pillars of feedback delivery?", opts: ["Speed, Volume, Clarity", "Your Connection, Your Tone, Your Body Language", "Timing, Location, Privacy", "Accuracy, Specificity, Brevity"], answer: 1, feedback: "Delivery matters because the same feedback can land very differently depending on how it's delivered. The three pillars are: Your Connection (does the partner trust you?), Your Tone (warm and respectful vs. cold and critical), and Your Body Language (open and engaged vs. closed and distracted). All three shape whether feedback is received or rejected." }
+  ]},
+  quiz4: { questions: [
+    { q: "What are the four steps of the Teaching Model?", opts: ["Plan, Teach, Test, Report", "Prepare, Present, Practice, Follow Up", "Assess, Demonstrate, Evaluate, Promote", "Connect, Show, Do, Review"], answer: 1, feedback: "The Teaching Model has four steps: Prepare (set up the environment and yourself), Present (demonstrate the skill with major steps, key points, and reasons why), Practice (partner performs while explaining), and Follow Up (answer questions, tell them where to find support, check in during their shift, give feedback and recognition)." },
+    { q: "During the 'Present' step, what three elements should you explain while demonstrating?", opts: ["Who, What, Where", "Speed, Accuracy, Safety", "Major steps, Key points, and Reasons why", "Equipment names, procedures, and standards"], answer: 2, feedback: "During Present, demonstrate the skill while explaining: Major Steps (sequence of the task — the big picture), Key Points (detailed steps — the critical details), and Reasons Why (why each step matters). Partners who understand the 'why' make better decisions when things don't go exactly to plan." },
+    { q: "During the 'Practice' step, what should the barista do while performing the task?", opts: ["Work silently to concentrate", "Only watch the trainer perform it again", "Say the major steps, key points, and reasons why out loud while performing", "Take notes in a training booklet"], answer: 2, feedback: "During Practice, asking the barista to say the major steps, key points, and reasons why out loud while performing simultaneously reinforces both procedural memory (what to do physically) and conceptual understanding (why it matters). Verbalizing while doing is one of the most powerful retention techniques in skills training." }
+  ]}
+};
+
+// ──────────────────────────────────
+// 150-QUESTION BANK
+// ──────────────────────────────────
+const questionBank = [
+  // ROLE & ENVIRONMENT (1–25)
+  { q: "What is the primary goal of a Barista Trainer?", opts: ["To manage the store's labor budget", "To create a positive learning experience for new partners", "To evaluate whether partners should be promoted", "To handle customer complaints during training shifts"], answer: 1, feedback: "The primary goal of a Barista Trainer is to create a positive learning experience. Everything else — feedback, recognition, communication with the manager — serves this central purpose. A new partner who feels welcomed and supported will learn faster and stay longer." },
+  { q: "Which of the following is NOT one of the four basic training skills?", opts: ["Assessing prior knowledge", "Scheduling training shifts", "Recognizing different learning styles", "Providing feedback and recognition"], answer: 1, feedback: "The four basic training skills are: Assessing Prior Knowledge, Recognizing Different Learning Styles, Applying the Teaching Model, and Providing Feedback and Recognition. Scheduling is a management function, not a basic training skill." },
+  { q: "Why does a trainer need to inform the team about a new partner joining?", opts: ["So the team can prepare a quiz for the new partner", "So the team is ready to welcome the new person, creating a warmer onboarding experience", "To comply with company reporting requirements", "So other baristas can avoid the new partner's station"], answer: 1, feedback: "Informing the team prepares them to welcome the new partner. A team that's expecting someone will be more hospitable, inclusive, and helpful. Nobody should make the new partner feel like an inconvenience — and that starts with the trainer making sure the whole team is ready." },
+  { q: "What does 'creating a culture of warmth and belonging' mean in the training context?", opts: ["Keeping the store temperature comfortable", "Making every new partner feel welcome, safe, and valued during their learning journey", "Playing background music in the training area", "Offering food to new partners during training sessions"], answer: 1, feedback: "Creating a culture of warmth and belonging means every new partner feels genuinely welcome, safe to make mistakes, and valued as a person — not just as a new employee. This is grounded in the Starbucks mission and directly shapes whether training succeeds or fails." },
+  { q: "A trainer is nervous and visibly stressed during a training session. How might this affect the new partner?", opts: ["It will have no effect — partners focus only on tasks", "The partner may also become nervous and anxious, since the trainer's energy sets the tone", "It will motivate the partner to perform better", "It signals to the partner that the job is more complex than expected"], answer: 1, feedback: "The trainer's energy is contagious. If the trainer is anxious or stressed, the new partner will absorb that energy and become anxious themselves. This is why 'remain calm' is the first instruction when the environment shifts — your emotional regulation directly shapes the partner's learning state." },
+  { q: "What should a trainer do FIRST when a new partner joins for training?", opts: ["Jump immediately into demonstrating espresso", "Put the partner at ease — connect with them, learn their name, and make them feel welcome", "Hand them a training manual to read independently", "Test their knowledge with a quiz"], answer: 1, feedback: "The first action is always connection — putting the partner at ease. This sets the emotional foundation for everything that follows. A new partner who feels welcomed and seen will be open to learning. One who feels thrown in the deep end will be anxious and closed off." },
+  { q: "Why is it important for a trainer to set a good example on every shift?", opts: ["To impress the manager", "Because new partners watch everything you do — your behavior demonstrates what 'good' looks like beyond formal training moments", "To qualify for promotion", "To ensure customers are served by the trainer only"], answer: 1, feedback: "New partners observe their trainer constantly — not just during formal training moments. Living the values, maintaining standards, treating every person with dignity, and modeling great customer service on every shift is the most powerful and continuous form of training. You are always demonstrating." },
+  { q: "What are the five things a trainer needs to do to create a warm learning environment?", opts: ["Hire well, train fast, assess often, report accurately, follow up quickly", "Prepare ahead of time, build strong relationships, be empathetic, motivate and inspire, and make training a priority", "Learn procedures, demonstrate skills, practice routines, give feedback, and evaluate performance", "Use visual aids, ask questions, demonstrate, practice, and test"], answer: 1, feedback: "The five elements of a warm learning environment: Prepare ahead of time · Build strong relationships · Be empathetic to partners with diverse backgrounds · Motivate and inspire new partners · Make the partner's training your priority. Together they create a safe, supportive context for real learning." },
+  { q: "What does 'be empathetic to partners with diverse backgrounds' mean for a trainer?", opts: ["Offering translation services during training", "Understanding that partners come from different life experiences and adjusting your teaching approach accordingly", "Assigning an equal number of hours to all partner types", "Following a different training curriculum for each cultural group"], answer: 1, feedback: "Empathy for diverse backgrounds means recognizing that a new partner's prior experience, cultural context, comfort with authority, and communication style may differ from yours. A great trainer adjusts their approach — not the content — to meet each partner where they are, ensuring everyone has an equal opportunity to succeed." },
+  { q: "What is the trainer's relationship with their manager supposed to look like?", opts: ["The trainer handles everything independently without manager input", "The trainer communicates effectively — sharing observations about partner progress, both positive and where support is needed", "The trainer only contacts the manager when a serious problem occurs", "The trainer submits written weekly reports on partner performance"], answer: 1, feedback: "The trainer-manager relationship is a communication loop. Sharing observations — what's going well, where more support is needed — helps the manager adjust schedules, provide additional resources, and ensure the new partner's onboarding is on track. Silence is not effective communication." },
+
+  // PRIOR KNOWLEDGE (26–50)
+  { q: "What is the purpose of 'Learn the Story' when assessing prior knowledge?", opts: ["To find out if the partner has worked at a competitor", "To understand the partner's background so you can calibrate the depth and pace of your teaching", "To document their work history for HR purposes", "To decide whether the partner is qualified for the job"], answer: 1, feedback: "Learning the story means understanding where the partner is coming from — their previous jobs, skills, and experiences. This helps you calibrate your teaching. You avoid wasting time on things they already know and can focus depth where it's actually needed. It's efficiency through understanding." },
+  { q: "What is a 'transferable skill'?", opts: ["A skill learned at Starbucks that can be used at another company", "A skill from a previous job that can be built upon in the new role", "A certificate that transfers between Starbucks locations", "A training manual that is shared between stores"], answer: 1, feedback: "A transferable skill is something learned in a previous role that remains relevant in the new one. A partner who worked as a hotel front desk agent may not know coffee — but they likely know customer service, working under pressure, and managing difficult interactions. Trainers build on these existing strengths." },
+  { q: "Why are follow-up questions important during prior knowledge assessment?", opts: ["They make the partner feel interviewed and pressure-tested", "They allow the trainer to dig deeper and get a true picture of the partner's experience level", "They are required by the training manual", "They give the trainer time to set up equipment"], answer: 1, feedback: "Follow-up questions go beyond surface answers. 'I've worked in restaurants' could mean vastly different things. Follow-ups like 'what role?' and 'what was the pace like?' reveal the true depth and relevance of their experience. Without follow-up, you risk either over-explaining what they know or under-explaining what they don't." },
+  { q: "A partner who has worked at Starbucks before 'may not require detailed explanation.' But what should a trainer still verify?", opts: ["Their exact beverage recipe knowledge", "That they know Starbucks-specific standards, this store's procedures, and local team culture — and watch for overconfidence leading to shortcuts", "Whether they need retraining from scratch", "Only their food handling certification status"], answer: 1, feedback: "Even experienced partners still need an orientation to this specific store's procedures, standards, and team culture. Overconfidence is also a risk — experienced partners may take shortcuts or assume things haven't changed. The trainer's job is to confirm standards are met, not just assume competence based on history." },
+  { q: "A 'first job' partner seems to understand your explanation and nods along. What should you do?", opts: ["Move on to the next topic — they've shown understanding", "Provide a written quiz to confirm comprehension", "Use follow-up questions and ask them to demonstrate the skill before moving on — nods don't always mean understanding", "Assume the explanation wasn't clear enough and restart from the beginning"], answer: 2, feedback: "For first-job partners especially, nodding doesn't equal understanding. They may nod to avoid appearing confused or to seem cooperative. Always verify comprehension through follow-up questions and having them demonstrate the skill. Real understanding reveals itself in doing — not in nodding." },
+  { q: "How does knowing a partner's experience level help a trainer use their time more effectively?", opts: ["It lets trainers skip steps they personally find boring", "It allows the trainer to skip what the partner already knows and spend more depth where learning is actually needed", "It ensures all partners get exactly the same amount of training hours", "It lets the trainer focus only on advanced topics"], answer: 1, feedback: "Time efficiency in training comes from targeting your effort. If a partner already understands food safety from a prior job, dwelling on basics wastes time that could be spent on espresso technique. Knowing the experience level means you teach what they actually need — not a one-size-fits-all script." },
+  { q: "Which of the following best describes how to handle a 'some experience' partner?", opts: ["Treat them exactly like a first-job partner for safety", "Build on their prior knowledge, look and listen for verbal and non-verbal cues, and follow up to confirm learning", "Skip all foundational training and go straight to advanced topics", "Let them self-direct their own training path"], answer: 1, feedback: "For 'some experience' partners: build on what they know (connect new Starbucks concepts to their prior knowledge), watch for verbal and non-verbal cues of understanding, and follow up to make sure they actually learned the skill. Don't assume comprehension — verify it." },
+  { q: "What are 'non-verbal cues' that might indicate a partner doesn't understand something?", opts: ["Taking notes and asking follow-up questions", "A blank expression, hesitation before answering, repeating a step incorrectly, or moving more slowly than expected", "Smiling and nodding enthusiastically", "Completing tasks quickly"], answer: 1, feedback: "Non-verbal cues of confusion include: blank or glazed expressions, long pauses before answering, performing steps incorrectly despite nodding, moving slower than the task requires, or re-reading the same step multiple times. A great trainer reads these signals and responds by slowing down, re-explaining, or offering a different approach." },
+  { q: "Why is it important to 'know your partner' beyond just their work history?", opts: ["To decide if they are trustworthy enough to handle cash", "Understanding their emotional state — nervousness, confidence, fears — helps calibrate your pace, tone, and level of detail", "To predict their long-term career trajectory at Starbucks", "To determine if they need a different trainer"], answer: 1, feedback: "Work history tells you about skills. Knowing your partner goes deeper — understanding their emotional state (nervous vs. confident), their communication style, and their fears helps you calibrate the human side of training. An anxious partner needs more reassurance; a confident one may need more challenge. Same knowledge, different delivery." },
+
+  // LEARNING STYLES (51–80)
+  { q: "Which learner benefits most from demonstrations, drawings, and graphics?", opts: ["Auditory", "Kinesthetic", "Visual", "Analytical"], answer: 2, feedback: "Visual learners receive information through images, maps, video, and demonstrations. They remember what they saw. Demonstrations are extremely powerful for this style — show the full task before asking them to attempt it. Graphics, diagrams, and visual reference cards (like beverage recipe cards) are ideal teaching tools." },
+  { q: "How do you keep an auditory learner engaged during a long explanation?", opts: ["Give them something to hold", "Change up speed, volume, and tone of speech while re-phrasing key points and asking questions", "Show them diagrams instead", "Let them practice the skill immediately"], answer: 1, feedback: "Auditory learners engage through listening — but monotone delivery causes attention drift. Changing up speed (slow for key points), volume (louder for emphasis), and tone (varied expressiveness) keeps an auditory learner engaged. Re-phrasing key points and asking questions also maintains active processing." },
+  { q: "A kinesthetic learner seems impatient during your explanation and asks 'Can I just try it?' What should you do?", opts: ["Insist they fully understand the theory before touching the equipment", "Recognize this as a learning style cue — let them perform the skill while you teach it simultaneously", "Send them away to read the manual first", "Schedule a follow-up session when they're more patient"], answer: 1, feedback: "Impatience during long explanations is a classic kinesthetic learner cue. Rather than forcing them through verbal instruction, adapt — let them get their hands on the task while you narrate the key points. Kinesthetic learners absorb information through physical doing, not listening or watching." },
+  { q: "What is the best overall teaching approach when you're unsure of a partner's learning style?", opts: ["Default to auditory — most people learn this way", "Use all three: demonstrate (visual), explain (auditory), then let them practice (kinesthetic)", "Test them with all three styles and use whichever they respond to first", "Focus on visual only since it covers the most learners"], answer: 1, feedback: "The blended approach — show it (visual), explain it (auditory), let them try it (kinesthetic) — works for almost every learner because it activates all three channels simultaneously. Most people are a mix of styles, so a blended approach rarely misses anyone." },
+  { q: "An auditory learner might struggle most with which teaching method?", opts: ["Verbal explanation with Q&A", "Silent demonstration with no narration", "Asking them to repeat instructions back", "Discussing key points in conversation"], answer: 1, feedback: "Auditory learners struggle most with silent or purely visual formats — watching a demonstration with no verbal explanation, reading a manual alone, or working from diagrams without narration. They need verbal processing to truly absorb information, so purely visual/silent teaching leaves a gap." },
+  { q: "A visual learner is struggling after a verbal explanation. What should the trainer try next?", opts: ["Repeat the verbal explanation more slowly", "Draw a diagram or perform a full demonstration — engage their visual channel", "Give them more time to think it through", "Have them read the training manual"], answer: 1, feedback: "If verbal explanation isn't landing for a visual learner, shift to their preferred channel — demonstration or visual aids. Drawing the process, using a diagram, pointing to steps on a reference card, or performing the task where they can watch closely will activate the channel where they actually learn." },
+  { q: "What cue might indicate a partner is a visual learner?", opts: ["They talk through problems out loud and ask many questions", "They ask 'Can you show me?' and watch very carefully before attempting a task", "They seem impatient and want to try things immediately", "They prefer reading the manual before watching a demonstration"], answer: 1, feedback: "Visual learners often ask 'Can you show me?' or 'Where does this go?' They watch demonstrations very closely and may refer back to written or visual guides. They retain what they saw far better than what they heard, and can struggle when given only verbal instructions." },
+  { q: "What cue might indicate a partner is a kinesthetic learner?", opts: ["They ask 'Can you explain that again?' in different words", "They want to watch multiple demonstrations before trying", "They seem restless during explanations and want to 'just try it' — physical doing is their primary learning channel", "They prefer taking written notes during demonstrations"], answer: 2, feedback: "Kinesthetic learners often show visible restlessness during long verbal explanations. They want to touch the equipment and perform the task. Their body language signals readiness to act. Once they can physically engage with the skill, they often surprise trainers with how quickly they learn." },
+  { q: "What does re-phrasing key points help achieve for auditory learners?", opts: ["It reduces the length of the training session", "It allows the trainer to fill time when there's no equipment available", "It helps the concept land differently each time it's said, increasing the chances that it resonates and sticks", "It is required by the training standard for all learner types"], answer: 2, feedback: "Re-phrasing key points serves two functions for auditory learners: it gives the concept another chance to land if the first phrasing didn't click, and it maintains engagement through variety. Saying the same thing in two different ways often produces the 'oh, I get it now!' moment that a single phrasing never would." },
+  { q: "Why is it important to recognize learning styles as a trainer?", opts: ["To categorize partners into groups for administrative purposes", "So you can adapt your teaching method to how each individual actually learns, making instruction more effective", "To determine which partners are most likely to succeed", "To assign partners to different training tracks"], answer: 1, feedback: "Recognizing learning styles lets you adapt your delivery — the same content taught in the wrong format may not land. A kinesthetic learner drowning in verbal explanation and a visual learner given only spoken instructions will both struggle unnecessarily. Adaptation isn't about effort — it's about matching method to the learner." },
+
+  // FEEDBACK & RECOGNITION (81–110)
+  { q: "What is the key difference between 'feedback' and 'recognition'?", opts: ["Feedback is formal; recognition is informal", "Feedback helps a partner improve something that needs to change; recognition celebrates and reinforces something they did right", "Feedback is given by managers; recognition is given by trainers", "Feedback happens at the end; recognition happens throughout"], answer: 1, feedback: "Feedback is corrective — it identifies what needs to change and shows the correct way. Recognition is celebratory — it acknowledges and reinforces what was done right. Both are essential. A training experience with only feedback creates anxiety. One with only recognition creates complacency. Great trainers use both." },
+  { q: "What is wrong with saying 'Good job!' as recognition?", opts: ["It is too informal for a workplace setting", "It's not specific enough — the partner doesn't know exactly what they did right, so the behavior isn't reinforced clearly", "It takes too long to say during a busy shift", "It should only be said by managers, not trainers"], answer: 1, feedback: "Vague recognition like 'Good job!' doesn't tell the partner what they did right — so they can't reliably repeat it. Effective recognition names the specific behavior ('I noticed you checked the milk temperature with the thermometer') and explains why it matters. Specific recognition reinforces the behavior far more powerfully than generic praise." },
+  { q: "In the 'What, What, Why' feedback framework, what is the purpose of the second 'What'?", opts: ["To identify who was responsible for the mistake", "To tell the partner the correct way to complete the task", "To ask the partner why they made the mistake", "To document the incident for the manager"], answer: 1, feedback: "The second 'What' tells the partner the correct way to complete the task. This is the constructive core of feedback — not just identifying that something went wrong, but clearly showing the right approach. Without this step, feedback is criticism without direction, leaving the partner confused about what to do differently." },
+  { q: "Why is the 'Why' step in feedback so important?", opts: ["It gives the trainer an opportunity to express frustration", "It helps the partner understand the impact of their behavior on customers, teammates, and standards — making them more likely to change", "It documents the training conversation formally", "It satisfies the trainer's need to explain themselves"], answer: 1, feedback: "The 'Why' step transforms feedback from a correction into a lesson. When partners understand why something matters — what happens to customers, to quality, to teammates when it's done wrong — they're far more motivated to change their behavior. Understanding the why also helps them make better decisions in new situations." },
+  { q: "What does 'delivery matters' mean in the context of feedback?", opts: ["The speed at which feedback is delivered determines its effectiveness", "How feedback is communicated — through connection, tone, and body language — determines whether it is received or rejected", "Feedback must always be delivered in writing", "Feedback must be delivered at the end of the shift, never during"], answer: 1, feedback: "'Delivery matters' means that even perfectly accurate feedback, delivered with a cold tone, crossed arms, or in a moment of poor connection, will be rejected or cause defensiveness. The three pillars — connection, tone, body language — determine whether the partner is open to receiving what you're saying." },
+  { q: "When should a trainer provide recognition?", opts: ["Only at the end of training, as a summary of what went well", "Whenever a partner gets something right — not waiting for perfection, but catching them doing things correctly", "Only after the partner has been working for at least one week", "Only when the manager is present to observe"], answer: 1, feedback: "Recognition should be given immediately and specifically whenever a partner gets something right — you don't wait for perfection. Catching partners doing things well, early and often, builds confidence, reinforces correct behavior, and creates a positive learning environment. Waiting until everything is perfect means rarely giving recognition at all." },
+  { q: "What 'What, Why' framework is used for recognition (not feedback)?", opts: ["Identify the problem, then explain the correct way", "Say what they did well, then explain why it matters", "Ask what they knew, then why they didn't apply it", "Describe what you saw, then what you expected to see instead"], answer: 1, feedback: "Recognition uses the two-step What-Why framework: What (say specifically what they did well — be precise, not vague) + Why (explain why it matters — the impact on customers, quality, or the team). This pairs the behavior with its significance, making the praise meaningful and the behavior memorable." },
+  { q: "Why should a trainer 'provide support, not rescue' during a partner's practice?", opts: ["To save time during a busy shift", "To allow the partner to develop problem-solving skills in a safe environment", "Because the trainer is not allowed to intervene during practice", "To test whether the partner is capable enough to continue training"], answer: 1, feedback: "Resisting the urge to rescue is one of the hardest and most important trainer behaviors. Every time you step in and fix something, you deny the partner the experience of solving the problem themselves. Problem-solving skills built during safe training moments create resilience for the real challenges of working on a busy bar." },
+  { q: "A trainer notices a new partner is re-steaming milk — a mistake that affects quality. Using the What-What-Why framework, what is the 'Why' step?", opts: ["Tell them 'Don't do that again'", "Explain that re-steaming milk destroys its protein structure and microfoam texture, resulting in a lower-quality beverage for the customer and a failure to meet Starbucks standards", "Ask why they chose to re-steam it", "Document the incident for the training record"], answer: 1, feedback: "The 'Why' step connects the mistake to its impact: re-steaming milk destroys the proteins that create microfoam, eliminates the creamy texture needed for latte art and quality beverages, and means the customer receives a lower-quality drink. When the partner understands this impact, the standard becomes meaningful — not just a rule to follow." },
+  { q: "Which three elements of a trainer's delivery affect how feedback is received?", opts: ["Words, Length, and Timing", "Connection, Tone, and Body Language", "Experience, Authority, and Confidence", "Speed, Volume, and Grammar"], answer: 1, feedback: "The three pillars of effective delivery are: Your Connection (does the partner trust you — trust makes feedback feel safe), Your Tone (warm and respectful vs. cold or critical), and Your Body Language (open, engaged posture vs. crossed arms or looking away). These three factors determine whether feedback is embraced or defended against." },
+  { q: "What is the purpose of recognizing a partner when they get something right?", opts: ["To make the shift more enjoyable", "To reinforce the correct behavior so they repeat it — recognition is as important a training tool as corrective feedback", "To meet a recognition quota set by the manager", "To compensate for any earlier criticism"], answer: 1, feedback: "Recognition reinforces specific behaviors — making it more likely the partner will repeat them. It builds confidence, creates positive associations with learning, and signals that the trainer is paying attention to both successes and mistakes. Recognition is not a nicety — it's a core training tool with real behavioral impact." },
+
+  // TEACHING MODEL (111–150)
+  { q: "During which step of the Teaching Model does the trainer demonstrate the skill?", opts: ["Prepare", "Present", "Practice", "Follow Up"], answer: 1, feedback: "The 'Present' step is when the trainer demonstrates the skill while explaining major steps, key points, and reasons why. The demonstration should be concise, clear, and always accompanied by the offer to repeat it if needed. Presenting without narrating misses the auditory and conceptual dimension of learning." },
+  { q: "What should happen BEFORE demonstrating any skill to a new partner?", opts: ["The partner should practice first to reveal their starting level", "The trainer must Prepare — connect with the manager, gather resources, connect with the partner, assess prior knowledge, and set expectations", "The trainer should give the partner a written quiz on the topic", "The demonstration should begin immediately upon the partner's arrival"], answer: 1, feedback: "Prepare always comes before Present. Preparation means: connecting with your manager for any needed information, locating and familiarizing with all tools and resources, connecting with the new partner to put them at ease, encouraging questions, assessing prior knowledge, and setting expectations for the training session." },
+  { q: "Why should a trainer always offer to repeat a demonstration?", opts: ["It's a formal requirement in the Starbucks training standard", "Some partners — especially visual or kinesthetic learners — need to see a skill performed multiple times before they're ready to try it themselves", "To fill time during slow shifts", "It tests the trainer's own mastery of the skill"], answer: 1, feedback: "Offering to repeat a demonstration removes the pressure of 'one chance to get it' from the partner's learning experience. Different learners need different numbers of exposures. Some will be ready after one viewing; others need two or three. Offering to repeat signals that there's no judgment — only support for understanding." },
+  { q: "During the Practice step, why should the barista say the steps OUT LOUD while performing?", opts: ["So the trainer can correct their speech patterns", "Verbalizing steps while performing simultaneously reinforces both procedural memory (what to do) and conceptual understanding (why it matters)", "To meet a verbal assessment requirement", "So customers know what is being prepared"], answer: 1, feedback: "Saying steps out loud while performing is a dual-channel learning technique. It engages language and physical memory at the same time — reinforcing both the sequence of actions and the reasons behind them. Partners who verbalize while doing retain skills more completely and recover from mistakes more confidently." },
+  { q: "When does the teaching process end according to the Teaching Model?", opts: ["When the partner correctly demonstrates the skill once", "After the Follow Up step — checking in during shifts, answering remaining questions, and providing ongoing feedback and recognition", "At the end of the first training day", "When the manager signs off on the training record"], answer: 1, feedback: "The Teaching Model doesn't end with Practice — it ends with Follow Up: asking remaining questions, telling the partner where to find support, checking in during their actual shift, and providing feedback and recognition based on real-world performance. Skills learned in training must be verified in the live environment." },
+  { q: "What is the purpose of 'setting expectations' during the Prepare step?", opts: ["To warn the partner that training will be difficult", "To tell the new partner the training framework and the tasks to be covered — so they know what to expect and can focus accordingly", "To establish rules for what happens if they fail", "To measure whether the partner is motivated enough to succeed"], answer: 1, feedback: "Setting expectations during Prepare gives the new partner a mental map of the training session. When they know what's coming — what skills will be covered, in what order, and why — they can focus their attention appropriately and feel more in control. Uncertainty during training adds unnecessary anxiety." },
+  { q: "What are 'major steps' in the context of the Present step?", opts: ["The most difficult steps of any given task", "The sequence of a task — the big-picture order in which actions are performed", "The steps that require the most physical effort", "The steps that are unique to Starbucks (vs. industry-standard procedures)"], answer: 1, feedback: "Major steps are the sequence of the task — the big-picture, numbered order of actions that make up the skill. For example, the major steps of milk steaming are: pour, aerate, auto-steam, sanitize, groom. Key points are the detailed sub-steps within each major step. Reasons why explain why they matter." },
+  { q: "What are 'key points' in the context of the Present step?", opts: ["The most important business metrics for the store", "Detailed sub-steps within each major step — the critical specifics that determine whether the skill is done correctly or incorrectly", "The parts of the training session the trainer personally finds most interesting", "Buzzwords and terminology the partner must memorize"], answer: 1, feedback: "Key points are the detailed steps within each major step — the specifics that determine success or failure. For 'aerate' in milk steaming, a key point might be: 'the steam wand tip must be just below the surface of the milk.' These details separate a correct execution from an incorrect one." },
+  { q: "What is the trainer's role during the Practice step?", opts: ["To step back completely and let the partner work independently", "To take notes on errors for the manager's review", "To observe, provide real-time feedback and recognition, and continue practice until the partner can demonstrate the skill correctly", "To time the partner against a performance standard"], answer: 2, feedback: "During Practice, the trainer stays engaged: observing the partner's performance, providing specific feedback when something needs to change, giving recognition when things go right, and continuing practice until the skill can be demonstrated correctly and consistently. The trainer is a present, active coach — not a passive observer." },
+  { q: "Why is 'Be concise' an important guideline during the Present step?", opts: ["To save time for the next training session", "Information overload during demonstration prevents the partner from absorbing the most important points — concision protects their ability to learn", "The partner should not be given too much responsibility early", "Store noise levels make long explanations impractical"], answer: 1, feedback: "Being concise during Present is about protecting the partner's cognitive capacity. If a trainer explains too much at once, the most critical points get buried in a flood of detail. Concise, focused presentation ensures the major steps, key points, and reasons why actually land — rather than overwhelming the partner before they've even tried." },
+  { q: "During Follow Up, what should the trainer tell the partner about additional support?", opts: ["That they should contact HR with any questions", "Where to find additional support — training materials, managers, and experienced partners they can turn to", "That all questions must be submitted in writing", "That they should observe other baristas for answers"], answer: 1, feedback: "Telling the new partner where to find additional support during Follow Up builds their independence and confidence. They need to know: which training materials exist, who their manager is, and which experienced partners are safe people to ask. This prevents partners from feeling stranded when questions arise after formal training ends." },
+  { q: "What is the benefit of checking in with a partner DURING their shift after training?", opts: ["To catch them making mistakes before customers notice", "To verify the partner's performance record for payroll purposes", "To observe how they apply learned skills in the real, live environment and provide real-time feedback and recognition", "To fill in for them if they're struggling"], answer: 2, feedback: "Checking in during the actual shift is the real-world validation of training. Observing how the partner applies skills when there are real customers, real time pressure, and real consequences gives the trainer data that a controlled training session can't provide. Real-time feedback during this moment is the most impactful form of follow-up." },
+  { q: "Which step of the Teaching Model would you use if a partner performed a skill correctly during training but struggles on the floor two days later?", opts: ["Start back at Prepare", "Begin again with Present — demonstrate the skill again with full explanation, then move through Practice and Follow Up again", "Skip to Follow Up only", "None — the training is complete, it's now a management issue"], answer: 1, feedback: "If a skill degrades after training, you essentially restart from Present — re-demonstrate with major steps, key points, and reasons why — then move through Practice again with the partner, and follow up during their next live shift. The Teaching Model is cyclical, not just linear. Skills sometimes need more than one teaching cycle." },
+  { q: "What should a trainer do if a partner is practicing correctly but very slowly?", opts: ["Rush them to build speed immediately", "Stop training — slowness indicates the partner isn't suitable", "Continue providing recognition for correct execution while continuing practice — speed develops naturally with repetition", "Report the issue to the manager immediately"], answer: 2, feedback: "Slowness during early practice is normal and expected. The goal of the Practice step is correctness, not speed. Speed develops naturally as the skill becomes more familiar through repetition. Rushing a partner to go faster before they've mastered correctness leads to sloppy technique and embedded bad habits." },
+  { q: "A new partner completes training and has no questions. What should the trainer do during Follow Up?", opts: ["End the Follow Up step — no questions means nothing left to do", "Accept their answer but still tell them where to find additional support and commit to checking in during their next shift", "Give them an advanced task immediately to keep them engaged", "Report to the manager that training is complete"], answer: 1, feedback: "Even if a partner has no immediate questions, Follow Up continues: tell them where to find additional support (training materials, manager, experienced partners) and commit to checking in during their next shift. Questions often only arise once someone is actually working in the live environment — so proactive follow-up is essential." },
+  { q: "What is the Teaching Model's equivalent of the customer service 'Craft & Connect' phase?", opts: ["Prepare", "Present", "Practice", "Follow Up"], answer: 2, feedback: "Practice is where the real connection between trainer and partner happens — it's the active, hands-on phase where knowledge meets action. Like 'Craft & Connect' in customer service, Practice is the core value-delivery moment of the Teaching Model. Everything before it sets the stage; everything after it reinforces what was built." },
+  { q: "Why should the trainer connect with the new partner at the START of the Prepare step rather than just setting up equipment?", opts: ["To assess whether the partner is ready to start", "Putting the partner at ease first ensures they're in an open, receptive emotional state for learning — connection precedes instruction", "It's more efficient to do both simultaneously", "Company policy requires formal greetings before training begins"], answer: 1, feedback: "Emotional readiness precedes cognitive readiness. A partner who is anxious, confused, or feeling unwelcome cannot absorb information effectively. By connecting with the partner first — making them feel seen, welcomed, and safe — the trainer creates the psychological conditions necessary for actual learning to occur." },
+  { q: "How many times should a partner practice a skill during the Practice step before moving on?", opts: ["Exactly twice — once watching and once performing", "Once successfully", "As many times as needed until they can demonstrate it correctly and consistently", "Three times minimum regardless of performance"], answer: 2, feedback: "Practice continues until the partner can demonstrate the skill correctly — not just once, but consistently. There is no prescribed number of repetitions. Some partners need two; others need ten. What matters is consistent correct execution, not hitting a minimum number. Rushing to move on before mastery is achieved undermines the entire process." },
+  { q: "A partner is struggling to learn espresso extraction during training. Which Teaching Model step should the trainer return to?", opts: ["Prepare — start the entire training relationship over", "Present — re-demonstrate the skill with major steps, key points, and reasons why, then return to Practice", "Follow Up — check in with them during their shift only", "Skip espresso training and focus on other skills"], answer: 1, feedback: "Returning to Present when Practice is struggling is the correct response. Re-demonstrating — clearly explaining major steps, key points, and reasons why — gives the partner the information they need in a new form. Returning to presentation acknowledges that the first round of instruction didn't fully land, and that's a trainer responsibility to address." },
+  { q: "The Teaching Model step 'Follow Up' includes checking in during the partner's shift. What specifically should the trainer watch for?", opts: ["Whether the partner is fast enough to handle peak", "How the partner applies learned skills in the real environment — and provide real-time recognition and feedback based on what they observe", "Whether the partner gets along with other team members", "Whether the partner needs the training schedule adjusted"], answer: 1, feedback: "During shift check-ins, the trainer observes how learned skills translate to real conditions — real customers, real pressure, real equipment. This is when feedback and recognition are most meaningful: tied to actual performance in the live environment, not a controlled training context. This observation closes the loop from training to real-world application." },
+  { q: "What is the risk of being too detailed during the Present step?", opts: ["The partner may ask too many questions afterward", "Information overload — the partner may become overwhelmed and unable to retain the most critical points", "The trainer may run out of things to teach in future sessions", "The demonstration will take too long and cut into shift time"], answer: 1, feedback: "Overwhelming a partner during Present is a common training mistake. When too much detail is provided at once, the most important points get lost in the volume of information. The instruction to 'be mindful not to overwhelm the barista' is specific — present the essential major steps, key points, and reasons why, without piling on every possible nuance." },
+  { q: "What does 'reasons why' in the Present step ensure?", opts: ["That partners can recite training standards verbatim", "That partners understand the purpose behind each step — helping them make better decisions when situations don't go to plan", "That the trainer's own knowledge is demonstrated", "That the training session meets the required length"], answer: 1, feedback: "Reasons why transform partners from rule-followers into problem-solvers. When they understand why each step matters — what happens to quality, customers, and safety when it's skipped — they can make better judgment calls in novel situations. A partner who only knows 'what' may freeze when something unexpected happens; one who knows 'why' adapts." }
+];
+
+// ──────────────────────────────────
+// QUIZ ENGINE
+// ──────────────────────────────────
+function buildChapterQuiz(containerId, key) {
+  const container = document.getElementById(containerId);
+  if (!container || !chapterQuizzes[key]) return;
+  const quiz = chapterQuizzes[key];
+  let cur = 0, score = 0;
+  function render() {
+    if (cur >= quiz.questions.length) {
+      container.innerHTML = `<div class="quiz-wrap"><div class="quiz-label">Chapter Quiz Complete</div><div class="quiz-score show"><div class="score-num">${score}/${quiz.questions.length}</div><div class="score-label">Questions Correct</div><p style="margin-top:1rem;font-size:14px;color:var(--muted)">${score===quiz.questions.length?'Perfect!':score>=quiz.questions.length-1?'Excellent!':'Review this chapter and try again.'}</p></div></div>`;
+      return;
+    }
+    const q = quiz.questions[cur];
+    container.innerHTML = `<div class="quiz-wrap"><div class="quiz-label">Chapter Quiz</div><div class="quiz-progress">Question ${cur+1} of ${quiz.questions.length}</div><div class="quiz-q">${q.q}</div><div class="quiz-options">${q.opts.map((o,i)=>`<button class="quiz-opt" onclick="ansQ(this,${i},${q.answer},'cq_${key}',${cur})">${o}</button>`).join('')}</div><div class="quiz-feedback" id="qf_cq_${key}"></div><button class="quiz-next" id="qn_cq_${key}" onclick="nxtQ('cq_${key}')">Next →</button></div>`;
+  }
+  window['qs_cq_'+key] = { render, inc:()=>{cur++;}, addS:()=>{score++; } };
+  render();
+}
+
+function buildPracticeQuiz() {
+  const container = document.getElementById('quizPractice');
+  if (!container) return;
+  const shuffled = [...questionBank].sort(() => Math.random() - 0.5).slice(0, 50);
+  let cur = 0, score = 0;
+  function render() {
+    if (cur >= shuffled.length) {
+      const pct = Math.round((score/50)*100);
+      const msg = pct===100?'🏆 Perfect score — you\'re a master trainer!':pct>=90?'🌟 Outstanding — near perfect!':pct>=80?'✅ Excellent work!':pct>=70?'👍 Good effort — keep reviewing!':'📚 Keep studying and retake to improve!';
+      container.innerHTML = `<div class="quiz-wrap">
+        <div class="quiz-label">Practice Quiz Complete</div>
+        <div class="quiz-score show">
+          <div class="score-num">${score}/50</div>
+          <div class="score-label">Questions Correct — ${pct}%</div>
+          <div class="score-bar-wrap"><div class="score-bar-track"><div class="score-bar-fill" style="width:${pct}%"></div></div></div>
+          <p style="margin-top:1.25rem;font-size:15px;color:var(--muted);line-height:1.6">${msg}</p>
+          <p style="margin-top:0.5rem;font-size:13px;color:var(--muted)">This quiz draws from a bank of 150 questions — every retake gives you a fresh 50.</p>
+          <button class="nav-btn primary" style="margin-top:1.5rem" onclick="buildPracticeQuiz()">↺ Retake with New Questions</button>
+        </div>
+      </div>`;
+      return;
+    }
+    const q = shuffled[cur];
+    container.innerHTML = `<div class="quiz-wrap">
+      <div class="quiz-label">Practice Quiz — 50 Questions</div>
+      <div class="quiz-progress">Question ${cur+1} of 50</div>
+      <div class="quiz-q">${q.q}</div>
+      <div class="quiz-options">${q.opts.map((o,i)=>`<button class="quiz-opt" onclick="ansP(this,${i},${q.answer},${cur})">${o}</button>`).join('')}</div>
+      <div class="quiz-feedback" id="qfP"></div>
+      <button class="quiz-next" id="qnP" onclick="nxtP()">Next →</button>
+    </div>`;
+    window._practiceState = { render, cur:()=>cur, inc:()=>cur++, addS:()=>score++, q: shuffled };
+  }
+  window._practiceState = { render, cur:()=>cur, inc:()=>cur++, addS:()=>score++, q: shuffled };
+  render();
+}
+
+function ansP(btn, chosen, correct, qIdx) {
+  const s = window._practiceState; if (!s) return;
+  btn.parentElement.querySelectorAll('.quiz-opt').forEach(o=>o.disabled=true);
+  const fb = document.getElementById('qfP'), nxt = document.getElementById('qnP');
+  const q = s.q[qIdx];
+  if (chosen===correct) { btn.classList.add('correct'); fb.textContent='✓ '+q.feedback; fb.className='quiz-feedback correct show'; s.addS(); }
+  else { btn.classList.add('wrong'); btn.parentElement.querySelectorAll('.quiz-opt')[correct].classList.add('correct'); fb.textContent='✗ '+q.feedback; fb.className='quiz-feedback wrong show'; }
+  nxt.classList.add('show');
+}
+function nxtP() { const s=window._practiceState; if(s){s.inc();s.render();} }
+
+function ansQ(btn, chosen, correct, key, qIdx) {
+  const s = window['qs_'+key]; if (!s) return;
+  btn.parentElement.querySelectorAll('.quiz-opt').forEach(o=>o.disabled=true);
+  const fb = document.getElementById('qf_'+key), nxt = document.getElementById('qn_'+key);
+  const allQ = key.startsWith('cq_') ? chapterQuizzes[key.replace('cq_','')].questions : [];
+  const q = allQ[qIdx];
+  if (!q) return;
+  if (chosen===correct) { btn.classList.add('correct'); fb.textContent='✓ '+q.feedback; fb.className='quiz-feedback correct show'; s.addS(); }
+  else { btn.classList.add('wrong'); btn.parentElement.querySelectorAll('.quiz-opt')[correct].classList.add('correct'); fb.textContent='✗ '+q.feedback; fb.className='quiz-feedback wrong show'; }
+  nxt.classList.add('show');
+}
+function nxtQ(key) { const s=window['qs_'+key]; if(s){s.inc();s.render();} }
+
+// ──────────────────────────────────
+// INIT
+// ──────────────────────────────────
+['quiz0','quiz1','quiz2','quiz3','quiz4'].forEach(id => buildChapterQuiz(id, id));
+buildPracticeQuiz();
+</script>
+</body>
+</html>
