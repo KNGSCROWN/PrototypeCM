@@ -834,6 +834,7 @@
   <button class="chapter-btn" onclick="showChapter(3)">Espresso</button>
   <button class="chapter-btn" onclick="showChapter(4)">Latte Art</button>
   <button class="chapter-btn" onclick="showChapter(5)">Brewing</button>
+  <button class="chapter-btn" onclick="showChapter(6)">Practice Quiz</button>
 </nav>
 
 <div class="content">
@@ -1502,6 +1503,21 @@
 
   <div class="chapter-nav-footer">
     <button class="nav-btn" onclick="showChapter(4)">← Latte Art</button>
+    <button class="nav-btn primary" onclick="showChapter(6)">Practice Quiz →</button>
+  </div>
+</div>
+
+<!-- ═══════════════════ PRACTICE QUIZ CHAPTER -->
+<div class="chapter" id="ch6">
+  <div class="chapter-header">
+    <div class="chapter-num">Practice Quiz</div>
+    <h2>Test Your Knowledge</h2>
+    <div class="subtitle">50 questions covering all chapters — Sensory World, Taste & Flavor, Espresso, Latte Art, and Brewing. Each answer reveals detailed feedback.</div>
+  </div>
+  <p style="font-size:14px;color:var(--muted);margin-bottom:1.5rem;">Answer all 50 questions one at a time. Your final score appears at the end. Retake to get a freshly shuffled set.</p>
+  <div id="quizPractice"></div>
+  <div class="chapter-nav-footer">
+    <button class="nav-btn" onclick="showChapter(5)">← Brewing</button>
     <button class="nav-btn primary" onclick="showChapter(0)">↺ Start Over</button>
   </div>
 </div>
@@ -1509,334 +1525,184 @@
 </div><!-- /content -->
 
 <script>
-// ──────────────────────────────────────────
-// CHAPTER NAVIGATION
-// ──────────────────────────────────────────
-let currentChapter = 0;
-const totalChapters = 6;
+// ──────────────────────────────────────────────────────────────
+// BREW & CRAFT ACADEMY — QUIZ ENGINE
+// Each chapter pool has 15 questions; 10 are randomly selected.
+// Practice Quiz has 50 questions (fixed set, shuffled each time).
+// ──────────────────────────────────────────────────────────────
 
-function showChapter(idx) {
-  document.querySelectorAll('.chapter').forEach((c, i) => {
-    c.classList.toggle('active', i === idx);
-  });
-  document.querySelectorAll('.chapter-btn').forEach((b, i) => {
-    b.classList.toggle('active', i === idx);
-  });
-  currentChapter = idx;
-  const pct = Math.round(((idx + 1) / totalChapters) * 100);
-  document.getElementById('progressFill').style.width = pct + '%';
-  document.getElementById('progressPct').textContent = pct + '%';
-  document.getElementById('progressLabel').textContent = 'Chapter ' + (idx + 1) + ' of ' + totalChapters;
-  window.scrollTo({ top: 0, behavior: 'smooth' });
+function pickRandom(arr, n) {
+  return [...arr].sort(() => Math.random() - 0.5).slice(0, n);
 }
 
-// ──────────────────────────────────────────
-// ACCORDION
-// ──────────────────────────────────────────
-function toggleAcc(el) {
-  el.classList.toggle('open');
-}
+// ── CHAPTER QUESTION POOLS (15 per chapter) ──────────────────
 
-// ──────────────────────────────────────────
-// TASTE CARDS
-// ──────────────────────────────────────────
-function toggleTaste(el) {
-  const wasOpen = el.classList.contains('active');
-  document.querySelectorAll('.taste-card').forEach(c => c.classList.remove('active'));
-  if (!wasOpen) el.classList.add('active');
-}
+const chapterPools = {
 
-// ──────────────────────────────────────────
-// FLAVOR WHEEL
-// ──────────────────────────────────────────
-const flavorData = {
-  sweet: {
-    title: 'Sweet',
-    desc: 'The sweet aromatics in coffee come from caramelized sugars developed during roasting. Sweet coffee can express vanilla, brown sugar, honey, caramel, maple syrup, or molasses.',
-    tags: ['Vanilla', 'Brown Sugar', 'Honey', 'Caramelized', 'Maple Syrup', 'Molasses']
-  },
-  floral: {
-    title: 'Floral',
-    desc: 'A sweet, light, slightly fragrant aromatic associated with fresh flowers. Floral coffees may evoke chamomile, rose, or jasmine — especially in washed African coffees from Ethiopia and Kenya.',
-    tags: ['Chamomile', 'Rose', 'Jasmine', 'Black Tea']
-  },
-  fruity: {
-    title: 'Fruity',
-    desc: 'A sweet, floral, aromatic blend of a variety of ripe fruits. Fruity coffees span from bright berries to tropical notes to citrus — often found in natural-processed coffees or high-altitude origins.',
-    tags: ['Blackberry', 'Raspberry', 'Blueberry', 'Strawberry', 'Raisin', 'Cherry', 'Grapefruit', 'Orange', 'Lemon', 'Lime', 'Pineapple', 'Peach']
-  },
-  sour: {
-    title: 'Sour / Fermented',
-    desc: 'Sour notes can be desirable (bright acidity from citric, malic acid) or undesirable (vinegar-like acetic acid, butyric acid from over-fermentation). Under-extracted coffee tastes sour.',
-    tags: ['Acetic Acid', 'Citric Acid', 'Malic Acid', 'Winey', 'Fermented', 'Overripe']
-  },
-  green: {
-    title: 'Green / Vegetative',
-    desc: 'An aromatic characteristic of fresh, plant-based material. These notes are generally considered defects in roasted coffee — they suggest under-roasting or processing problems.',
-    tags: ['Olive Oil', 'Under-Ripe', 'Peapod', 'Fresh', 'Hay-Like', 'Herb-Like', 'Beany']
-  },
-  nutty: {
-    title: 'Nutty / Cocoa',
-    desc: 'A slightly sweet, brown, woody, oily, and sometimes bitter aromatic. Nutty and cocoa notes are very common in medium-roasted Latin American coffees — think Pike Place® Roast.',
-    tags: ['Dark Chocolate', 'Chocolate', 'Cocoa', 'Almond', 'Hazelnut', 'Peanuts']
-  },
-  spices: {
-    title: 'Spices',
-    desc: 'The sweet, brown aromatic associated with spices. Brown spice notes appear more commonly in darker roasts. Pepper gives a sharp, physically penetrating sensation in the nasal cavity.',
-    tags: ['Brown Spice', 'Clove', 'Cinnamon', 'Nutmeg', 'Anise', 'Pepper', 'Pungent']
-  },
-  roasted: {
-    title: 'Roasted',
-    desc: 'Dark brown impression characteristics of products cooked by dry heat to a high temperature. Roasted notes include cereal, malt, smoke, ash, and tobacco — common in dark-roasted coffees.',
-    tags: ['Cereal', 'Grain', 'Malt', 'Smoky', 'Ashy', 'Burnt', 'Tobacco']
-  }
+  ch1: [ // Sensory World (15 questions)
+    { q: "What are the four steps of coffee tasting at Starbucks?", opts: ["Sip, taste, swallow, describe", "Smell, slurp, locate, describe", "Smell, taste, think, share", "Look, smell, sip, compare"], answer: 1, feedback: "The four steps are Smell → Slurp → Locate → Describe. This framework breaks down the tasting process and helps you experience aroma, flavor, body, and acidity by isolating one component at a time." },
+    { q: "What is the difference between someone's sensory skills today and those of a professional coffee taster?", opts: ["Natural talent — some people are born with better palates", "Genetics — taste receptors vary significantly between people", "Simply a matter of experience and practice", "Only professionals can develop true sensory awareness"], answer: 2, feedback: "No matter your age or background, you have the same essential tasting mechanism as every other human. The difference between your sensory skills today and those of a professional coffee taster is simply experience." },
+    { q: "Why does Starbucks encourage baristas to use the Coffee Passport?", opts: ["It's required by corporate policy", "To track hours spent in tastings", "To capture personal impressions and document sensory journeys over time", "To compare notes with other baristas"], answer: 2, feedback: "The Coffee Passport is part guide, part journal. It's your personal record of coffee tastings — capturing who you were as a coffee lover, who you are now, and where you're headed. There's no right or wrong approach, as long as you're recording your experiences." },
+    { q: "What is the purpose of the 'slurp' step in coffee tasting?", opts: ["To cool down the coffee before tasting", "To spray the coffee across the entire palate so all taste receptors are activated simultaneously", "To aerate the coffee and release more aroma", "To measure the body of the coffee"], answer: 1, feedback: "Slurping sprays coffee across the entire palate, activating all taste receptors simultaneously. It also introduces air that helps volatilize aromatic compounds toward your retronasal passage, significantly enhancing your perception of flavor." },
+    { q: "What does the 'locate' step in coffee tasting involve?", opts: ["Finding where the coffee was grown on a map", "Identifying where on your palate you experience specific sensations — sweetness at the tip of the tongue, bitterness at the back", "Locating the defects in the coffee sample", "Finding the right words to describe the coffee's origin"], answer: 1, feedback: "The 'locate' step involves identifying where on your palate you experience specific taste sensations. Sweetness tends to be perceived at the tip of the tongue, saltiness on the sides, acidity in the cheeks, and bitterness at the back of the throat." },
+    { q: "How many taste receptors does the average person have?", opts: ["About 1,000 taste buds with hundreds of receptors each", "About 10,000 taste buds with roughly 100 receptors each", "About 50,000 taste buds", "About 500 taste buds with 10 receptors each"], answer: 1, feedback: "The average person has approximately 10,000 taste buds, each containing roughly 100 taste receptor cells. These receptors detect the five basic tastes: sweet, sour, salty, bitter, and umami. This mechanism is essentially the same in all humans — what varies is training and experience." },
+    { q: "What is a 'supertaster' and how does it affect coffee perception?", opts: ["A professional coffee taster certified by the SCA", "A person with significantly more taste buds than average who perceives tastes — particularly bitterness — more intensely", "A person who can identify the exact origin of a coffee by taste alone", "A barista who has passed all Starbucks Coffee Master certification levels"], answer: 1, feedback: "Supertasters have significantly more taste buds than average, causing them to experience flavors — particularly bitterness — more intensely. This can make certain coffees taste overwhelmingly bitter to a supertaster while others find the same coffee pleasantly rich." },
+    { q: "What is the 'aroma' step designed to capture in coffee tasting?", opts: ["Only the fragrance of dry ground coffee before brewing", "The volatile aromatic compounds that carry into your nose — both the 'fragrance' of dry grounds and the 'aroma' of brewed coffee — which account for the vast majority of what we perceive as flavor", "Only the steam rising from a freshly brewed cup", "The aftertaste left on the palate after swallowing"], answer: 1, feedback: "The smell/aroma step is designed to capture the volatile aromatic compounds that carry into your nose from both the dry grounds (called 'fragrance') and the brewed coffee (called 'aroma'). Aroma accounts for up to 80% of what we perceive as flavor — far more than taste alone." },
+    { q: "What is the Coffee Tasting Wheel used for?", opts: ["To grade coffee quality on a 100-point scale", "As a visual vocabulary tool that organizes coffee flavors and aromas from broad categories to specific descriptors — helping tasters find the right words for what they perceive", "To identify which roast level a coffee belongs to", "To compare coffees from different origins side by side"], answer: 1, feedback: "The Coffee Tasting Wheel (developed by the SCA) is a visual vocabulary tool that organizes coffee flavors and aromas from broad categories on the outside to specific descriptors toward the center. It gives tasters a shared language — helping you find the right words for what you're experiencing." },
+    { q: "What does 'body' refer to in coffee tasting?", opts: ["The overall size of the flavor profile", "The physical sensation of weight, thickness, and texture of the coffee in the mouth — ranging from light and tea-like to heavy and syrupy", "The caffeine strength of the coffee", "The length of time the flavor lingers after swallowing"], answer: 1, feedback: "Body refers to the physical sensation of weight, thickness, and texture that coffee has in the mouth — sometimes described as mouthfeel. It can range from light and tea-like to medium and smooth to heavy and syrupy. Body is largely determined by the amount of dissolved and suspended compounds in the coffee." },
+    { q: "What is acidity in coffee and why is it desirable?", opts: ["The pH level of the brewed coffee — all specialty coffee is acidic", "A bright, lively, pleasurable tartness or crispness in coffee — not sour — that adds complexity and vibrancy, especially in high-altitude coffees", "The unpleasant sourness that results from under-extraction", "The chemical compounds left from the processing method"], answer: 1, feedback: "Acidity in specialty coffee refers to a bright, lively, pleasurable tartness or crispness — not the unpleasant sourness of under-extraction. Desirable acidity adds complexity and vibrancy. It is most prominent in high-altitude, washed-processed coffees from regions like Ethiopia, Kenya, and Colombia." },
+    { q: "What is the difference between 'fragrance' and 'aroma' in coffee tasting terminology?", opts: ["They are synonymous — both refer to the smell of brewed coffee", "Fragrance is the smell of dry ground coffee before brewing; aroma is the smell of the brewed coffee after hot water is added", "Fragrance refers to floral notes; aroma refers to earthy notes", "Fragrance is detected orthonasal; aroma is detected retronasal"], answer: 1, feedback: "In formal coffee tasting, fragrance refers specifically to the smell of dry ground coffee before brewing, while aroma refers to the smell of the brewed coffee after hot water has been added. Both are evaluated in professional cupping sessions, as they can reveal different aspects of the coffee's character." },
+    { q: "What does 'finish' or 'aftertaste' mean in coffee tasting?", opts: ["The last sip of coffee remaining in the cup", "The sensations that linger on the palate after swallowing — quality coffees have a long, pleasant finish while defective coffees often have a short, unpleasant one", "The color of the coffee after brewing", "The way the coffee looks as it cools down"], answer: 1, feedback: "Finish (or aftertaste) refers to the sensations that remain on the palate after swallowing. Quality coffees often have a long, pleasant finish — the flavors linger agreeably. Defective or low-quality coffees may have a short, unpleasant aftertaste. Describing the finish is an important part of the 'describe' step in coffee tasting." },
+    { q: "Why do coffee professionals 'rest' the cup and evaluate at different temperatures during cupping?", opts: ["To let the coffee cool to a safe drinking temperature", "Because different flavor compounds become perceptible at different temperatures — some flavors emerge as the coffee cools, giving a fuller picture of the coffee's character", "To compare the coffee at hot and iced temperatures simultaneously", "Because the scoring criteria require multiple temperature evaluations"], answer: 1, feedback: "Different flavor compounds become perceptible at different temperatures. Some defects are masked at high temperatures. As a coffee cools, new flavors emerge that weren't detectable when hot. Evaluating a coffee across a temperature range gives a much fuller, more accurate picture of its overall character and quality." },
+    { q: "What is the significance of 'clean cup' as a sensory characteristic?", opts: ["A cup that has been properly washed before brewing", "The absence of any defects, off-flavors, or non-coffee characteristics — a clean cup allows the unique terroir and varietal character of the coffee to be perceived without interference", "A coffee brewed at the correct temperature with filtered water", "The clarity and transparency of the brewed coffee's color"], answer: 1, feedback: "A 'clean cup' means the absence of any defects, off-flavors, or non-coffee characteristics in the cup from ingestion to finish. A clean cup allows the unique terroir, varietal, and processing character of the coffee to be perceived without interference — it's a fundamental quality indicator in professional evaluation." }
+  ],
+
+  ch2: [ // Taste, Aroma & Flavor (15 questions)
+    { q: "What is flavor, technically?", opts: ["Only what you taste on your tongue", "Only the aroma of the coffee", "How your brain synthesizes taste and aroma together", "The mouthfeel and body of the coffee"], answer: 2, feedback: "Flavor is how our brains synthesize aromas and tastes into a combined, overall experience. This is why pinching your nose eliminates most of what we call 'flavor' — you're disconnecting the aroma half of the equation." },
+    { q: "Which taste is associated with under-extracted coffee?", opts: ["Bitter", "Sweet", "Sour", "Umami"], answer: 2, feedback: "Under-extracted coffee tastes sour. Over-extracted coffee tastes bitter. Knowing this distinction is one of the most practical diagnostic tools a barista can have." },
+    { q: "What is retronasal olfaction?", opts: ["Smelling coffee before you drink it", "The process of smelling from inside the mouth through the nasal-oral airway", "The ability to detect aromas with eyes closed", "A technique for professional coffee tasters only"], answer: 1, feedback: "The retronasal passage connects your nasal and oral cavities, allowing aromatic compounds to be 'smelled' from your mouth. This is extremely important because it helps make the perception of flavor possible — and it's why proper slurping technique matters!" },
+    { q: "What are the five basic tastes that humans can detect?", opts: ["Sweet, sour, salty, bitter, spicy", "Sweet, sour, salty, bitter, umami", "Sweet, sour, salty, bitter, astringent", "Sweet, sour, bitter, rich, mild"], answer: 1, feedback: "The five basic tastes are sweet, sour, salty, bitter, and umami. Each is detected by specific taste receptors on the tongue. All other flavor experiences — the thousands of nuanced flavors we associate with coffee — are combinations of these five tastes plus aromatic compounds." },
+    { q: "What role does orthonasal olfaction play in coffee tasting?", opts: ["It is the same as retronasal olfaction — there is no difference", "Orthonasal olfaction is smelling through the nostrils from the outside — detecting the aroma of coffee rising from the cup before and during drinking", "Orthonasal olfaction only functions when the eyes are closed", "Orthonasal olfaction detects tastes while retronasal detects texture"], answer: 1, feedback: "Orthonasal olfaction is smelling through the nostrils from the outside — it's what you experience when you inhale the aroma of coffee rising from the cup. Combined with retronasal olfaction (smelling from inside the mouth), these two pathways together create the full experience of aroma and flavor." },
+    { q: "What does 'astringency' feel like in coffee, and what causes it?", opts: ["A pleasant cooling sensation caused by high-altitude growing conditions", "A dry, puckering sensation in the mouth caused by tannins and other phenolic compounds binding with proteins in saliva", "The sharp, piercing quality of high acidity in African coffees", "A smooth, coating sensation caused by oils in dark-roasted coffee"], answer: 1, feedback: "Astringency is a dry, puckering sensation in the mouth — like the feeling after eating an unripe banana or over-steeped black tea. In coffee, it's caused by tannins and other phenolic compounds that bind with proteins in saliva. Astringency is generally considered a defect in specialty coffee and is often a sign of over-extraction." },
+    { q: "Why does pinching your nose eliminate most of what we call 'flavor'?", opts: ["It changes the pressure in the mouth, affecting taste receptors", "Because up to 80% of what we perceive as flavor comes from aroma — blocking orthonasal and retronasal olfaction removes the vast majority of the flavor experience", "Because the taste buds require oxygen to function properly", "It causes the tongue to become numb from the pressure change"], answer: 1, feedback: "Because up to 80% of what we perceive as 'flavor' actually comes from aroma detected through both orthonasal and retronasal olfaction. When you block your nostrils, you eliminate both pathways. What remains is only the basic tastes detectable on the tongue — sweet, sour, salty, bitter, and umami — without the thousands of aromatic nuances that create complex flavor." },
+    { q: "What are 'volatile' aromatic compounds and why do they matter for coffee?", opts: ["Compounds that make coffee dangerous if consumed in large quantities", "Unstable, easily evaporated compounds that carry into the nose as gas — they are responsible for coffee's complex aromas and most of what we perceive as flavor", "Compounds that cause the bitterness in dark-roasted coffees", "Chemical compounds that degrade coffee freshness over time"], answer: 1, feedback: "Volatile aromatic compounds are unstable, easily evaporated substances that exist as gases at room temperature and easily travel to the nose. Coffee contains over 800 identified volatile aromatic compounds (more than almost any other food or beverage), which is why coffee has such a complex and distinctive aroma — and why aroma dominates our flavor perception." },
+    { q: "What is 'umami' and can it be found in coffee?", opts: ["The Japanese word for bitterness — associated with dark roasts", "A savory, rich, brothy taste caused by glutamates — yes, it can be found in coffee, particularly in certain single-origin coffees with earthy, savory complexity", "A flavor found only in food, not beverages", "The metallic taste caused by brewing with hard water"], answer: 1, feedback: "Umami is the fifth basic taste — savory, rich, and brothy, caused by glutamates and nucleotides. While not as commonly discussed in coffee tasting, umami can indeed be found in coffee, particularly in certain single-origin coffees with earthy, savory complexity. Starbucks Sumatra, for example, sometimes shows umami-like depth." },
+    { q: "What is 'mouthfeel' in coffee and what determines it?", opts: ["The visual impression of coffee in the cup — its color and clarity", "The physical texture and coating sensation of coffee in the mouth — determined mainly by lipid (oil) content, dissolved solids, and suspended particles", "The temperature at which coffee is most comfortably consumed", "The length of time flavor persists after swallowing"], answer: 1, feedback: "Mouthfeel is the physical texture and coating sensation of coffee in the mouth — separate from but related to body. It's determined mainly by the lipid (oil) content, dissolved solids, and suspended particles in the brewed coffee. French press coffee has a distinctive heavy, oily mouthfeel; filtered coffee has a cleaner, lighter mouthfeel because paper filters remove most oils." },
+    { q: "What causes the 'sweetness' we associate with well-roasted coffee?", opts: ["Actual sugar content — darker roasts have more sugar than lighter roasts", "The Maillard reaction and caramelization during roasting transform natural sugars and amino acids into hundreds of sweet-tasting and sweet-smelling aromatic compounds", "Added sweeteners used in the roasting process", "The natural sweetness of arabica beans grown at high altitude"], answer: 1, feedback: "The sweetness we associate with well-roasted coffee comes primarily from the Maillard reaction and caramelization that occur during roasting. These processes transform the natural sugars and amino acids in the green bean into hundreds of sweet-tasting and sweet-smelling aromatic compounds. Darker roasts actually have less residual sugar than lighter roasts, as more sugars have been caramelized." },
+    { q: "What does 'brightness' mean when describing coffee acidity?", opts: ["The light color of a blonde-roasted coffee", "A lively, positive, energetic quality of acidity — not harsh or sharp — that makes the coffee feel vibrant and alive on the palate", "The clarity of the brewed coffee when held up to light", "The high caffeine content of certain single-origin coffees"], answer: 1, feedback: "Brightness, when used to describe coffee acidity, refers to a lively, positive, energetic quality of acidity — not harsh or sour — that makes the coffee feel vibrant and alive on the palate. Brightness is a highly desirable characteristic in high-quality specialty coffee, particularly from East Africa and Latin American high-altitude origins." },
+    { q: "Which part of the tongue primarily detects sweetness?", opts: ["The back of the tongue near the throat", "The tip of the tongue", "The sides of the tongue near the molars", "The center of the tongue"], answer: 1, feedback: "Sweetness is primarily detected at the tip of the tongue. Saltiness tends to be detected on the sides toward the front, sourness (acidity) on the sides toward the back, and bitterness at the back of the tongue near the throat. This is why the 'locate' step in Starbucks coffee tasting is so important." },
+    { q: "What is the 'flavor wheel' and who developed the standard version used in the coffee industry?", opts: ["A proprietary Starbucks tool for training baristas", "A visual vocabulary tool developed by the Specialty Coffee Association (SCA) with World Coffee Research — organizing coffee flavors from broad categories to specific descriptors", "A quality grading scale from 1 to 100 used by coffee importers", "A color chart showing how roast level affects bean color"], answer: 1, feedback: "The Coffee Flavor Wheel is a visual vocabulary tool developed by the Specialty Coffee Association (SCA) in collaboration with World Coffee Research. It organizes coffee flavors and aromas from broad categories on the outer ring to increasingly specific descriptors moving inward. It gives the global coffee community a shared language for describing what's in the cup." },
+    { q: "What is the difference between 'sour' (desirable acidity) and 'sour' (a defect) in coffee?", opts: ["There is no difference — all sourness in coffee is a defect", "Desirable acidity is a bright, pleasant tartness from organic acids like citric and malic acid naturally present in the coffee; defective sourness is caused by acetic acid from over-fermentation or under-extraction", "Sour notes only appear in natural-processed coffees and are always a defect", "Sourness is only detected at the back of the throat and is always pleasant"], answer: 1, feedback: "This distinction is crucial for baristas: Desirable acidity is a bright, pleasant tartness from organic acids like citric acid (grapefruit, lemon) and malic acid (apple, pear) that are naturally present in the coffee. Defective sourness comes from acetic acid (vinegar-like) from over-fermentation, or from under-extraction where favorable compounds haven't been properly dissolved. Context and intensity make all the difference." }
+  ],
+
+  ch3: [ // Espresso (15 questions)
+    { q: "What are the Four Ms of Espresso?", opts: ["Machine, Method, Measure, Moisture", "Miscela, Macinazione, Macchina, Mano", "Mix, Microgrind, Monitor, Make", "Medium, Micro, Macro, Measure"], answer: 1, feedback: "Miscela (coffee), Macinazione (grinder), Macchina (machine), Mano (barista's hand). Each element is named in Italian because espresso culture was born there. Together, they form the well-choreographed dance of pulling a perfect shot." },
+    { q: "How many bars of pressure does an espresso machine use?", opts: ["2 bars", "5 bars", "9 bars", "15 bars"], answer: 2, feedback: "Modern espresso machines create nine bars of pressure. The earliest machines in 1884 created fewer than two bars — which is why early espresso was often over-extracted and bitter, with no appealing crema." },
+    { q: "Why must espresso be served immediately after pulling?", opts: ["It gets too cold quickly", "The flavor changes and crema dissipates with every passing moment", "The machine needs to reset", "Milk won't adhere to old espresso"], answer: 1, feedback: "The blossoming of a perfect espresso is intense and satisfying but also short-lived. With every passing moment, the flavor changes and the crema dissipates. The skilled barista knows that a quick, smooth, and efficient process yields the most consistent results." },
+    { q: "What does 'Miscela' refer to in the Four Ms of Espresso?", opts: ["The espresso machine", "The barista's hand and skill", "The coffee blend or single-origin used — the raw ingredient that determines the flavor foundation of the espresso", "The grinding technique used to prepare the coffee"], answer: 2, feedback: "Miscela refers to the coffee itself — the blend or single-origin that forms the raw ingredient and flavor foundation of the espresso. At Starbucks, Espresso Roast is the standard miscela — a pre-roast blend of Latin American and Indonesian beans selected and roasted specifically to produce a rich, caramelly espresso." },
+    { q: "What does 'Macinazione' refer to in the Four Ms of Espresso?", opts: ["The espresso machine", "The barista's hand and skill", "The grinder and grinding — particle size directly determines how water flows through the coffee puck and how much is extracted", "The tamping technique used to compress the coffee"], answer: 2, feedback: "Macinazione refers to the grinder and the act of grinding — specifically the particle size of the ground coffee, which directly determines how water flows through the coffee puck and how efficiently flavors are extracted. Grind too fine and the shot runs slow and over-extracts; too coarse and it runs fast and under-extracts." },
+    { q: "What is 'crema' in espresso and what does it tell you about quality?", opts: ["The layer of milk foam added to a latte", "The dark brown layer at the bottom of a properly pulled shot", "The golden-brown, velvety foam on top of a properly extracted espresso shot — formed by CO₂ emulsified with oils and water under pressure, indicating freshness and proper extraction", "The residue left in the portafilter basket after pulling a shot"], answer: 2, feedback: "Crema is the golden-brown, velvety foam that sits on top of a properly extracted espresso shot. It's formed by CO₂ gas being emulsified with coffee oils and water under the nine bars of espresso pressure. Good crema indicates fresh coffee (CO₂ is released as coffee degases after roasting) and proper extraction. A properly pulled Starbucks espresso should have a rich, reddish-brown crema." },
+    { q: "What does 'pre-infusion' do in the espresso brewing process?", opts: ["It heats the portafilter before the shot is pulled", "A slow saturation of the coffee puck with low-pressure water before full pressure is applied — allowing even wetting to prepare for uniform extraction", "The process of tamping the coffee before brewing", "The quality check done before serving the espresso to the customer"], answer: 1, feedback: "Pre-infusion is a slow, low-pressure saturation of the coffee puck with water before full brewing pressure is applied. This allows the coffee to expand and wet evenly, eliminating dry pockets that could cause channeling (water bypassing coffee unevenly). Even saturation leads to more uniform and complete extraction." },
+    { q: "What is 'channeling' in espresso and why is it a problem?", opts: ["The natural flow of water through evenly distributed coffee — a sign of good technique", "When water finds paths of least resistance through the coffee puck rather than flowing evenly — causing some coffee to be over-extracted while other areas are under-extracted", "The process of directing steam through the steam wand during milk steaming", "A flavor characteristic of certain Indonesian single-origin coffees"], answer: 1, feedback: "Channeling occurs when water finds paths of least resistance through the coffee puck rather than flowing evenly through all the coffee. This causes some areas to be severely over-extracted (contributing bitterness) while other areas remain under-extracted (contributing sourness). The result is an imbalanced, muddled shot. Proper dosing, distribution, and tamping prevent channeling." },
+    { q: "What flavor should a properly extracted Starbucks espresso have?", opts: ["Light and floral with bright citrus acidity", "Flat and bitter — this is normal for dark-roasted espresso", "Rich, full-bodied, and caramelly sweet — balancing intensity with sweetness", "Sharp and sour with light body"], answer: 2, feedback: "A properly extracted Starbucks Espresso Roast should be rich, full-bodied, and caramelly sweet. The Espresso Roast was specifically developed to have assertive boldness and a caramelly sweet finish — it balances exquisitely with steamed milk in lattes and cappuccinos, and stands on its own in a doppio or Americano." },
+    { q: "What is 'Mano' in the context of the Four Ms of Espresso?", opts: ["The espresso machine itself", "The coffee blend used as the base ingredient", "The barista — their skill, judgment, consistency, and care; the human element that integrates all other variables", "The grinding mechanism inside the espresso machine"], answer: 2, feedback: "Mano (Italian for 'hand') refers to the barista — the human element that integrates all the other Ms. No matter how good the coffee, grinder, or machine, the skill, judgment, consistency, and care of the barista ultimately determine the quality of every shot. This is why barista training and the development of the 'barista's eye' are so important." },
+    { q: "How does the Mastrena® differ from the Black Eagle in how it manages grind adjustments?", opts: ["The Mastrena® requires more frequent manual adjustment than the Black Eagle", "Both machines use identical automated adjustment systems", "The Mastrena® uses a computerized system that monitors shot time and automatically adjusts burr distance; the Black Eagle requires the barista to manually watch shot time and make stepless micro-adjustments", "The Black Eagle adjusts grind automatically; the Mastrena® requires manual adjustment"], answer: 2, feedback: "The Black Eagle requires the barista to set particle size by watching shot time and tasting, making stepless micro-adjustments. The Mastrena® uses a computerized system that monitors shot time and automatically adjusts the burr distance to correct particle size for optimum extraction — ensuring consistency especially at high volume." },
+    { q: "What is a 'doppio' and why is it particularly important for evaluating espresso quality?", opts: ["A long espresso diluted with hot water — also called an Americano", "A double shot of espresso served straight — the purest expression of the espresso without any additions, making it the ideal vehicle for evaluating extraction quality", "A macchiato with two layers of foam", "An espresso with a small amount of steamed milk added"], answer: 1, feedback: "A doppio is a double shot of espresso served straight, without any additions. Because it presents the espresso completely unaltered — no water, no milk, no syrups — it's the purest way to evaluate the extraction quality. Professional espresso evaluation (including Starbucks' shot calibration) is always done as a doppio." },
+    { q: "What is 'extraction yield' in espresso, and what percentage represents an ideal extraction?", opts: ["The percentage of water absorbed by the coffee — 50–60% is ideal", "The percentage of the coffee's soluble compounds that dissolve into the brewed beverage — 18–22% is the generally accepted ideal for espresso", "The ratio of espresso weight to water used — 1:2 is ideal", "The percentage of caffeine extracted from the ground coffee — 90–95% is ideal"], answer: 1, feedback: "Extraction yield refers to the percentage of the coffee's total soluble compounds that dissolve into the brewed beverage. For espresso, an extraction yield of 18–22% is generally considered ideal. Below 18% produces under-extracted, sour espresso; above 22% produces over-extracted, bitter espresso. Both TDS meters and sensory evaluation are used to validate extraction." },
+    { q: "What does the 'flowing honey' visual describe in a properly pulled espresso shot?", opts: ["The color of the crema — it should be honey-colored", "The texture of the grounds after tamping — firm and honey-smooth", "How the espresso stream should flow from the portafilter spouts — a smooth, continuous, viscous stream similar to warm honey pouring from a spoon", "The appearance of a properly steamed milk microfoam"], answer: 2, feedback: "A properly flowing espresso shot should resemble warm honey pouring from a spoon — a smooth, continuous, viscous stream that flows steadily without sputtering or running too quickly. This visual indicator is one of the key cues master baristas use to evaluate extraction in real time, along with shot time, yield weight, and tasting." },
+    { q: "What happened to espresso's popularity that caused the craft to spread globally from Italy?", opts: ["The Italian government mandated espresso as a national export product in the 1950s","Italian espresso culture spread through Italian immigration and the global café culture movement — passionate baristas worldwide adopted and adapted the craft","The invention of instant espresso made it globally accessible in the 1960s","Starbucks brought espresso to America in 1987, introducing it to the world"], answer: 1, feedback: "Espresso culture spread from Italy through Italian immigration and a global café culture movement. As love for espresso expanded around the world, skilled and curious baristas began experimenting with the craft — most notably with latte art. The first beverage decorated with the iconic rosetta design was poured at Espresso Vivace in Seattle in 1992." }
+  ],
+
+  ch4: [ // Latte Art (15 questions)
+    { q: "Why must you aerate milk BEFORE steaming it to the final temperature?", opts: ["For better flavor development", "Because proteins denature above ~100°F (38°C) and can no longer be smoothly incorporated into foam", "To save time during steaming", "Because hot milk aerates faster"], answer: 1, feedback: "At around 100°F (38°C), the proteins inside milk begin to denature — they lose their original structure. Once this happens, air can no longer be smoothly combined into the foam. If you keep aerating past this point, you'll end up with large, stubborn air bubbles that refuse to be incorporated." },
+    { q: "What is the ideal steaming temperature for adults?", opts: ["100°–120°F (38°–49°C)", "130°–140°F (54°–60°C)", "150°–170°F (66°–77°C)", "180°–190°F (82°–88°C)"], answer: 2, feedback: "The ideal steaming temperature for adults is 150°–170°F (66°–77°C). At this temperature, lactose tastes at its sweetest without the unpleasant flavor compounds that appear when milk scalds above this range." },
+    { q: "What causes 'ghosting' in latte art?", opts: ["Incorrect milk temperature", "Pouring too aggressively or hitting the side of the cup, causing milk to splash and create beige splotches instead of crisp white-on-brown contrast", "Using nonfat milk instead of whole milk", "Pouring too slowly"], answer: 1, feedback: "Ghosting — beige splotches instead of crisp white-on-brown contrast — is caused by pouring too aggressively or hitting the side of the cup, causing milk to splash. The solution is to use the 'pin drop' technique: pour a thin stream into the deepest part of the espresso so the milk cleanly dives under the surface." },
+    { q: "What is 'microfoam' and why is it essential for latte art?", opts: ["The tiny amount of foam left in the steaming pitcher after pouring", "The very fine, silky-smooth steamed milk with uniform, microscopic bubbles that flows like wet paint — essential for creating defined latte art designs with good contrast", "The foam produced specifically by plant-based milks", "The layer of foam skimmed off the top of steamed milk before pouring"], answer: 1, feedback: "Microfoam is the result of perfectly steamed milk — a fine, silky-smooth texture with uniform, microscopic bubbles that makes the milk flow like wet paint. Microfoam is essential for latte art because its consistency allows it to be controlled precisely during pouring, and its fine structure creates clean, defined designs with good contrast against the dark espresso." },
+    { q: "How does milk fat content affect microfoam quality?", opts: ["Higher fat produces drier, stiffer foam; lower fat produces creamier foam", "Fat has no measurable effect on foam quality or texture", "Whole milk (about 4.5% fat) produces creamier, more luscious microfoam that's ideal for latte art; nonfat milk creates a slightly drier, stiffer foam — both can work, but whole milk is generally preferred for richness and pliability", "Lower fat milk steams faster, making it the professional's preference"], answer: 2, feedback: "Fat is the source of milk's naturally rich creaminess. Whole milk used in Starbucks stores is about 4.5% milk fat; nonfat milk is 0%. Fat helps stabilize the structure of microfoam — a microfoam made with whole milk will be creamier and more luscious, while nonfat milk creates a slightly drier, stiffer foam. Both can be used to create latte art with practice, but whole milk produces the richest, most pourable microfoam." },
+    { q: "What is the 'pin drop' technique in latte art pouring?", opts: ["Using a toothpick to draw designs in the foam after pouring", "Starting the pour with a thin, concentrated stream aimed at the deepest part of the espresso so the milk cleanly dives under the surface before being raised to create surface designs", "Dropping a small amount of espresso into the milk pitcher to check temperature", "A technique specific to flat white preparation only"], answer: 1, feedback: "The 'pin drop' technique refers to starting the pour with a thin stream aimed into the deepest part of the espresso — the milk cleanly dives under the surface (like a pin drop into water) without splashing. Once the cup is 50–60% full and the milk has integrated with the espresso, the pitcher is raised slightly and widened to bring the foam to the surface where it creates the design." },
+    { q: "Where was the first beverage decorated with the iconic rosetta latte art design poured?", opts: ["A café in Milan, Italy — birthplace of espresso culture", "Starbucks' original Pike Place Market store in 1987", "Espresso Vivace in Seattle, Washington, in 1992", "A café in Melbourne, Australia, in the early 1990s"], answer: 2, feedback: "The first beverage decorated with the iconic rosetta design was poured at Espresso Vivace in Seattle in 1992. The rosetta — resembling a fern or leaf — remains one of the most iconic and technically challenging latte art designs. The fact that this milestone happened in Seattle reflects the city's central role in American specialty coffee culture." },
+    { q: "What does 'free pour' latte art mean?", opts: ["Latte art created without charging the customer extra", "Designs created by controlling the flow and direction of milk directly from the pitcher — without any etching tools — relying entirely on pouring technique and milk texture", "Pouring milk into the espresso without any specific technique", "Latte art designs created using pre-made foam templates"], answer: 1, feedback: "Free pour latte art refers to designs created by controlling the flow and direction of the milk directly from the steaming pitcher — without any etching tools or templates. The barista relies entirely on pouring technique, milk texture, flow rate, and pitcher movement to create designs. The heart, rosetta, and tulip are the classic free pour designs." },
+    { q: "What is the purpose of 'stretching' milk during steaming?", opts: ["To increase the volume of milk to serve more customers with each pitcher", "To incorporate a specific amount of air into the milk before proteins denature — creating the microfoam necessary for latte art and a creamy texture", "To heat the milk to the correct temperature more quickly", "To homogenize the milk fat with the rest of the liquid"], answer: 1, feedback: "Stretching refers to the phase of steaming where air is incorporated into the milk — before the proteins begin to denature around 100°F (38°C). The steam wand is positioned at the surface of the milk to draw in controlled amounts of air. This stretching phase is what creates the microfoam structure necessary for latte art and the velvety texture of a well-made latte." },
+    { q: "What is a 'cortado' and how does it differ from a latte in terms of milk ratio?", opts: ["A cortado is a small latte with extra foam — identical to a cappuccino", "A cortado is equal parts espresso and steamed milk (typically 1:1 or 2:2 oz) — much less milk than a latte (typically 1:3–1:4 espresso to milk), so the coffee flavor is more prominent", "A cortado is made with cold milk poured directly over hot espresso", "A cortado is an Americano with a splash of cream added after brewing"], answer: 1, feedback: "A cortado is equal parts espresso and steamed milk — typically 2 oz espresso and 2 oz milk — making it a much smaller, more concentrated beverage than a latte. The reduced milk volume means the coffee flavor is far more prominent. The name comes from the Spanish word 'cortar' (to cut) — the milk 'cuts' the espresso's intensity slightly." },
+    { q: "Why does milk scalding (above 170°F/77°C) negatively affect flavor?", opts: ["The lactose content increases dramatically above this temperature", "Heat causes denaturation of proteins and breakdown of lactose — creating cooked milk flavors that taste bitter, scorched, and sulfuric rather than sweet and creamy", "The milk separates into cream and skim layers when overheated", "Above 170°F, milk can no longer create any foam at all"], answer: 1, feedback: "When milk is heated above 170°F (77°C), several negative reactions occur: proteins denature and aggregate (creating a rubbery texture), lactose begins breaking down (reducing sweetness), and Maillard-like reactions create cooked, scorched, and sulfuric flavor compounds. The result is milk that tastes bitter, burnt, and unpleasant — destroying the sweet, creamy character that makes steamed milk delicious." },
+    { q: "What is a 'tulip' in latte art and how is it created?", opts: ["A design created by inserting a tulip-shaped etching tool into the foam", "A multi-layered latte art design created by pouring a series of stacked blobs of milk, each one pushing the previous layer forward to create a layered, petal-like appearance", "A design requiring two separate milk pitchers simultaneously", "A design created only with nonfat milk due to its drier foam"], answer: 1, feedback: "The tulip is a classic free-pour latte art design created by pouring a series of stacked blobs of microfoam. The barista pours a small blob, stops momentarily, then pours a second blob slightly behind the first — this pushes the first blob forward and creates a layered, petal-like appearance. Additional layers can be added for a more complex tulip." },
+    { q: "What is 'etching' in the context of latte art, and how does it differ from free pouring?", opts: ["The process of cleaning the steam wand after use", "Using a tool (like a toothpick or latte art pen) to draw designs into the surface of the foam after pouring — unlike free pour which creates designs through milk flow alone", "Scoring the espresso puck surface before brewing to improve extraction", "A technique for creating designs using flavored syrups drizzled on top"], answer: 1, feedback: "Etching uses a tool — typically a toothpick, skewer, or specialized latte art pen — to draw designs into the surface of the foam after the milk has been poured. Unlike free pour (where designs emerge from the flow of milk during pouring), etching allows for more intricate, detailed designs like portraits, flowers, or geometric patterns. It requires good microfoam as a foundation." },
+    { q: "What is the role of the 'swirling' step after steaming milk?", opts: ["To cool the milk to the correct serving temperature", "To break down large bubbles into microfoam through a combination of swirling and tapping the pitcher on the counter — integrating the foam and liquid into a uniform, glossy texture", "To separate the foam from the steamed milk for cappuccino preparation", "To check the temperature of the milk by watching how it moves"], answer: 1, feedback: "After steaming, swirling and gently tapping the pitcher on the counter are essential steps. Swirling integrates the foam with the steamed milk into a uniform, glossy, paint-like texture. Tapping helps break down any remaining large bubbles into fine microfoam. Skipping this step leaves the milk with a two-layer texture (liquid on bottom, foam on top) that won't pour or pour properly for latte art." },
+    { q: "What is the significance of pouring latte art for customer experience?", opts: ["It primarily demonstrates technical skill for barista competitions", "It adds significant time to beverage preparation and is mainly for Instagram visibility", "It transforms a beverage into a personalized, handcrafted gift — creating a moment of connection and delight that reflects the barista's care and skill", "It is primarily used to verify that the milk was steamed correctly"], answer: 2, feedback: "Latte art transforms a beverage into a personalized, handcrafted gift. When a barista presents a beautifully poured rosetta or heart, it communicates care, skill, and attention — creating a moment of genuine human connection. It reflects the spirit of Starbucks' mission: 'to inspire and nurture the human spirit — one person, one cup and one neighborhood at a time.'" }
+  ],
+
+  ch5: [ // Brewing (15 questions)
+    { q: "What is the Starbucks recommended brew ratio?", opts: ["12:1 (water to coffee)", "16:1 (water to coffee)", "18:1 (water to coffee)", "22:1 (water to coffee)"], answer: 2, feedback: "Starbucks recommends an 18:1 brew ratio — 6 fl oz of water for every 2 tablespoon scoop (10g) of coffee. Across the coffee industry, ratios between 16:1 and 18:1 result in a pleasant strength agreeable to most customers." },
+    { q: "Why does Starbucks wait one week after roasting before recommending coffee for brewing?", opts: ["To allow time for quality inspection", "To let packaging gases escape before opening", "Freshly roasted coffee releases so many built-up gases when wetted that it's difficult to extract properly — flavors need time to develop", "Store logistics require at least a week of transit"], answer: 2, feedback: "Coffee that is too fresh is actually problematic for brewing — the naturally built-up gases rush out when wetted, making it hard to extract the right flavor compounds. Waiting one week after roasting gives time for off-gassing and allows flavors to fully develop." },
+    { q: "What does turbulence do to extraction?", opts: ["It decreases extraction", "It has no effect on extraction", "It increases extraction — excessive turbulence can lead to over-extraction", "It only affects aroma, not extraction"], answer: 2, feedback: "Turbulence is the mixing action as water passes over and through coffee — and it increases extraction. Following correct brewing technique is essential. When using the pour-over method, a steady, even stream generates just the right amount of turbulence without over-agitating." },
+    { q: "What is the ideal water temperature for brewing coffee according to Starbucks guidelines?", opts: ["185°–190°F (85°–88°C)", "195°–205°F (91°–96°C)", "210°–212°F (99°–100°C)", "170°–180°F (77°–82°C)"], answer: 1, feedback: "The ideal water temperature for brewing coffee is 195°–205°F (91°–96°C) — just below boiling. Water that is too cold will under-extract the coffee (producing sour, underdeveloped flavors), while water that is too hot (at or above boiling) will over-extract (producing harsh, bitter flavors and scalding the coffee)." },
+    { q: "What are the 'Four Fundamentals' of brewing great coffee at Starbucks?", opts: ["Origin, roast, grind, water", "Proportion, grind, water, freshness", "Temperature, time, turbulence, ratio", "Coffee, filter, temperature, timing"], answer: 1, feedback: "The Four Fundamentals of great coffee are Proportion, Grind, Water, and Freshness. These four variables, when properly calibrated together, determine the quality of every cup. Changing any one of them changes the resulting cup — understanding them gives a barista the diagnostic tools to troubleshoot and improve any brewing method." },
+    { q: "What is the 'bloom' in pour-over brewing and why does it matter?", opts: ["The visual pattern created on top of the coffee bed during brewing", "An initial small pour of hot water (typically twice the weight of the coffee) that pre-wets the grounds and allows CO₂ to escape before the full extraction pour", "The crema-like layer that forms on top of pour-over coffee", "The period after brewing when the coffee's flavors continue to develop in the server"], answer: 1, feedback: "The bloom (also called the pre-infusion) is an initial small pour of hot water — typically about twice the weight of the coffee — that pre-wets the grounds and allows CO₂ to escape for 30–45 seconds before the main extraction pour begins. If you skip the bloom, CO₂ escaping during brewing creates an uneven bed and inconsistent extraction. A good bloom indicates fresh coffee." },
+    { q: "What happens to coffee flavor when the grind is too fine for a given brewing method?", opts: ["The coffee under-extracts, producing sour, weak flavors", "The coffee over-extracts, producing bitter, harsh, and astringent flavors because water moves too slowly through the fine grounds, dissolving undesirable compounds", "The flavor becomes sweeter and more complex", "Grind size only affects brewing speed, not flavor"], answer: 1, feedback: "When the grind is too fine for a given brewing method, water moves too slowly through the grounds, spending too much time in contact with the coffee and dissolving too many compounds — including the undesirable bitter, harsh, and astringent ones that extract last. This produces over-extracted, bitter, dry coffee. Each brewing method has an optimal grind size because contact time, turbulence, and extraction dynamics differ." },
+    { q: "What happens to coffee flavor when the grind is too coarse for a given brewing method?", opts: ["The coffee over-extracts, producing bitter and astringent flavors", "The coffee under-extracts, producing sour, weak, underdeveloped flavors because water passes through too quickly without dissolving enough favorable compounds", "The flavor becomes cleaner and less bitter", "Grind size only affects body, not flavor"], answer: 1, feedback: "When the grind is too coarse for a given brewing method, water passes through too quickly without sufficient contact time to dissolve enough of the favorable flavor compounds — sugars, acids, and aromatic compounds. The result is under-extracted coffee that tastes sour, hollow, weak, and underdeveloped." },
+    { q: "Why does Starbucks use CloverVITM brewing technology in select Reserve locations?", opts: ["Because it brews faster than any other method", "Because it uses lower water temperatures that preserve delicate flavors", "Because it uses a unique vacuum-press technology that allows each cup to be brewed to order with precisely controlled variables — ideal for showcasing rare, high-quality single-origin coffees", "Because it produces the highest caffeine yield of any brewing method"], answer: 2, feedback: "The Clover® brewing system uses a unique vacuum-press technology that allows each cup to be brewed individually to order with precisely controlled temperature, steep time, and volume. This level of precision makes it ideal for showcasing rare, high-quality single-origin coffees — each cup can be optimized for that specific coffee's ideal extraction parameters." },
+    { q: "What is 'extraction' in the context of coffee brewing?", opts: ["The process of harvesting coffee cherries from the tree", "The process of removing caffeine from green beans before roasting", "The process of dissolving and pulling flavor compounds from ground coffee into water — only about 18–22% of coffee's soluble compounds should be extracted for ideal flavor", "The process of separating espresso crema from the liquid portion of the shot"], answer: 2, feedback: "Extraction in brewing refers to the process of dissolving flavor compounds from ground coffee into water. Not all of the coffee's soluble compounds are desirable — the first compounds extracted are fruity acids and sugars (pleasant), then more complex compounds (balanced), and finally harsh bitter compounds (unpleasant). The sweet spot is 18–22% of soluble compounds extracted for optimal flavor." },
+    { q: "What is the purpose of using freshly ground coffee rather than pre-ground?", opts: ["Pre-ground coffee is cheaper and less convenient", "Freshly ground coffee is more visually appealing to customers", "Grinding just before brewing preserves volatile aromatic compounds that escape rapidly from ground coffee — pre-ground coffee loses its most delicate flavors within minutes of grinding", "Pre-ground coffee brews unevenly due to inconsistent particle sizes"], answer: 2, feedback: "Grinding just before brewing is essential because volatile aromatic compounds — responsible for coffee's complex aroma and most of its flavor — escape rapidly from ground coffee. The vastly increased surface area of ground coffee accelerates oxidation and off-gassing. Even the highest quality coffee loses a significant portion of its delicate flavor within minutes of grinding, which is why Starbucks grinds coffee to order wherever possible." },
+    { q: "What is 'total dissolved solids' (TDS) in brewing and why does it matter?", opts: ["The amount of solid particles (coffee grounds) remaining in brewed coffee", "A measurement of the concentration of dissolved compounds in brewed coffee — higher TDS indicates stronger coffee; the Specialty Coffee Association recommends 11,500–13,500 ppm for ideal strength", "The weight of ground coffee used per liter of water", "The amount of caffeine dissolved per ounce of brewed coffee"], answer: 1, feedback: "Total Dissolved Solids (TDS) measures the concentration of dissolved compounds in brewed coffee — a proxy for strength. The Specialty Coffee Association's recommended range is 1.15–1.35% (11,500–13,500 ppm) for ideal brewed coffee strength. TDS meters are used in professional coffee quality control, alongside sensory evaluation, to verify that brewing recipes are hitting their targets." },
+    { q: "What distinguishes French press coffee's mouthfeel from drip-filtered coffee?", opts: ["French press coffee is always weaker than drip coffee because immersion brewing is less efficient", "French press coffee has a heavier, oilier, more full-bodied mouthfeel because metal mesh filters allow oils and fine particles to pass into the cup; paper filters in drip brewing absorb most oils and trap fine particles", "Both methods produce identical mouthfeel — the difference is only in flavor", "French press coffee has lighter mouthfeel because the grounds remain at the bottom"], answer: 1, feedback: "French press coffee has a distinctively heavy, oily, and full-bodied mouthfeel compared to drip-filtered coffee. This is because the metal mesh plunger filter allows coffee oils and fine particles (including 'fines' — very small ground particles) to pass into the cup. Paper filters in drip brewing absorb most of the oils and trap fine particles, producing a cleaner, lighter-bodied cup." },
+    { q: "What is 'contact time' in brewing and how does it affect extraction?", opts: ["The time from when the barista starts brewing to when the customer receives the cup", "The duration that water is in contact with ground coffee during brewing — longer contact time increases extraction; finding the ideal contact time for each method and grind size is critical", "The time coffee can sit on a warming plate before it degrades", "The time needed for a new bag of coffee to off-gas before optimal brewing"], answer: 1, feedback: "Contact time is the duration that water is in contact with ground coffee during brewing. Longer contact time increases extraction — all else being equal. Each brewing method has a different optimal contact time: espresso extracts in 25–30 seconds at nine bars of pressure, while cold brew steeps for 12–24 hours at room temperature. Grind size and contact time must be calibrated together — finer grinds need less contact time; coarser grinds need more." },
+    { q: "Why is water quality important for coffee brewing?", opts: ["Tap water contains chlorine that speeds up extraction to an undesirable level", "Water is 98–99% of brewed coffee — its mineral content, chlorine levels, and pH directly affect extraction efficiency and the final flavor; ideal water is slightly mineral-rich but not hard", "Water quality only matters for espresso, not drip coffee", "All water produces identical extraction results as long as the temperature is correct"], answer: 1, feedback: "Water is 98–99% of brewed coffee, making it the dominant ingredient. Its quality profoundly affects the result: chlorine and other impurities create off-flavors; water that is too soft (lacking minerals) doesn't extract efficiently; water that is too hard (excessive minerals) inhibits extraction and causes buildup in equipment. The SCA recommends water with 75–250 ppm of total dissolved solids for optimal extraction and flavor." }
+  ]
 };
 
-function showFlavor(btn, key) {
-  document.querySelectorAll('.flavor-cat-btn').forEach(b => b.classList.remove('active'));
-  btn.classList.add('active');
-  const d = flavorData[key];
-  document.getElementById('flavorPanel').innerHTML = `
-    <h4>${d.title}</h4>
-    <p>${d.desc}</p>
-    <div class="flavor-tags">${d.tags.map(t => `<span class="flavor-tag">${t}</span>`).join('')}</div>
-  `;
-}
+// ── BUILD CHAPTER QUIZZES — pick 10 random from each pool ───
+const quizzes = {};
+['ch1','ch2','ch3','ch4','ch5'].forEach((ch, i) => {
+  quizzes['quiz'+(i+1)] = { questions: pickRandom(chapterPools[ch], 10) };
+});
 
-// ──────────────────────────────────────────
-// THE FOUR MS
-// ──────────────────────────────────────────
-function toggleM(el) {
-  const wasOpen = el.classList.contains('open');
-  document.querySelectorAll('.m-card').forEach(c => c.classList.remove('open'));
-  if (!wasOpen) el.classList.add('open');
-}
+// ── PRACTICE QUIZ — 50 questions (10 per chapter), fixed set, shuffled ──
+const practiceQuestions = [
+  // SENSORY WORLD (Q1-10)
+  { q: "What are the four steps of coffee tasting at Starbucks?", opts: ["Sip, taste, swallow, describe", "Smell, slurp, locate, describe", "Smell, taste, think, share", "Look, smell, sip, compare"], answer: 1, feedback: "The four steps are Smell → Slurp → Locate → Describe. This framework breaks down the tasting process and helps you experience aroma, flavor, body, and acidity by isolating one component at a time." },
+  { q: "What is the difference between a novice taster's sensory skills and those of a professional coffee taster?", opts: ["Natural talent — some people are born with better palates", "Genetics — taste receptors vary significantly between people", "Simply a matter of experience and practice", "Only professionals can develop true sensory awareness"], answer: 2, feedback: "No matter your age or background, you have the same essential tasting mechanism as every other human. The difference between your sensory skills today and those of a professional coffee taster is simply experience." },
+  { q: "What does 'body' refer to in coffee tasting?", opts: ["The overall size of the flavor profile", "The physical sensation of weight, thickness, and texture of the coffee in the mouth — ranging from light and tea-like to heavy and syrupy", "The caffeine strength of the coffee", "The length of time the flavor lingers after swallowing"], answer: 1, feedback: "Body refers to the physical sensation of weight, thickness, and texture that coffee has in the mouth. It can range from light and tea-like to medium and smooth to heavy and syrupy. Body is largely determined by the amount of dissolved and suspended compounds in the coffee." },
+  { q: "What is acidity in coffee and why is it desirable?", opts: ["The pH level of the brewed coffee — all specialty coffee is acidic", "A bright, lively, pleasurable tartness or crispness in coffee — not sour — that adds complexity and vibrancy, especially in high-altitude coffees", "The unpleasant sourness that results from under-extraction", "The chemical compounds left from the processing method"], answer: 1, feedback: "Acidity in specialty coffee refers to a bright, lively, pleasurable tartness or crispness — not the unpleasant sourness of under-extraction. Desirable acidity adds complexity and vibrancy. It is most prominent in high-altitude, washed-processed coffees from regions like Ethiopia, Kenya, and Colombia." },
+  { q: "What is the purpose of the 'slurp' step in coffee tasting?", opts: ["To cool down the coffee before tasting", "To spray the coffee across the entire palate so all taste receptors are activated simultaneously", "To aerate the coffee and release more aroma", "To measure the body of the coffee"], answer: 1, feedback: "Slurping sprays coffee across the entire palate, activating all taste receptors simultaneously. It also introduces air that helps volatilize aromatic compounds toward your retronasal passage, significantly enhancing your perception of flavor." },
+  { q: "What is the difference between 'fragrance' and 'aroma' in coffee tasting terminology?", opts: ["They are synonymous — both refer to the smell of brewed coffee", "Fragrance is the smell of dry ground coffee before brewing; aroma is the smell of the brewed coffee after hot water is added", "Fragrance refers to floral notes; aroma refers to earthy notes", "Fragrance is detected orthonasal; aroma is detected retronasal"], answer: 1, feedback: "Fragrance refers specifically to the smell of dry ground coffee before brewing, while aroma refers to the smell of the brewed coffee after hot water has been added. Both are evaluated in professional cupping sessions, as they can reveal different aspects of the coffee's character." },
+  { q: "How many taste buds does the average person have?", opts: ["About 1,000 taste buds with hundreds of receptors each", "About 10,000 taste buds with roughly 100 receptors each", "About 50,000 taste buds", "About 500 taste buds with 10 receptors each"], answer: 1, feedback: "The average person has approximately 10,000 taste buds, each containing roughly 100 taste receptor cells. These receptors detect the five basic tastes: sweet, sour, salty, bitter, and umami. This mechanism is essentially the same in all humans — what varies is training and experience." },
+  { q: "What does 'finish' or 'aftertaste' mean in coffee tasting?", opts: ["The last sip of coffee remaining in the cup", "The sensations that linger on the palate after swallowing — quality coffees have a long, pleasant finish while defective coffees often have a short, unpleasant one", "The color of the coffee after brewing", "The way the coffee looks as it cools down"], answer: 1, feedback: "Finish (or aftertaste) refers to the sensations that remain on the palate after swallowing. Quality coffees often have a long, pleasant finish — the flavors linger agreeably. Defective or low-quality coffees may have a short, unpleasant aftertaste." },
+  { q: "Why does Starbucks encourage baristas to use the Coffee Passport?", opts: ["It's required by corporate policy", "To track hours spent in tastings", "To capture personal impressions and document sensory journeys over time", "To compare notes with other baristas"], answer: 2, feedback: "The Coffee Passport is part guide, part journal. It's your personal record of coffee tastings — capturing who you were as a coffee lover, who you are now, and where you're headed. There's no right or wrong approach, as long as you're recording your experiences." },
+  { q: "What is 'clean cup' as a sensory characteristic?", opts: ["A cup that has been properly washed before brewing", "The absence of any defects, off-flavors, or non-coffee characteristics — a clean cup allows the unique terroir and varietal character of the coffee to be perceived without interference", "A coffee brewed at the correct temperature with filtered water", "The clarity and transparency of the brewed coffee's color"], answer: 1, feedback: "A 'clean cup' means the absence of any defects, off-flavors, or non-coffee characteristics in the cup from ingestion to finish. A clean cup allows the unique terroir, varietal, and processing character of the coffee to be perceived without interference — it's a fundamental quality indicator in professional evaluation." },
 
-// ──────────────────────────────────────────
-// ESPRESSO STEPS
-// ──────────────────────────────────────────
-const stepContent = [
-  {
-    title: 'Grind',
-    text: 'Fresh beans are finely ground to the correct particle size <em>immediately before brewing</em>. For the Black Eagle & Mythos, stainless-steel flat burrs grind consistently — the barista sets particle size by watching shot time and tasting, making stepless micro-adjustments. For the Mastrena® & Mastrena® II, a computerized system monitors shot time and automatically adjusts the burr distance to correct particle size for optimum extraction.'
-  },
-  {
-    title: 'Dose',
-    text: 'The correct amount of coffee is measured out and evenly distributed. For the Black Eagle, the barista doses freshly ground coffee into the portafilter basket using a scale to set the correct grind time. Precision portafilter baskets with laser-cut holes create consistency in extraction and water flow even at peak volume. For the Mastrena®, the perfect amount is automatically ground to order, dosed, and distributed into a temperature-controlled brew chamber.'
-  },
-  {
-    title: 'Tamp',
-    text: 'The ground coffee is evenly compressed to ensure uniformity in extraction. For the Black Eagle, the barista uses a tamper to ergonomically and evenly compress the coffee. The specific Starbucks tamper was selected because when the portafilter basket is filled with the correct dose, this tamper creates consistent taste in cup. For the Mastrena®, a mechanical piston tamps the bed of coffee with even pressure, monitoring resistance to create a repeatable tamp.'
-  },
-  {
-    title: 'Brew',
-    text: 'Under pressure, hot water is forced through the puck of coffee to extract a full-bodied and sweet shot. A volumetric water-flow system regulates the correct amount of water to start and stop each pull. A slow pre-infusion evenly saturates the bed of coffee to prepare for extraction. Consistent water temperature is ensured throughout the brew process. The perfectly flowing shot should resemble warm honey pouring from a spoon.'
-  }
+  // TASTE, AROMA & FLAVOR (Q11-20)
+  { q: "What is flavor, technically?", opts: ["Only what you taste on your tongue", "Only the aroma of the coffee", "How your brain synthesizes taste and aroma together", "The mouthfeel and body of the coffee"], answer: 2, feedback: "Flavor is how our brains synthesize aromas and tastes into a combined, overall experience. This is why pinching your nose eliminates most of what we call 'flavor' — you're disconnecting the aroma half of the equation." },
+  { q: "Which taste is associated with under-extracted coffee?", opts: ["Bitter", "Sweet", "Sour", "Umami"], answer: 2, feedback: "Under-extracted coffee tastes sour. Over-extracted coffee tastes bitter. Knowing this distinction is one of the most practical diagnostic tools a barista can have." },
+  { q: "What is retronasal olfaction?", opts: ["Smelling coffee before you drink it", "The process of smelling from inside the mouth through the nasal-oral airway", "The ability to detect aromas with eyes closed", "A technique for professional coffee tasters only"], answer: 1, feedback: "The retronasal passage connects your nasal and oral cavities, allowing aromatic compounds to be 'smelled' from your mouth. This is extremely important because it helps make the perception of flavor possible — and it's why proper slurping technique matters!" },
+  { q: "What are the five basic tastes that humans can detect?", opts: ["Sweet, sour, salty, bitter, spicy", "Sweet, sour, salty, bitter, umami", "Sweet, sour, salty, bitter, astringent", "Sweet, sour, bitter, rich, mild"], answer: 1, feedback: "The five basic tastes are sweet, sour, salty, bitter, and umami. Each is detected by specific taste receptors on the tongue. All other flavor experiences — the thousands of nuanced flavors we associate with coffee — are combinations of these five tastes plus aromatic compounds." },
+  { q: "Why does pinching your nose eliminate most of what we call 'flavor'?", opts: ["It changes the pressure in the mouth, affecting taste receptors", "Because up to 80% of what we perceive as flavor comes from aroma — blocking orthonasal and retronasal olfaction removes the vast majority of the flavor experience", "Because the taste buds require oxygen to function properly", "It causes the tongue to become numb from the pressure change"], answer: 1, feedback: "Because up to 80% of what we perceive as 'flavor' actually comes from aroma detected through both orthonasal and retronasal olfaction. When you block your nostrils, you eliminate both pathways. What remains is only the basic tastes detectable on the tongue — sweet, sour, salty, bitter, and umami — without the thousands of aromatic nuances that create complex flavor." },
+  { q: "What causes the 'sweetness' we associate with well-roasted coffee?", opts: ["Actual sugar content — darker roasts have more sugar than lighter roasts", "The Maillard reaction and caramelization during roasting transform natural sugars and amino acids into hundreds of sweet-tasting and sweet-smelling aromatic compounds", "Added sweeteners used in the roasting process", "The natural sweetness of arabica beans grown at high altitude"], answer: 1, feedback: "The sweetness we associate with well-roasted coffee comes primarily from the Maillard reaction and caramelization that occur during roasting. These processes transform the natural sugars and amino acids in the green bean into hundreds of sweet-tasting and sweet-smelling aromatic compounds." },
+  { q: "What does 'brightness' mean when describing coffee acidity?", opts: ["The light color of a blonde-roasted coffee", "A lively, positive, energetic quality of acidity — not harsh or sharp — that makes the coffee feel vibrant and alive on the palate", "The clarity of the brewed coffee when held up to light", "The high caffeine content of certain single-origin coffees"], answer: 1, feedback: "Brightness, when used to describe coffee acidity, refers to a lively, positive, energetic quality of acidity — not harsh or sour — that makes the coffee feel vibrant and alive on the palate. Brightness is a highly desirable characteristic in high-quality specialty coffee." },
+  { q: "What are 'volatile' aromatic compounds and why do they matter for coffee?", opts: ["Compounds that make coffee dangerous if consumed in large quantities", "Unstable, easily evaporated compounds that carry into the nose as gas — they are responsible for coffee's complex aromas and most of what we perceive as flavor", "Compounds that cause the bitterness in dark-roasted coffees", "Chemical compounds that degrade coffee freshness over time"], answer: 1, feedback: "Volatile aromatic compounds are unstable, easily evaporated substances that exist as gases at room temperature and easily travel to the nose. Coffee contains over 800 identified volatile aromatic compounds (more than almost any other food or beverage), which is why coffee has such a complex and distinctive aroma." },
+  { q: "What is 'astringency' in coffee and what causes it?", opts: ["A pleasant cooling sensation caused by high-altitude growing conditions", "A dry, puckering sensation in the mouth caused by tannins and other phenolic compounds binding with proteins in saliva", "The sharp, piercing quality of high acidity in African coffees", "A smooth, coating sensation caused by oils in dark-roasted coffee"], answer: 1, feedback: "Astringency is a dry, puckering sensation in the mouth — like the feeling after eating an unripe banana or over-steeped black tea. In coffee, it's caused by tannins and other phenolic compounds that bind with proteins in saliva. Astringency is generally considered a defect in specialty coffee and is often a sign of over-extraction." },
+  { q: "What is 'mouthfeel' in coffee and what determines it?", opts: ["The visual impression of coffee in the cup — its color and clarity", "The physical texture and coating sensation of coffee in the mouth — determined mainly by lipid (oil) content, dissolved solids, and suspended particles", "The temperature at which coffee is most comfortably consumed", "The length of time flavor persists after swallowing"], answer: 1, feedback: "Mouthfeel is the physical texture and coating sensation of coffee in the mouth — separate from but related to body. It's determined mainly by the lipid (oil) content, dissolved solids, and suspended particles in the brewed coffee. French press coffee has a distinctive heavy, oily mouthfeel; filtered coffee has a cleaner, lighter mouthfeel." },
+
+  // ESPRESSO (Q21-30)
+  { q: "What are the Four Ms of Espresso?", opts: ["Machine, Method, Measure, Moisture", "Miscela, Macinazione, Macchina, Mano", "Mix, Microgrind, Monitor, Make", "Medium, Micro, Macro, Measure"], answer: 1, feedback: "Miscela (coffee), Macinazione (grinder), Macchina (machine), Mano (barista's hand). Each element is named in Italian because espresso culture was born there. Together, they form the well-choreographed dance of pulling a perfect shot." },
+  { q: "How many bars of pressure does an espresso machine use?", opts: ["2 bars", "5 bars", "9 bars", "15 bars"], answer: 2, feedback: "Modern espresso machines create nine bars of pressure. The earliest machines in 1884 created fewer than two bars — which is why early espresso was often over-extracted and bitter, with no appealing crema." },
+  { q: "Why must espresso be served immediately after pulling?", opts: ["It gets too cold quickly", "The flavor changes and crema dissipates with every passing moment", "The machine needs to reset", "Milk won't adhere to old espresso"], answer: 1, feedback: "The blossoming of a perfect espresso is intense and satisfying but also short-lived. With every passing moment, the flavor changes and the crema dissipates. The skilled barista knows that a quick, smooth, and efficient process yields the most consistent results." },
+  { q: "What does 'Miscela' refer to in the Four Ms of Espresso?", opts: ["The espresso machine", "The barista's hand and skill", "The coffee blend or single-origin used — the raw ingredient that determines the flavor foundation of the espresso", "The grinding technique used to prepare the coffee"], answer: 2, feedback: "Miscela refers to the coffee itself — the blend or single-origin that forms the raw ingredient and flavor foundation of the espresso. At Starbucks, Espresso Roast is the standard miscela — a pre-roast blend of Latin American and Indonesian beans selected and roasted specifically to produce a rich, caramelly espresso." },
+  { q: "What is 'crema' in espresso and what does it indicate about quality?", opts: ["The layer of milk foam added to a latte", "The dark brown layer at the bottom of a properly pulled shot", "The golden-brown, velvety foam on top of a properly extracted espresso shot — formed by CO₂ emulsified with oils and water under pressure, indicating freshness and proper extraction", "The residue left in the portafilter basket after pulling a shot"], answer: 2, feedback: "Crema is the golden-brown, velvety foam that sits on top of a properly extracted espresso shot. It's formed by CO₂ gas being emulsified with coffee oils and water under the nine bars of espresso pressure. Good crema indicates fresh coffee and proper extraction." },
+  { q: "What is 'channeling' in espresso and why is it a problem?", opts: ["The natural flow of water through evenly distributed coffee", "When water finds paths of least resistance through the coffee puck rather than flowing evenly — causing some coffee to be over-extracted while other areas are under-extracted", "The process of directing steam through the steam wand during milk steaming", "A flavor characteristic of certain Indonesian single-origin coffees"], answer: 1, feedback: "Channeling occurs when water finds paths of least resistance through the coffee puck rather than flowing evenly through all the coffee. This causes some areas to be severely over-extracted (contributing bitterness) while other areas remain under-extracted (contributing sourness). Proper dosing, distribution, and tamping prevent channeling." },
+  { q: "What does 'Mano' refer to in the Four Ms of Espresso?", opts: ["The espresso machine itself", "The coffee blend used as the base ingredient", "The barista — their skill, judgment, consistency, and care; the human element that integrates all other variables", "The grinding mechanism inside the espresso machine"], answer: 2, feedback: "Mano (Italian for 'hand') refers to the barista — the human element that integrates all the other Ms. No matter how good the coffee, grinder, or machine, the skill, judgment, consistency, and care of the barista ultimately determine the quality of every shot." },
+  { q: "What flavor should a properly extracted Starbucks espresso have?", opts: ["Light and floral with bright citrus acidity", "Flat and bitter — this is normal for dark-roasted espresso", "Rich, full-bodied, and caramelly sweet — balancing intensity with sweetness", "Sharp and sour with light body"], answer: 2, feedback: "A properly extracted Starbucks Espresso Roast should be rich, full-bodied, and caramelly sweet. The Espresso Roast was specifically developed to have assertive boldness and a caramelly sweet finish — it balances exquisitely with steamed milk in lattes and cappuccinos, and stands on its own in a doppio or Americano." },
+  { q: "What does 'Macinazione' refer to in the Four Ms of Espresso?", opts: ["The espresso machine", "The barista's hand and skill", "The grinder and grinding — particle size directly determines how water flows through the coffee puck and how much is extracted", "The tamping technique used to compress the coffee"], answer: 2, feedback: "Macinazione refers to the grinder and the act of grinding — specifically the particle size of the ground coffee, which directly determines how water flows through the coffee puck and how efficiently flavors are extracted. Grind too fine and the shot runs slow and over-extracts; too coarse and it runs fast and under-extracts." },
+  { q: "What is 'pre-infusion' in the espresso brewing process?", opts: ["It heats the portafilter before the shot is pulled", "A slow saturation of the coffee puck with low-pressure water before full pressure is applied — allowing even wetting to prepare for uniform extraction", "The process of tamping the coffee before brewing", "The quality check done before serving the espresso to the customer"], answer: 1, feedback: "Pre-infusion is a slow, low-pressure saturation of the coffee puck with water before full brewing pressure is applied. This allows the coffee to expand and wet evenly, eliminating dry pockets that could cause channeling (water bypassing coffee unevenly). Even saturation leads to more uniform and complete extraction." },
+
+  // LATTE ART (Q31-40)
+  { q: "Why must you aerate milk BEFORE steaming it to the final temperature?", opts: ["For better flavor development", "Because proteins denature above ~100°F (38°C) and can no longer be smoothly incorporated into foam", "To save time during steaming", "Because hot milk aerates faster"], answer: 1, feedback: "At around 100°F (38°C), the proteins inside milk begin to denature — they lose their original structure. Once this happens, air can no longer be smoothly combined into the foam. If you keep aerating past this point, you'll end up with large, stubborn air bubbles that refuse to be incorporated." },
+  { q: "What is the ideal steaming temperature for adults?", opts: ["100°–120°F (38°–49°C)", "130°–140°F (54°–60°C)", "150°–170°F (66°–77°C)", "180°–190°F (82°–88°C)"], answer: 2, feedback: "The ideal steaming temperature for adults is 150°–170°F (66°–77°C). At this temperature, lactose tastes at its sweetest without the unpleasant flavor compounds that appear when milk scalds above this range." },
+  { q: "What causes 'ghosting' in latte art?", opts: ["Incorrect milk temperature", "Pouring too aggressively or hitting the side of the cup, causing milk to splash and create beige splotches instead of crisp white-on-brown contrast", "Using nonfat milk instead of whole milk", "Pouring too slowly"], answer: 1, feedback: "Ghosting — beige splotches instead of crisp white-on-brown contrast — is caused by pouring too aggressively or hitting the side of the cup, causing milk to splash. The solution is to use the 'pin drop' technique: pour a thin stream into the deepest part of the espresso so the milk cleanly dives under the surface." },
+  { q: "What is 'microfoam' and why is it essential for latte art?", opts: ["The tiny amount of foam left in the steaming pitcher after pouring", "The very fine, silky-smooth steamed milk with uniform, microscopic bubbles that flows like wet paint — essential for creating defined latte art designs with good contrast", "The foam produced specifically by plant-based milks", "The layer of foam skimmed off the top of steamed milk before pouring"], answer: 1, feedback: "Microfoam is the result of perfectly steamed milk — a fine, silky-smooth texture with uniform, microscopic bubbles that makes the milk flow like wet paint. Microfoam is essential for latte art because its consistency allows it to be controlled precisely during pouring, and its fine structure creates clean, defined designs with good contrast against the dark espresso." },
+  { q: "How does milk fat content affect microfoam quality?", opts: ["Higher fat produces drier, stiffer foam; lower fat produces creamier foam", "Fat has no measurable effect on foam quality or texture", "Whole milk (about 4.5% fat) produces creamier, more luscious microfoam that's ideal for latte art; nonfat milk creates a slightly drier, stiffer foam — both can work, but whole milk is generally preferred for richness and pliability", "Lower fat milk steams faster, making it the professional's preference"], answer: 2, feedback: "Fat is the source of milk's naturally rich creaminess. Whole milk used in Starbucks stores is about 4.5% milk fat; nonfat milk is 0%. Fat helps stabilize the structure of microfoam — a microfoam made with whole milk will be creamier and more luscious, while nonfat milk creates a slightly drier, stiffer foam. Both can be used to create latte art with practice." },
+  { q: "What is the 'pin drop' technique in latte art pouring?", opts: ["Using a toothpick to draw designs in the foam after pouring", "Starting the pour with a thin, concentrated stream aimed at the deepest part of the espresso so the milk cleanly dives under the surface before being raised to create surface designs", "Dropping a small amount of espresso into the milk pitcher to check temperature", "A technique specific to flat white preparation only"], answer: 1, feedback: "The 'pin drop' technique refers to starting the pour with a thin stream aimed into the deepest part of the espresso — the milk cleanly dives under the surface without splashing. Once the cup is 50–60% full and the milk has integrated with the espresso, the pitcher is raised slightly and widened to bring the foam to the surface where it creates the design." },
+  { q: "Where was the first beverage decorated with the iconic rosetta latte art design poured?", opts: ["A café in Milan, Italy", "Starbucks' original Pike Place Market store in 1987", "Espresso Vivace in Seattle, Washington, in 1992", "A café in Melbourne, Australia, in the early 1990s"], answer: 2, feedback: "The first beverage decorated with the iconic rosetta design was poured at Espresso Vivace in Seattle in 1992. The rosetta — resembling a fern or leaf — remains one of the most iconic and technically challenging latte art designs." },
+  { q: "What does 'free pour' latte art mean?", opts: ["Latte art created without charging the customer extra", "Designs created by controlling the flow and direction of milk directly from the pitcher — without any etching tools — relying entirely on pouring technique and milk texture", "Pouring milk into the espresso without any specific technique", "Latte art designs created using pre-made foam templates"], answer: 1, feedback: "Free pour latte art refers to designs created by controlling the flow and direction of the milk directly from the steaming pitcher — without any etching tools or templates. The barista relies entirely on pouring technique, milk texture, flow rate, and pitcher movement to create designs." },
+  { q: "Why does milk scalding (above 170°F/77°C) negatively affect flavor?", opts: ["The lactose content increases dramatically above this temperature", "Heat causes denaturation of proteins and breakdown of lactose — creating cooked milk flavors that taste bitter, scorched, and sulfuric rather than sweet and creamy", "The milk separates into cream and skim layers when overheated", "Above 170°F, milk can no longer create any foam at all"], answer: 1, feedback: "When milk is heated above 170°F (77°C), proteins denature and aggregate, lactose begins breaking down (reducing sweetness), and Maillard-like reactions create cooked, scorched, and sulfuric flavor compounds. The result is milk that tastes bitter, burnt, and unpleasant — destroying the sweet, creamy character that makes steamed milk delicious." },
+  { q: "What is the purpose of 'stretching' milk during steaming?", opts: ["To increase the volume of milk to serve more customers with each pitcher", "To incorporate a specific amount of air into the milk before proteins denature — creating the microfoam necessary for latte art and a creamy texture", "To heat the milk to the correct temperature more quickly", "To homogenize the milk fat with the rest of the liquid"], answer: 1, feedback: "Stretching refers to the phase of steaming where air is incorporated into the milk — before the proteins begin to denature around 100°F (38°C). The steam wand is positioned at the surface of the milk to draw in controlled amounts of air. This stretching phase is what creates the microfoam structure necessary for latte art and the velvety texture of a well-made latte." },
+
+  // BREWING (Q41-50)
+  { q: "What is the Starbucks recommended brew ratio?", opts: ["12:1 (water to coffee)", "16:1 (water to coffee)", "18:1 (water to coffee)", "22:1 (water to coffee)"], answer: 2, feedback: "Starbucks recommends an 18:1 brew ratio — 6 fl oz of water for every 2 tablespoon scoop (10g) of coffee. Across the coffee industry, ratios between 16:1 and 18:1 result in a pleasant strength agreeable to most customers." },
+  { q: "Why does Starbucks wait one week after roasting before recommending coffee for brewing?", opts: ["To allow time for quality inspection", "To let packaging gases escape before opening", "Freshly roasted coffee releases so many built-up gases when wetted that it's difficult to extract properly — flavors need time to develop", "Store logistics require at least a week of transit"], answer: 2, feedback: "Coffee that is too fresh is actually problematic for brewing — the naturally built-up gases rush out when wetted, making it hard to extract the right flavor compounds. Waiting one week after roasting gives time for off-gassing and allows flavors to fully develop." },
+  { q: "What does turbulence do to extraction?", opts: ["It decreases extraction", "It has no effect on extraction", "It increases extraction — excessive turbulence can lead to over-extraction", "It only affects aroma, not extraction"], answer: 2, feedback: "Turbulence is the mixing action as water passes over and through coffee — and it increases extraction. Following correct brewing technique is essential. When using the pour-over method, a steady, even stream generates just the right amount of turbulence without over-agitating." },
+  { q: "What are the 'Four Fundamentals' of brewing great coffee at Starbucks?", opts: ["Origin, roast, grind, water", "Proportion, grind, water, freshness", "Temperature, time, turbulence, ratio", "Coffee, filter, temperature, timing"], answer: 1, feedback: "The Four Fundamentals of great coffee are Proportion, Grind, Water, and Freshness. These four variables, when properly calibrated together, determine the quality of every cup. Changing any one of them changes the resulting cup — understanding them gives a barista the diagnostic tools to troubleshoot and improve any brewing method." },
+  { q: "What is the 'bloom' in pour-over brewing and why does it matter?", opts: ["The visual pattern created on top of the coffee bed during brewing", "An initial small pour of hot water that pre-wets the grounds and allows CO₂ to escape before the full extraction pour", "The crema-like layer that forms on top of pour-over coffee", "The period after brewing when the coffee's flavors continue to develop in the server"], answer: 1, feedback: "The bloom (also called the pre-infusion) is an initial small pour of hot water — typically about twice the weight of the coffee — that pre-wets the grounds and allows CO₂ to escape for 30–45 seconds before the main extraction pour begins. If you skip the bloom, CO₂ escaping during brewing creates an uneven bed and inconsistent extraction. A good bloom indicates fresh coffee." },
+  { q: "What is the ideal water temperature for brewing coffee?", opts: ["185°–190°F (85°–88°C)", "195°–205°F (91°–96°C)", "210°–212°F (99°–100°C)", "170°–180°F (77°–82°C)"], answer: 1, feedback: "The ideal water temperature for brewing coffee is 195°–205°F (91°–96°C) — just below boiling. Water that is too cold will under-extract the coffee, while water that is too hot will over-extract and produce harsh, bitter flavors." },
+  { q: "What happens to coffee flavor when the grind is too fine for a given brewing method?", opts: ["The coffee under-extracts, producing sour, weak flavors", "The coffee over-extracts, producing bitter, harsh, and astringent flavors because water moves too slowly through the fine grounds, dissolving undesirable compounds", "The flavor becomes sweeter and more complex", "Grind size only affects brewing speed, not flavor"], answer: 1, feedback: "When the grind is too fine for a given brewing method, water moves too slowly through the grounds, spending too much time in contact with the coffee and dissolving too many compounds — including the undesirable bitter, harsh, and astringent ones that extract last. This produces over-extracted, bitter, dry coffee." },
+  { q: "Why is using freshly ground coffee important rather than pre-ground?", opts: ["Pre-ground coffee is cheaper and less convenient", "Freshly ground coffee is more visually appealing to customers", "Grinding just before brewing preserves volatile aromatic compounds that escape rapidly from ground coffee — pre-ground coffee loses its most delicate flavors within minutes of grinding", "Pre-ground coffee brews unevenly due to inconsistent particle sizes"], answer: 2, feedback: "Grinding just before brewing is essential because volatile aromatic compounds — responsible for coffee's complex aroma and most of its flavor — escape rapidly from ground coffee. The vastly increased surface area of ground coffee accelerates oxidation and off-gassing. Even the highest quality coffee loses a significant portion of its delicate flavor within minutes of grinding." },
+  { q: "What distinguishes French press coffee's mouthfeel from drip-filtered coffee?", opts: ["French press coffee is always weaker than drip coffee", "French press coffee has a heavier, oilier, more full-bodied mouthfeel because metal mesh filters allow oils and fine particles to pass into the cup; paper filters in drip brewing absorb most oils and trap fine particles", "Both methods produce identical mouthfeel", "French press coffee has lighter mouthfeel because the grounds remain at the bottom"], answer: 1, feedback: "French press coffee has a distinctively heavy, oily, and full-bodied mouthfeel compared to drip-filtered coffee. This is because the metal mesh plunger filter allows coffee oils and fine particles to pass into the cup. Paper filters in drip brewing absorb most of the oils and trap fine particles, producing a cleaner, lighter-bodied cup." },
+  { q: "What is 'contact time' in brewing and how does it affect extraction?", opts: ["The time from when the barista starts brewing to when the customer receives the cup", "The duration that water is in contact with ground coffee during brewing — longer contact time increases extraction; finding the ideal contact time for each method and grind size is critical", "The time coffee can sit on a warming plate before it degrades", "The time needed for a new bag of coffee to off-gas before optimal brewing"], answer: 1, feedback: "Contact time is the duration that water is in contact with ground coffee during brewing. Longer contact time increases extraction — all else being equal. Each brewing method has a different optimal contact time: espresso extracts in 25–30 seconds at nine bars of pressure, while cold brew steeps for 12–24 hours. Grind size and contact time must be calibrated together." }
 ];
 
-function showStep(btn, idx) {
-  document.querySelectorAll('.step-tab').forEach(t => t.classList.remove('active'));
-  btn.classList.add('active');
-  const d = stepContent[idx];
-  document.getElementById('stepDetail').innerHTML = `<h4>${d.title}</h4><p>${d.text}</p>`;
-}
+// Shuffle practice questions
+quizzes['quizPractice'] = { questions: [...practiceQuestions].sort(() => Math.random() - 0.5) };
 
-// ──────────────────────────────────────────
-// TROUBLE CARDS
-// ──────────────────────────────────────────
-function toggleTrouble(el) {
-  el.classList.toggle('open');
-}
-
-// ──────────────────────────────────────────
-// LATTE DESIGN CARDS
-// ──────────────────────────────────────────
-function toggleDesign(el) {
-  const wasOpen = el.classList.contains('active');
-  document.querySelectorAll('.design-card').forEach(c => c.classList.remove('active'));
-  if (!wasOpen) el.classList.add('active');
-}
-
-// ──────────────────────────────────────────
-// EXTRACTION ZONES
-// ──────────────────────────────────────────
-const extData = {
-  under: 'Under-extracted coffee tastes <strong>sour, vegetal, and underdeveloped</strong> — not enough favorable compounds have been dissolved. This happens when brewing is too short, grind is too coarse, water is too cold, or the coffee-to-water ratio is too low. Think of a coffee press left to brew for only two minutes.',
-  ideal: 'The sweet spot: <strong>18–22% extraction</strong>. Flavors are balanced and sweet, with pleasant acidity and no harsh bitterness. This is the target range that Starbucks R&D validates with both refractometers and sensory analysis. Following Starbucks brewing recipes in-store is designed to hit this window every single time.',
-  over: 'Over-extracted coffee tastes <strong>bitter, harsh, astringent, and dry on the finish</strong> — too many compounds have been dissolved, including the unpleasant ones extracted last. This happens when brewing is too long, grind is too fine, water is too hot, or the ratio is too high. Think of a coffee press forgotten for 10 minutes.'
-};
-
-function showExtZone(el, zone) {
-  document.getElementById('extDesc').innerHTML = extData[zone];
-}
-
-// ──────────────────────────────────────────
-// BREW VARIABLES
-// ──────────────────────────────────────────
-function toggleBvar(el) {
-  el.classList.toggle('open');
-}
-
-// ──────────────────────────────────────────
-// QUIZZES
-// ──────────────────────────────────────────
-const quizzes = {
-  quiz1: {
-    questions: [
-      {
-        q: "What are the four steps of coffee tasting at Starbucks?",
-        opts: ["Sip, taste, swallow, describe", "Smell, slurp, locate, describe", "Smell, taste, think, share", "Look, smell, sip, compare"],
-        answer: 1,
-        feedback: "Correct! The four steps are Smell → Slurp → Locate → Describe. This framework breaks down the tasting process and helps you experience aroma, flavor, body, and acidity by isolating one component at a time."
-      },
-      {
-        q: "What is the difference between someone's sensory skills today and those of a professional coffee taster?",
-        opts: ["Natural talent — some people are born with better palates", "Genetics — taste receptors vary significantly between people", "Simply a matter of experience and practice", "Only professionals can develop true sensory awareness"],
-        answer: 2,
-        feedback: "Correct! No matter your age or background, you have the same essential tasting mechanism as every other human. The difference between your sensory skills today and those of a professional coffee taster is simply experience."
-      },
-      {
-        q: "Why does Starbucks encourage baristas to use the Coffee Passport?",
-        opts: ["It's required by corporate policy", "To track hours spent in tastings", "To capture personal impressions and document sensory journeys over time", "To compare notes with other baristas"],
-        answer: 2,
-        feedback: "The Coffee Passport is part guide, part journal. It's your personal record of coffee tastings — capturing who you were as a coffee lover, who you are now, and where you're headed. There's no right or wrong approach, as long as you're recording your experiences."
-      }
-    ]
-  },
-  quiz2: {
-    questions: [
-      {
-        q: "What is flavor, technically?",
-        opts: ["Only what you taste on your tongue", "Only the aroma of the coffee", "How your brain synthesizes taste and aroma together", "The mouthfeel and body of the coffee"],
-        answer: 2,
-        feedback: "Flavor is how our brains synthesize aromas and tastes into a combined, overall experience. This is why pinching your nose eliminates most of what we call 'flavor' — you're disconnecting the aroma half of the equation."
-      },
-      {
-        q: "Which taste is associated with under-extracted coffee?",
-        opts: ["Bitter", "Sweet", "Sour", "Umami"],
-        answer: 2,
-        feedback: "Under-extracted coffee tastes sour. Over-extracted coffee tastes bitter. Knowing this distinction is one of the most practical diagnostic tools a barista can have."
-      },
-      {
-        q: "What is retronasal olfaction?",
-        opts: ["Smelling coffee before you drink it", "The process of smelling from inside the mouth through the nasal-oral airway", "The ability to detect aromas with eyes closed", "A technique for professional coffee tasters only"],
-        answer: 1,
-        feedback: "The retronasal passage connects your nasal and oral cavities, allowing aromatic compounds to be 'smelled' from your mouth. This is extremely important because it helps make the perception of flavor possible — and it's why proper slurping technique matters!"
-      }
-    ]
-  },
-  quiz3: {
-    questions: [
-      {
-        q: "What are the Four Ms of Espresso?",
-        opts: ["Machine, Method, Measure, Moisture", "Miscela, Macinazione, Macchina, Mano", "Mix, Microgrind, Monitor, Make", "Medium, Micro, Macro, Measure"],
-        answer: 1,
-        feedback: "Miscela (coffee), Macinazione (grinder), Macchina (machine), Mano (barista's hand). Each element is named in Italian because espresso culture was born there. Together, they form the well-choreographed dance of pulling a perfect shot."
-      },
-      {
-        q: "How many bars of pressure does an espresso machine use?",
-        opts: ["2 bars", "5 bars", "9 bars", "15 bars"],
-        answer: 2,
-        feedback: "Modern espresso machines create nine bars of pressure. The earliest machines in 1884 created fewer than two bars — which is why early espresso was often over-extracted and bitter, with no appealing crema."
-      },
-      {
-        q: "Why must espresso be served immediately after pulling?",
-        opts: ["It gets too cold quickly", "The flavor changes and crema dissipates with every passing moment", "The machine needs to reset", "Milk won't adhere to old espresso"],
-        answer: 1,
-        feedback: "The blossoming of a perfect espresso is intense and satisfying but also short-lived. With every passing moment, the flavor changes and the crema dissipates. The skilled barista knows that a quick, smooth, and efficient process yields the most consistent results."
-      }
-    ]
-  },
-  quiz4: {
-    questions: [
-      {
-        q: "Why must you aerate milk BEFORE steaming it to the final temperature?",
-        opts: ["For better flavor development", "Because proteins denature above ~100°F (38°C) and can no longer be smoothly incorporated into foam", "To save time during steaming", "Because hot milk aerates faster"],
-        answer: 1,
-        feedback: "At around 100°F (38°C), the proteins inside milk begin to denature — they lose their original structure. Once this happens, air can no longer be smoothly combined into the foam. If you keep aerating past this point, you'll end up with large, stubborn air bubbles that refuse to be incorporated."
-      },
-      {
-        q: "What is the ideal steaming temperature for adults?",
-        opts: ["100°–120°F (38°–49°C)", "130°–140°F (54°–60°C)", "150°–170°F (66°–77°C)", "180°–190°F (82°–88°C)"],
-        answer: 2,
-        feedback: "The ideal steaming temperature for adults is 150°–170°F (66°–77°C). At this temperature, lactose tastes at its sweetest without the unpleasant flavor compounds that appear when milk scalds above this range."
-      },
-      {
-        q: "What causes 'ghosting' in latte art?",
-        opts: ["Incorrect milk temperature", "Pouring too aggressively or hitting the side of the cup, causing milk to splash", "Using nonfat milk instead of whole milk", "Pouring too slowly"],
-        answer: 1,
-        feedback: "Ghosting — beige splotches instead of crisp white-on-brown contrast — is caused by pouring too aggressively or hitting the side of the cup, causing milk to splash. The solution is to use the 'pin drop' technique: pour a thin stream into the deepest part of the espresso so the milk cleanly dives under the surface."
-      }
-    ]
-  },
-  quiz5: {
-    questions: [
-      {
-        q: "What is the Starbucks recommended brew ratio?",
-        opts: ["12:1 (water to coffee)", "16:1 (water to coffee)", "18:1 (water to coffee)", "22:1 (water to coffee)"],
-        answer: 2,
-        feedback: "Starbucks recommends an 18:1 brew ratio — 6 fl oz of water for every 2 tablespoon scoop (10g) of coffee. Across the coffee industry, ratios between 16:1 and 18:1 result in a pleasant strength agreeable to most customers."
-      },
-      {
-        q: "Why does Starbucks wait one week after roasting before recommending coffee for brewing?",
-        opts: ["To allow time for quality inspection", "To let packaging gases escape before opening", "Freshly roasted coffee releases so many built-up gases when wetted that it's difficult to extract properly — flavors need time to develop", "Store logistics require at least a week of transit"],
-        answer: 2,
-        feedback: "Coffee that is too fresh is actually problematic for brewing — the naturally built-up gases rush out when wetted, making it hard to extract the right flavor compounds. Waiting one week after roasting gives time for off-gassing and allows flavors to fully develop."
-      },
-      {
-        q: "What does turbulence do to extraction?",
-        opts: ["It decreases extraction", "It has no effect on extraction", "It increases extraction — excessive turbulence can lead to over-extraction", "It only affects aroma, not extraction"],
-        answer: 2,
-        feedback: "Turbulence is the mixing action as water passes over and through coffee — and it increases extraction. Following correct brewing technique is essential. When using the pour-over method, a steady, even stream generates just the right amount of turbulence without over-agitating."
-      }
-    ]
-  }
-};
-
-function buildQuiz(containerId, quizKey) {
-  const container = document.getElementById(containerId);
-  if (!container) return;
-  const quiz = quizzes[quizKey];
-  let current = 0;
-  let score = 0;
-  let answered = false;
-
-  function render() {
-    if (current >= quiz.questions.length) {
-      container.innerHTML = `
-        <div class="quiz-wrap">
-          <div class="quiz-label">Chapter Quiz Complete</div>
-          <div class="quiz-score show">
-            <div class="score-num">${score}/${quiz.questions.length}</div>
-            <div class="score-label">Questions Correct</div>
-            <p style="margin-top:1rem;font-size:14px;color:var(--muted);">${
-              score === quiz.questions.length ? 'Perfect score — you truly know your craft!' :
-              score >= quiz.questions.length - 1 ? 'Excellent — almost there!' :
-              'Good effort! Review the chapter material and try again.'
-            }</p>
-          </div>
-        </div>`;
-      return;
-    }
-    const q = quiz.questions[current];
-    answered = false;
-    container.innerHTML = `
-      <div class="quiz-wrap">
-        <div class="quiz-label">Chapter Quiz</div>
-        <div class="quiz-progress">Question ${current + 1} of ${quiz.questions.length}</div>
-        <div class="quiz-q">${q.q}</div>
-        <div class="quiz-options">
-          ${q.opts.map((o, i) => `<button class="quiz-opt" onclick="answerQ(this, ${i}, ${q.answer}, '${quizKey}', ${current})">${o}</button>`).join('')}
-        </div>
-        <div class="quiz-feedback" id="qfeedback_${quizKey}"></div>
-        <button class="quiz-next" id="qnext_${quizKey}" onclick="nextQ('${quizKey}')">Next →</button>
-      </div>`;
-  }
-
-  window['quizState_' + quizKey] = { current: () => current, increment: () => { current++; }, addScore: () => { score++; }, render };
-  render();
-}
-
+// ── QUIZ ENGINE ──────────────────────────────────────────────
 function answerQ(btn, chosen, correct, key, qIdx) {
   const state = window['quizState_' + key];
   if (!state) return;
@@ -1866,12 +1732,151 @@ function nextQ(key) {
   state.render();
 }
 
-// Build all quizzes
+function buildQuiz(containerId, quizKey) {
+  const container = document.getElementById(containerId);
+  if (!container || !quizzes[quizKey]) return;
+  const quiz = quizzes[quizKey];
+  let current = 0, score = 0;
+  const isPractice = containerId === 'quizPractice';
+  const label = isPractice ? 'Practice Quiz — 50 Questions' : 'Chapter Quiz — 10 Questions';
+
+  function render() {
+    if (current >= quiz.questions.length) {
+      const pct = Math.round((score / quiz.questions.length) * 100);
+      const msg = pct === 100 ? "Perfect score — you truly know your craft!" :
+                  pct >= 80 ? 'Excellent work!' :
+                  pct >= 60 ? 'Good effort! Review the chapter material and try again.' :
+                  "Keep studying — you've got this!";
+      const retakeFn = isPractice ? 'resetPracticeQuiz()' : `retakeChapterQuiz('${containerId}', '${quizKey}')`;
+      container.innerHTML = `
+        <div class="quiz-wrap">
+          <div class="quiz-label">${isPractice ? 'Practice Quiz Complete' : 'Chapter Quiz Complete'}</div>
+          <div class="quiz-score show">
+            <div class="score-num">${score}/${quiz.questions.length}</div>
+            <div class="score-label">Questions Correct — ${pct}%</div>
+            <p style="margin-top:1rem;font-size:14px;color:var(--muted);">${msg}</p>
+            <button class="quiz-next show" style="margin-top:1rem" onclick="${retakeFn}">↺ New Random Quiz</button>
+          </div>
+        </div>`;
+      return;
+    }
+    const q = quiz.questions[current];
+    container.innerHTML = `
+      <div class="quiz-wrap">
+        <div class="quiz-label">${label}</div>
+        <div class="quiz-progress">Question ${current + 1} of ${quiz.questions.length}</div>
+        <div class="quiz-q">${q.q}</div>
+        <div class="quiz-options">
+          ${q.opts.map((o, i) => `<button class="quiz-opt" onclick="answerQ(this, ${i}, ${q.answer}, '${containerId}', ${current})">${o}</button>`).join('')}
+        </div>
+        <div class="quiz-feedback" id="qfeedback_${containerId}"></div>
+        <button class="quiz-next" id="qnext_${containerId}" onclick="nextQ('${containerId}')">Next →</button>
+      </div>`;
+  }
+
+  window['quizState_' + containerId] = { current: () => current, increment: () => { current++; }, addScore: () => { score++; }, render };
+  render();
+}
+
+function retakeChapterQuiz(containerId, quizKey) {
+  const chKey = { quiz1: 'ch1', quiz2: 'ch2', quiz3: 'ch3', quiz4: 'ch4', quiz5: 'ch5' }[quizKey];
+  quizzes[quizKey] = { questions: pickRandom(chapterPools[chKey], 10) };
+  buildQuiz(containerId, quizKey);
+}
+
+function resetPracticeQuiz() {
+  quizzes['quizPractice'] = { questions: [...practiceQuestions].sort(() => Math.random() - 0.5) };
+  buildQuiz('quizPractice', 'quizPractice');
+}
+
+// ── CHAPTER NAVIGATION ──────────────────────────────────────
+let currentChapter = 0;
+const totalChapters = 7;
+
+function showChapter(idx) {
+  document.querySelectorAll('.chapter').forEach((c, i) => {
+    c.classList.toggle('active', i === idx);
+  });
+  document.querySelectorAll('.chapter-btn').forEach((b, i) => {
+    b.classList.toggle('active', i === idx);
+  });
+  currentChapter = idx;
+  const pct = Math.round(((idx + 1) / totalChapters) * 100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressPct').textContent = pct + '%';
+  document.getElementById('progressLabel').textContent = 'Chapter ' + (idx + 1) + ' of ' + totalChapters;
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+// ── INTERACTIVE FEATURES (preserved from original) ──────────
+function toggleAcc(el) { el.classList.toggle('open'); }
+function toggleTaste(el) {
+  const wasOpen = el.classList.contains('active');
+  document.querySelectorAll('.taste-card').forEach(c => c.classList.remove('active'));
+  if (!wasOpen) el.classList.add('active');
+}
+
+const flavorData = {
+  sweet: { title: 'Sweet', desc: 'The sweet aromatics in coffee come from caramelized sugars developed during roasting. Sweet coffee can express vanilla, brown sugar, honey, caramel, maple syrup, or molasses.', tags: ['Vanilla', 'Brown Sugar', 'Honey', 'Caramelized', 'Maple Syrup', 'Molasses'] },
+  floral: { title: 'Floral', desc: 'A sweet, light, slightly fragrant aromatic associated with fresh flowers. Floral coffees may evoke chamomile, rose, or jasmine — especially in washed African coffees from Ethiopia and Kenya.', tags: ['Chamomile', 'Rose', 'Jasmine', 'Black Tea'] },
+  fruity: { title: 'Fruity', desc: 'A sweet, floral, aromatic blend of a variety of ripe fruits. Fruity coffees span from bright berries to tropical notes to citrus — often found in natural-processed coffees or high-altitude origins.', tags: ['Blackberry', 'Raspberry', 'Blueberry', 'Strawberry', 'Raisin', 'Cherry', 'Grapefruit', 'Orange', 'Lemon', 'Lime', 'Pineapple', 'Peach'] },
+  sour: { title: 'Sour / Fermented', desc: 'Sour notes can be desirable (bright acidity from citric, malic acid) or undesirable (vinegar-like acetic acid, butyric acid from over-fermentation). Under-extracted coffee tastes sour.', tags: ['Acetic Acid', 'Citric Acid', 'Malic Acid', 'Winey', 'Fermented', 'Overripe'] },
+  green: { title: 'Green / Vegetative', desc: 'An aromatic characteristic of fresh, plant-based material. These notes are generally considered defects in roasted coffee — they suggest under-roasting or processing problems.', tags: ['Olive Oil', 'Under-Ripe', 'Peapod', 'Fresh', 'Hay-Like', 'Herb-Like', 'Beany'] },
+  nutty: { title: 'Nutty / Cocoa', desc: 'A slightly sweet, brown, woody, oily, and sometimes bitter aromatic. Nutty and cocoa notes are very common in medium-roasted Latin American coffees — think Pike Place® Roast.', tags: ['Dark Chocolate', 'Chocolate', 'Cocoa', 'Almond', 'Hazelnut', 'Peanuts'] },
+  spices: { title: 'Spices', desc: 'The sweet, brown aromatic associated with spices. Brown spice notes appear more commonly in darker roasts. Pepper gives a sharp, physically penetrating sensation in the nasal cavity.', tags: ['Brown Spice', 'Clove', 'Cinnamon', 'Nutmeg', 'Anise', 'Pepper', 'Pungent'] },
+  roasted: { title: 'Roasted', desc: 'Dark brown impression characteristics of products cooked by dry heat to a high temperature. Roasted notes include cereal, malt, smoke, ash, and tobacco — common in dark-roasted coffees.', tags: ['Cereal', 'Grain', 'Malt', 'Smoky', 'Ashy', 'Burnt', 'Tobacco'] }
+};
+
+function showFlavor(btn, key) {
+  document.querySelectorAll('.flavor-cat-btn').forEach(b => b.classList.remove('active'));
+  btn.classList.add('active');
+  const d = flavorData[key];
+  document.getElementById('flavorPanel').innerHTML = `<h4>${d.title}</h4><p>${d.desc}</p><div class="flavor-tags">${d.tags.map(t => `<span class="flavor-tag">${t}</span>`).join('')}</div>`;
+}
+
+function toggleM(el) {
+  const wasOpen = el.classList.contains('open');
+  document.querySelectorAll('.m-card').forEach(c => c.classList.remove('open'));
+  if (!wasOpen) el.classList.add('open');
+}
+
+const stepContent = [
+  { title: 'Grind', text: 'Fresh beans are finely ground to the correct particle size <em>immediately before brewing</em>. For the Black Eagle & Mythos, stainless-steel flat burrs grind consistently — the barista sets particle size by watching shot time and tasting, making stepless micro-adjustments. For the Mastrena® & Mastrena® II, a computerized system monitors shot time and automatically adjusts the burr distance to correct particle size for optimum extraction.' },
+  { title: 'Dose', text: 'The correct amount of coffee is measured out and evenly distributed. For the Black Eagle, the barista doses freshly ground coffee into the portafilter basket using a scale to set the correct grind time. Precision portafilter baskets with laser-cut holes create consistency in extraction and water flow even at peak volume. For the Mastrena®, the perfect amount is automatically ground to order, dosed, and distributed into a temperature-controlled brew chamber.' },
+  { title: 'Tamp', text: 'The ground coffee is evenly compressed to ensure uniformity in extraction. For the Black Eagle, the barista uses a tamper to ergonomically and evenly compress the coffee. The specific Starbucks tamper was selected because when the portafilter basket is filled with the correct dose, this tamper creates consistent taste in cup. For the Mastrena®, a mechanical piston tamps the bed of coffee with even pressure, monitoring resistance to create a repeatable tamp.' },
+  { title: 'Brew', text: 'Under pressure, hot water is forced through the puck of coffee to extract a full-bodied and sweet shot. A volumetric water-flow system regulates the correct amount of water to start and stop each pull. A slow pre-infusion evenly saturates the bed of coffee to prepare for extraction. Consistent water temperature is ensured throughout the brew process. The perfectly flowing shot should resemble warm honey pouring from a spoon.' }
+];
+
+function showStep(btn, idx) {
+  document.querySelectorAll('.step-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  const d = stepContent[idx];
+  document.getElementById('stepDetail').innerHTML = `<h4>${d.title}</h4><p>${d.text}</p>`;
+}
+
+function toggleTrouble(el) { el.classList.toggle('open'); }
+function toggleDesign(el) {
+  const wasOpen = el.classList.contains('active');
+  document.querySelectorAll('.design-card').forEach(c => c.classList.remove('active'));
+  if (!wasOpen) el.classList.add('active');
+}
+
+const extData = {
+  under: 'Under-extracted coffee tastes <strong>sour, vegetal, and underdeveloped</strong> — not enough favorable compounds have been dissolved. This happens when brewing is too short, grind is too coarse, water is too cold, or the coffee-to-water ratio is too low.',
+  ideal: 'The sweet spot: <strong>18–22% extraction</strong>. Flavors are balanced and sweet, with pleasant acidity and no harsh bitterness. This is the target range that Starbucks R&D validates with both refractometers and sensory analysis.',
+  over: 'Over-extracted coffee tastes <strong>bitter, harsh, astringent, and dry on the finish</strong> — too many compounds have been dissolved, including the unpleasant ones extracted last. This happens when brewing is too long, grind is too fine, water is too hot, or the ratio is too high.'
+};
+
+function showExtZone(el, zone) { document.getElementById('extDesc').innerHTML = extData[zone]; }
+function toggleBvar(el) { el.classList.toggle('open'); }
+
+// ── INITIALIZE ───────────────────────────────────────────────
 buildQuiz('quiz1', 'quiz1');
 buildQuiz('quiz2', 'quiz2');
 buildQuiz('quiz3', 'quiz3');
 buildQuiz('quiz4', 'quiz4');
 buildQuiz('quiz5', 'quiz5');
+buildQuiz('quizPractice', 'quizPractice');
 </script>
 </body>
 </html>
