@@ -1,0 +1,1407 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Starbucks Coffee Academy — Complete Coffee Guide</title>
+<style>
+  @import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Libre+Baskerville:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap');
+
+  :root {
+    --cream: #F5F0E8;
+    --espresso: #2C1A0E;
+    --roast: #6B3A1F;
+    --caramel: #C47A2B;
+    --gold: #E8A93A;
+    --muted: #7A5C3A;
+    --border: rgba(107,58,31,0.2);
+    --card: #FFFDF8;
+    --green: #1E3932;
+    --green-light: #00704A;
+    --text: #1A1008;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: 'DM Sans', sans-serif; background: var(--cream); color: var(--text); }
+
+  .hero { background: var(--espresso); color: var(--cream); padding: 4rem 2rem 3rem; text-align: center; position: relative; overflow: hidden; }
+  .hero::before { content: ''; position: absolute; top: -60px; left: 50%; transform: translateX(-50%); width: 500px; height: 500px; border-radius: 50%; background: radial-gradient(circle, rgba(196,122,43,0.15) 0%, transparent 70%); pointer-events: none; }
+  .hero-badge { display: inline-block; font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--gold); border: 1px solid rgba(232,169,58,0.4); padding: 6px 16px; border-radius: 2px; margin-bottom: 1.5rem; }
+  .hero h1 { font-family: 'Playfair Display', serif; font-size: clamp(2rem, 5vw, 3.5rem); font-weight: 400; line-height: 1.15; margin-bottom: 1rem; }
+  .hero h1 em { color: var(--gold); font-style: italic; }
+  .hero p { font-size: 1rem; color: rgba(245,240,232,0.7); max-width: 600px; margin: 0 auto 2rem; line-height: 1.7; }
+  .progress-bar-wrap { max-width: 400px; margin: 0 auto; }
+  .progress-label { display: flex; justify-content: space-between; font-size: 12px; color: rgba(245,240,232,0.5); margin-bottom: 8px; }
+  .progress-track { height: 3px; background: rgba(245,240,232,0.15); border-radius: 2px; overflow: hidden; }
+  .progress-fill { height: 100%; background: var(--gold); border-radius: 2px; transition: width 0.5s ease; }
+
+  .chapter-nav { background: var(--espresso); border-top: 1px solid rgba(245,240,232,0.08); overflow-x: auto; scrollbar-width: none; position: sticky; top: 0; z-index: 100; text-align: center; }
+  .chapter-nav-inner { display: inline-flex; padding: 0 1.5rem; }
+  .chapter-nav::-webkit-scrollbar { display: none; }
+  .chapter-btn { flex-shrink: 0; padding: 14px 16px; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: rgba(245,240,232,0.45); background: none; border: none; border-bottom: 2px solid transparent; cursor: pointer; font-family: 'DM Sans', sans-serif; transition: all 0.2s; white-space: nowrap; }
+  .chapter-btn:hover { color: rgba(245,240,232,0.8); }
+  .chapter-btn.active { color: var(--gold); border-bottom-color: var(--gold); }
+
+  .content { max-width: 860px; margin: 0 auto; padding: 3rem 1.5rem 6rem; }
+  .chapter { display: none; }
+  .chapter.active { display: block; animation: fadeIn 0.4s ease; }
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(12px); } to { opacity: 1; transform: translateY(0); } }
+
+  .chapter-header { margin-bottom: 2.5rem; padding-bottom: 1.5rem; border-bottom: 1px solid var(--border); }
+  .chapter-num { font-size: 11px; letter-spacing: 3px; text-transform: uppercase; color: var(--caramel); margin-bottom: 0.5rem; }
+  .chapter-header h2 { font-family: 'Playfair Display', serif; font-size: clamp(1.6rem, 4vw, 2.4rem); font-weight: 400; color: var(--espresso); line-height: 1.2; }
+  .chapter-header .subtitle { font-family: 'Libre Baskerville', serif; font-style: italic; color: var(--muted); margin-top: 0.5rem; font-size: 1rem; }
+
+  .prose { font-size: 16px; line-height: 1.8; color: #2a1a0a; }
+  .prose p { margin-bottom: 1.25rem; }
+  .prose strong { font-weight: 500; color: var(--roast); }
+
+  .callout { background: var(--espresso); color: var(--cream); padding: 1.5rem 2rem; border-radius: 4px; margin: 2rem 0; position: relative; overflow: hidden; }
+  .callout::before { content: '\201C'; font-family: 'Playfair Display', serif; font-size: 5rem; color: rgba(232,169,58,0.2); position: absolute; top: -10px; left: 10px; line-height: 1; }
+  .callout p { font-family: 'Libre Baskerville', serif; font-style: italic; font-size: 1.05rem; line-height: 1.7; position: relative; z-index: 1; color: rgba(245,240,232,0.9); }
+  .callout cite { display: block; font-size: 12px; letter-spacing: 1px; text-transform: uppercase; color: var(--gold); margin-top: 0.75rem; font-style: normal; }
+
+  .fact-box { background: var(--card); border: 1px solid var(--border); border-left: 3px solid var(--caramel); border-radius: 4px; padding: 1.25rem 1.5rem; margin: 1.5rem 0; font-size: 15px; line-height: 1.7; color: var(--roast); }
+  .fact-box .fact-label { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--caramel); margin-bottom: 0.5rem; font-weight: 500; }
+
+  .section-heading { font-family: 'Playfair Display', serif; font-size: 1.3rem; font-weight: 600; color: var(--espresso); margin: 2.5rem 0 1rem; padding-bottom: 0.5rem; border-bottom: 1px solid var(--border); }
+
+  .accordion { margin: 1.5rem 0; }
+  .acc-item { border: 1px solid var(--border); border-radius: 6px; overflow: hidden; margin-bottom: 0.75rem; background: var(--card); transition: box-shadow 0.2s; }
+  .acc-item:hover { box-shadow: 0 2px 12px rgba(44,26,14,0.07); }
+  .acc-header { display: flex; align-items: center; gap: 1rem; padding: 1rem 1.25rem; cursor: pointer; user-select: none; }
+  .acc-icon { width: 34px; height: 34px; border-radius: 50%; background: var(--espresso); color: var(--gold); display: flex; align-items: center; justify-content: center; font-size: 15px; flex-shrink: 0; }
+  .acc-title { font-weight: 500; font-size: 15px; flex: 1; }
+  .acc-arrow { font-size: 12px; color: var(--muted); transition: transform 0.2s; }
+  .acc-item.open .acc-arrow { transform: rotate(180deg); }
+  .acc-body { display: none; padding: 0 1.25rem 1.25rem; font-size: 14px; color: #4a2e16; line-height: 1.75; border-top: 1px solid var(--border); padding-top: 1rem; }
+  .acc-item.open .acc-body { display: block; }
+
+  .steps-list { display: grid; gap: 0.75rem; margin: 1.5rem 0; }
+  .step-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; display: flex; gap: 1rem; align-items: flex-start; }
+  .step-num { width: 36px; height: 36px; border-radius: 50%; background: var(--espresso); color: var(--gold); display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 600; flex-shrink: 0; min-width: 36px; }
+  .step-body h4 { font-weight: 500; font-size: 15px; margin-bottom: 0.25rem; color: var(--espresso); }
+  .step-body p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  .values-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+  .value-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; cursor: pointer; transition: all 0.2s; }
+  .value-card:hover { box-shadow: 0 4px 16px rgba(44,26,14,0.1); transform: translateY(-2px); }
+  .value-card.active { border-color: var(--caramel); background: rgba(196,122,43,0.04); }
+  .value-emoji { font-size: 2rem; margin-bottom: 0.5rem; }
+  .value-name { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 600; color: var(--espresso); margin-bottom: 0.25rem; }
+  .value-short { font-size: 13px; color: var(--muted); line-height: 1.5; }
+  .value-detail { display: none; font-size: 13px; color: #4a2e16; line-height: 1.7; border-top: 1px solid var(--border); margin-top: 0.75rem; padding-top: 0.75rem; }
+  .value-card.active .value-detail { display: block; }
+
+  .fund-grid { display: grid; grid-template-columns: repeat(2,1fr); gap: 1rem; margin: 1.5rem 0; }
+  @media (max-width: 500px) { .fund-grid { grid-template-columns: 1fr; } }
+  .fund-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; cursor: pointer; transition: all 0.2s; position: relative; overflow: hidden; }
+  .fund-card:hover { box-shadow: 0 4px 20px rgba(44,26,14,0.1); }
+  .fund-card.open { border-color: var(--caramel); }
+  .fund-bg { font-family: 'Playfair Display', serif; font-size: 4rem; color: rgba(44,26,14,0.05); position: absolute; top: 0; right: 8px; line-height: 1; }
+  .fund-icon { font-size: 1.5rem; margin-bottom: 0.5rem; }
+  .fund-title { font-weight: 500; font-size: 16px; color: var(--espresso); margin-bottom: 0.25rem; }
+  .fund-body { display: none; font-size: 13px; color: #4a2e16; line-height: 1.75; border-top: 1px solid var(--border); padding-top: 0.75rem; margin-top: 0.75rem; }
+  .fund-card.open .fund-body { display: block; }
+
+  /* GRIND TABLE */
+  .grind-table { width: 100%; border-collapse: collapse; margin: 1.5rem 0; font-size: 13px; }
+  .grind-table th { background: var(--espresso); color: var(--gold); padding: 10px 12px; text-align: left; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; font-weight: 500; }
+  .grind-table td { padding: 10px 12px; border-bottom: 1px solid var(--border); color: #4a2e16; vertical-align: top; }
+  .grind-table tr:nth-child(even) td { background: rgba(196,122,43,0.03); }
+  .grind-table tr:hover td { background: rgba(196,122,43,0.07); }
+  .grind-badge { display: inline-block; padding: 3px 10px; border-radius: 20px; font-size: 11px; font-weight: 500; background: var(--espresso); color: var(--gold); }
+
+  /* COFFEE CARD */
+  .coffee-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+  .coffee-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; cursor: pointer; transition: all 0.2s; }
+  .coffee-card:hover { box-shadow: 0 4px 20px rgba(44,26,14,0.1); transform: translateY(-2px); }
+  .coffee-card.open { border-color: var(--caramel); }
+  .cc-roast { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--caramel); margin-bottom: 0.4rem; }
+  .cc-name { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--espresso); margin-bottom: 0.3rem; }
+  .cc-notes { font-size: 13px; color: var(--muted); font-style: italic; margin-bottom: 0.75rem; }
+  .cc-tags { display: flex; flex-wrap: wrap; gap: 0.4rem; margin-bottom: 0.75rem; }
+  .cc-tag { padding: 3px 10px; border-radius: 20px; font-size: 11px; border: 1px solid var(--border); color: var(--muted); }
+  .cc-detail { display: none; font-size: 13px; color: #4a2e16; line-height: 1.7; border-top: 1px solid var(--border); padding-top: 0.75rem; margin-top: 0.75rem; }
+  .coffee-card.open .cc-detail { display: block; }
+
+  /* GLOSSARY */
+  .glossary-search { width: 100%; padding: 12px 16px; border: 1px solid var(--border); border-radius: 6px; font-size: 14px; background: var(--card); color: var(--text); font-family: 'DM Sans', sans-serif; margin-bottom: 1rem; }
+  .glossary-search:focus { outline: none; border-color: var(--caramel); }
+  .glossary-grid { display: grid; gap: 0.5rem; }
+  .gloss-item { background: var(--card); border: 1px solid var(--border); border-radius: 6px; padding: 1rem 1.25rem; font-size: 14px; line-height: 1.7; }
+  .gloss-term { font-weight: 500; color: var(--espresso); font-size: 15px; }
+  .gloss-def { color: #4a2e16; margin-top: 0.25rem; }
+
+  /* TASTING WHEEL */
+  .tasting-cards { display: grid; grid-template-columns: repeat(auto-fill, minmax(200px, 1fr)); gap: 1rem; margin: 1.5rem 0; }
+  .tasting-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; text-align: center; }
+  .tasting-icon { font-size: 2rem; margin-bottom: 0.5rem; }
+  .tasting-title { font-family: 'Playfair Display', serif; font-size: 1rem; font-weight: 600; color: var(--espresso); margin-bottom: 0.4rem; }
+  .tasting-desc { font-size: 13px; color: var(--muted); line-height: 1.5; }
+
+  /* SAMPLING STEPS */
+  .sampling-steps { counter-reset: step; display: grid; gap: 0.75rem; margin: 1.5rem 0; }
+  .sample-step { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem 1.25rem 1.25rem 4rem; position: relative; counter-increment: step; }
+  .sample-step::before { content: counter(step); position: absolute; left: 1.25rem; top: 50%; transform: translateY(-50%); width: 34px; height: 34px; border-radius: 50%; background: var(--green); color: var(--gold); display: flex; align-items: center; justify-content: center; font-family: 'Playfair Display', serif; font-size: 0.9rem; font-weight: 600; }
+  .sample-step h4 { font-weight: 500; font-size: 15px; color: var(--espresso); margin-bottom: 0.25rem; }
+  .sample-step p { font-size: 13px; color: var(--muted); line-height: 1.6; }
+
+  /* NAV FOOTER */
+  .chapter-nav-footer { display: flex; justify-content: space-between; align-items: center; margin-top: 3rem; padding-top: 1.5rem; border-top: 1px solid var(--border); }
+  .nav-btn { padding: 10px 20px; border: 1px solid var(--border); border-radius: 4px; background: none; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; font-family: 'DM Sans', sans-serif; color: var(--muted); transition: all 0.2s; }
+  .nav-btn:hover { border-color: var(--caramel); color: var(--caramel); }
+  .nav-btn.primary { background: var(--espresso); color: var(--gold); border-color: var(--espresso); }
+  .nav-btn:disabled { opacity: 0.3; cursor: default; }
+
+  /* PILLS */
+  .pill-row { display: flex; flex-wrap: wrap; gap: 0.5rem; margin: 0.75rem 0; }
+  .pill { padding: 5px 14px; border-radius: 20px; font-size: 12px; border: 1px solid var(--border); color: var(--roast); background: var(--card); }
+  .pill.green { background: rgba(30,57,50,0.08); border-color: var(--green-light); color: var(--green); }
+
+  /* 2-col layout */
+  .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 1.5rem; margin: 1.5rem 0; }
+  @media (max-width: 600px) { .two-col { grid-template-columns: 1fr; } }
+
+  .mini-card { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1.25rem; }
+  .mini-card h4 { font-family: 'Playfair Display', serif; font-size: 1rem; color: var(--espresso); margin-bottom: 0.5rem; }
+  .mini-card p, .mini-card li { font-size: 13px; color: #4a2e16; line-height: 1.7; }
+  .mini-card ul { padding-left: 1.2rem; }
+  .mini-card li { margin-bottom: 0.3rem; }
+
+  /* quiz */
+  .quiz-wrap { background: var(--card); border: 1px solid var(--border); border-radius: 8px; padding: 1.5rem; margin: 2rem 0; }
+  .quiz-label { font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--caramel); margin-bottom: 1rem; }
+  .quiz-q { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--espresso); margin-bottom: 1.25rem; line-height: 1.4; }
+  .quiz-options { display: grid; gap: 0.5rem; margin-bottom: 1rem; }
+  .quiz-opt { padding: 0.75rem 1rem; border: 1px solid var(--border); border-radius: 6px; cursor: pointer; font-size: 14px; background: none; text-align: left; font-family: 'DM Sans', sans-serif; transition: all 0.2s; color: var(--text); }
+  .quiz-opt:hover { border-color: var(--caramel); background: rgba(196,122,43,0.04); }
+  .quiz-opt.correct { background: rgba(0,112,74,0.1); border-color: var(--green-light); color: var(--green); }
+  .quiz-opt.wrong { background: rgba(139,0,0,0.07); border-color: #8B0000; color: #8B0000; }
+  .quiz-feedback { font-size: 14px; line-height: 1.6; padding: 0.75rem 1rem; border-radius: 6px; display: none; margin-top: 0.75rem; }
+  .quiz-feedback.show { display: block; }
+  .quiz-feedback.correct { background: rgba(0,112,74,0.08); color: var(--green); }
+  .quiz-feedback.wrong { background: rgba(139,0,0,0.07); color: #8B0000; }
+  .quiz-next { margin-top: 1rem; padding: 0.6rem 1.5rem; background: var(--espresso); color: var(--gold); border: none; border-radius: 4px; font-size: 13px; letter-spacing: 1px; text-transform: uppercase; cursor: pointer; display: none; font-family: 'DM Sans', sans-serif; }
+  .quiz-next.show { display: inline-block; }
+  .quiz-progress { font-size: 12px; color: var(--muted); margin-bottom: 1rem; }
+  .quiz-score { text-align: center; padding: 1.5rem; display: none; }
+  .quiz-score.show { display: block; }
+  .quiz-score .score-num { font-family: 'Playfair Display', serif; font-size: 3rem; color: var(--espresso); line-height: 1; }
+  .quiz-score .score-label { color: var(--muted); font-size: 14px; margin-top: 0.25rem; }
+
+  /* Table for pairings */
+  .pair-table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 13px; }
+  .pair-table th { background: var(--green); color: var(--gold); padding: 8px 12px; text-align: left; font-size: 11px; letter-spacing: 1px; text-transform: uppercase; }
+  .pair-table td { padding: 9px 12px; border-bottom: 1px solid var(--border); color: #4a2e16; }
+  .pair-table tr:nth-child(even) td { background: rgba(196,122,43,0.03); }
+
+  /* freshness bullets */
+  .checklist { list-style: none; padding: 0; margin: 1rem 0; display: grid; gap: 0.5rem; }
+  .checklist li { display: flex; gap: 0.75rem; align-items: flex-start; font-size: 14px; color: #4a2e16; line-height: 1.6; }
+  .checklist li::before { content: '✓'; color: var(--green-light); font-weight: bold; flex-shrink: 0; margin-top: 1px; }
+
+  .warning-list { list-style: none; padding: 0; margin: 1rem 0; display: grid; gap: 0.5rem; }
+  .warning-list li { display: flex; gap: 0.75rem; align-items: flex-start; font-size: 14px; color: #4a2e16; line-height: 1.6; }
+  .warning-list li::before { content: '⚠'; color: var(--caramel); flex-shrink: 0; margin-top: 1px; }
+
+  @media (max-width: 768px) {
+    .coffee-grid { grid-template-columns: 1fr; }
+    .fund-grid { grid-template-columns: 1fr; }
+    .grind-table { font-size: 11px; }
+    .grind-table th, .grind-table td { padding: 7px 8px; }
+  }
+
+  /* ── SENSORY COFFEE CARDS ── */
+  .scoffee-grid { display: grid; gap: 1.5rem; margin: 1.5rem 0; }
+  .scoffee-card { background: var(--card); border: 1px solid var(--border); border-radius: 12px; overflow: hidden; }
+  .scoffee-header { display: flex; align-items: flex-start; gap: 1.25rem; padding: 1.5rem; cursor: pointer; }
+  .scoffee-emoji { font-size: 2.5rem; flex-shrink: 0; line-height: 1; }
+  .scoffee-meta { flex: 1; }
+  .scoffee-roast { font-size: 10px; letter-spacing: 2px; text-transform: uppercase; color: var(--caramel); margin-bottom: 0.25rem; }
+  .scoffee-name { font-family: 'Playfair Display', serif; font-size: 1.15rem; color: var(--espresso); font-weight: 600; line-height: 1.2; margin-bottom: 0.3rem; }
+  .scoffee-tagline { font-size: 13px; color: var(--muted); font-style: italic; }
+  .scoffee-toggle { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(--caramel); border: 1px solid rgba(196,122,43,0.3); padding: 5px 12px; border-radius: 20px; white-space: nowrap; cursor: pointer; flex-shrink: 0; transition: all 0.2s; }
+  .scoffee-card.open .scoffee-toggle { background: var(--espresso); color: var(--gold); border-color: var(--espresso); }
+
+  .scoffee-body { display: none; padding: 0 1.5rem 1.5rem; }
+  .scoffee-card.open .scoffee-body { display: block; }
+
+  .scoffee-bars { display: grid; gap: 0.6rem; margin-bottom: 1.5rem; }
+  .sbar-row { display: flex; align-items: center; gap: 0.75rem; }
+  .sbar-label { font-size: 11px; letter-spacing: 1px; text-transform: uppercase; color: var(--muted); width: 70px; flex-shrink: 0; }
+  .sbar-track { flex: 1; height: 6px; background: rgba(107,58,31,0.12); border-radius: 3px; overflow: hidden; }
+  .sbar-fill { height: 100%; border-radius: 3px; background: linear-gradient(90deg, var(--caramel), var(--gold)); transition: width 0.6s ease; }
+  .sbar-val { font-size: 11px; color: var(--muted); width: 40px; text-align: right; flex-shrink: 0; }
+
+  .sensory-sections { display: grid; gap: 1rem; }
+  .sensory-block { background: var(--cream); border-radius: 8px; padding: 1rem 1.25rem; }
+  .sensory-block-title { display: flex; align-items: center; gap: 0.5rem; font-size: 11px; letter-spacing: 2px; text-transform: uppercase; color: var(--caramel); margin-bottom: 0.5rem; font-weight: 500; }
+  .sensory-block-icon { font-size: 1rem; }
+  .sensory-block p { font-size: 13px; color: #4a2e16; line-height: 1.75; }
+  .sensory-block strong { color: var(--espresso); }
+
+  .pairing-chips { display: flex; flex-wrap: wrap; gap: 0.5rem; margin-top: 0.5rem; }
+  .pairing-chip { display: flex; align-items: center; gap: 0.4rem; padding: 5px 12px; border-radius: 20px; font-size: 12px; background: var(--espresso); color: var(--gold); }
+
+  .tongue-map { display: flex; gap: 0.5rem; flex-wrap: wrap; margin-top: 0.4rem; }
+  .tongue-zone { padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 500; }
+  .tongue-zone.tip { background: rgba(232,169,58,0.2); color: #7a4800; }
+  .tongue-zone.sides { background: rgba(0,112,74,0.12); color: #005a3c; }
+  .tongue-zone.back { background: rgba(44,26,14,0.1); color: #3a1a08; }
+  .tongue-zone.full { background: rgba(196,122,43,0.15); color: #6b3a00; }
+
+  .scoffee-divider { height: 1px; background: var(--border); margin: 1rem 0; }
+  .since-badge { display: inline-block; font-size: 11px; padding: 3px 10px; border-radius: 3px; background: rgba(30,57,50,0.08); color: var(--green); border: 1px solid rgba(30,57,50,0.2); margin-top: 0.75rem; }
+
+  .story-block { background: var(--espresso) !important; }
+  .story-block .sensory-block-title { color: var(--gold) !important; }
+  .story-text { font-size: 13.5px; color: rgba(245,240,232,0.88); line-height: 1.85; }
+  .story-text strong { color: var(--gold); font-size: 12px; letter-spacing: 1.5px; text-transform: uppercase; display: block; margin-top: 1.25rem; margin-bottom: 0.35rem; }
+  .story-text strong:first-child { margin-top: 0; }
+
+  .roast-section-divider { display: flex; align-items: center; gap: 1rem; margin: 2rem 0 1rem; }
+  .roast-section-divider h3 { font-family: 'Playfair Display', serif; font-size: 1.1rem; color: var(--espresso); white-space: nowrap; }
+  .roast-section-divider::before, .roast-section-divider::after { content: ''; flex: 1; height: 1px; background: var(--border); }
+</style>
+</head>
+<body>
+
+<div class="hero">
+  <div class="hero-badge">Starbucks Coffee Academy · Complete Reference Guide</div>
+  <h1>The <em>Coffee</em> Academy</h1>
+  <p>Your comprehensive guide to brewing, selling, and tasting coffee — from the Four Fundamentals of brewing to coffee tasting activities, grind charts, coffee facts, and everything in between.</p>
+  <div class="progress-bar-wrap">
+    <div class="progress-label">
+      <span id="progressLabel">Chapter 1 of 5</span>
+      <span id="progressPct">20%</span>
+    </div>
+    <div class="progress-track">
+      <div class="progress-fill" id="progressFill" style="width:20%"></div>
+    </div>
+  </div>
+</div>
+
+<nav class="chapter-nav">
+  <div class="chapter-nav-inner">
+    <button class="chapter-btn active" onclick="showChapter(0)">Brewing & Selling</button>
+    <button class="chapter-btn" onclick="showChapter(1)">Grind & Water</button>
+    <button class="chapter-btn" onclick="showChapter(2)">Coffee Tasting</button>
+    <button class="chapter-btn" onclick="showChapter(3)">Coffee Facts & Origins</button>
+    <button class="chapter-btn" onclick="showChapter(4)">Glossary</button>
+    <button class="chapter-btn" onclick="showChapter(5)">☕ Knowledge Quiz</button>
+  </div>
+</nav>
+
+<div class="content">
+
+<!-- ═══════════════ CH0: BREWING & SELLING -->
+<div class="chapter active" id="ch0">
+  <div class="chapter-header">
+    <div class="chapter-num">Chapter 1</div>
+    <h2>Brewing &amp; Selling Coffee</h2>
+    <div class="subtitle">Making great coffee in store and at home — and sharing it with customers.</div>
+  </div>
+
+  <div class="callout">
+    <p>A great cup of coffee starts with regularly maintained brewing equipment, high-quality ingredients and the right recipe. Follow the guidelines for the Four Fundamentals — proportion, grind, water and freshness — and you will brew a great cup of coffee.</p>
+    <cite>— Starbucks Coffee &amp; Tea Resource Manual</cite>
+  </div>
+
+  <div class="section-heading">The Four Fundamentals</div>
+  <div class="fund-grid">
+    <div class="fund-card" onclick="this.classList.toggle('open')">
+      <div class="fund-bg">⚖</div>
+      <div class="fund-icon">⚖️</div>
+      <div class="fund-title">Proportion</div>
+      <div style="font-size:13px;color:var(--muted)">Use the proper coffee-to-water ratio</div>
+      <div class="fund-body">
+        <strong>The standard recipe:</strong> 10 g (2 tbsp) of freshly ground coffee for every 180 ml (6 fl oz.) of water. This standard was established by the Coffee Brewing Center in the 1940s and introduced in 1945 — Starbucks did not invent it.<br><br>
+        <strong>Why proportion matters:</strong> Hot water extracts and mixes with the flavor components in ground coffee. The proper proportion allows extraction of the coffee's full flavors, yielding a rich, aromatic cup.<br><br>
+        <strong>Too little coffee = bitter coffee:</strong> When too little coffee is used, more water passes through the grounds. The extraction process continues long after desirable flavor components are pulled out, resulting in thin, bitter-tasting coffee. To make a milder cup, dilute full-strength coffee with hot water — do not reduce the coffee amount.<br><br>
+        <strong>Yield reference:</strong><br>
+        • 1 lb (453.6 g) bag → about 8 L (270 fl oz.) → ~22 tall or 17 grande cups<br>
+        • 250 g (0.55 lb) bag → about 4.4 L (150 fl oz.) → ~12 tall or 9 grande cups
+      </div>
+    </div>
+    <div class="fund-card" onclick="this.classList.toggle('open')">
+      <div class="fund-bg">⚙</div>
+      <div class="fund-icon">⚙️</div>
+      <div class="fund-title">Grind</div>
+      <div style="font-size:13px;color:var(--muted)">Match the grind to the brewing method</div>
+      <div class="fund-body">
+        The grind (particle size) determines how long water and coffee are in contact, which determines exactly what is extracted.<br><br>
+        <strong>Too fine:</strong> Water stays in contact too long → over-extraction → bitter and unpleasant flavor.<br><br>
+        <strong>Too coarse:</strong> Water passes through too quickly → under-extraction → watery, flavorless cup.<br><br>
+        The correct grind is always determined by the brewing method. See the full Grind Chart in Chapter 2.
+      </div>
+    </div>
+    <div class="fund-card" onclick="this.classList.toggle('open')">
+      <div class="fund-bg">💧</div>
+      <div class="fund-icon">💧</div>
+      <div class="fund-title">Water</div>
+      <div style="font-size:13px;color:var(--muted)">Fresh, clean water at the right temperature</div>
+      <div class="fund-body">
+        A cup of coffee contains 98% water — so water quality matters enormously.<br><br>
+        <strong>Use water that:</strong> Tastes clean, fresh, and free of impurities. If the water tastes good, it will make good coffee.<br><br>
+        <strong>Avoid:</strong> Water from softeners, distilled water, municipal water tasting like chlorine, well water with iron or sulfur smell. Consider filtered or bottled water.<br><br>
+        <strong>Temperature:</strong> Water heated to 91°–96°C (195°–205°F) is perfect for extracting the coffee's full range of flavors. Automatic coffeemakers must heat to this range. When using a kettle: bring to a boil, remove from heat for 30 seconds, then pour. For in-store coffee press brewing, use the instant hot water dispenser.
+      </div>
+    </div>
+    <div class="fund-card" onclick="this.classList.toggle('open')">
+      <div class="fund-bg">✨</div>
+      <div class="fund-icon">✨</div>
+      <div class="fund-title">Freshness</div>
+      <div style="font-size:13px;color:var(--muted)">Coffee is highly perishable — use it fresh</div>
+      <div class="fund-body">
+        Coffee is best used within one week of opening a bag. The enemies of coffee are <strong>oxygen, heat, light, and moisture</strong>. Over time, these make even the highest-quality coffees taste stale.<br><br>
+        <strong>Freshness Standards:</strong>
+        <ul style="padding-left:1.2rem;margin-top:0.5rem;font-size:13px;">
+          <li>FlavorLock™ bags past the BEST BEFORE date must be donated or discarded</li>
+          <li>Opened bags of whole bean coffee (including bins) must be marked with a seven-day expiration date</li>
+          <li>An opened bag must be brewed or sold within seven days</li>
+          <li>Expired whole bean coffee must be donated or discarded</li>
+        </ul><br>
+        <strong>FlavorLock™ packaging</strong> has a 34-week shelf life. Each bag has a lot code (includes BEST BEFORE date and roasting batch) on the front, back lower right corner, or along the back seam.
+      </div>
+    </div>
+  </div>
+
+  <div class="section-heading">Coffee Freshness at Home</div>
+  <div class="prose">
+    <p>Encourage customers to think of coffee as they do other perishables. Share these tips:</p>
+  </div>
+  <ul class="checklist">
+    <li>Store in an opaque, airtight container at room temperature once the FlavorLock™ bag is opened.</li>
+    <li>Never store coffee in the refrigerator or freezer for daily use — moisture condenses onto the coffee each time the container is opened, damaging it.</li>
+    <li>Store unopened FlavorLock™ bags at room temperature until the BEST BEFORE date.</li>
+    <li>For best results, grind just before brewing. Whole bean coffee stays fresh longer because less surface area is exposed to oxygen.</li>
+    <li>Once brewed, coffee is best held in a thermal carafe. On a home burner, coffee tastes bad after 20 minutes. Coffee should never be reheated.</li>
+  </ul>
+
+  <div class="section-heading">Grinding Coffee for Customers — Standards</div>
+  <ul class="warning-list">
+    <li>Non-Starbucks food (including whole bean coffees) must NOT encounter Starbucks food and equipment — it could be tainted or contaminated and harm other customer beverage/food products.</li>
+    <li>Unopened Starbucks whole bean coffees previously purchased in a store or elsewhere may be ground for customers.</li>
+    <li>No flavored coffee (including barrel aged), regardless of brand, in Starbucks store grinders — flavor can linger in the grinder and contaminate beans ground subsequently.</li>
+    <li>Customers who bring in a competitor's coffee may be offered a sample of Starbucks® ground coffee instead.</li>
+  </ul>
+
+  <div class="section-heading">Scooping and Bagging Coffee</div>
+  <div class="fact-box">
+    <div class="fact-label">Store Procedure — Not available in the Philippines</div>
+    Though most Starbucks coffees are sold in prepackaged FlavorLock™ bags, some coffees in stores are weighed and scooped into coffee bags for sale to customers.
+  </div>
+  <div class="steps-list">
+    <div class="step-card"><div class="step-num">1</div><div class="step-body"><h4>Select the Bag</h4><p>Select a one-pound or ½-pound scoop bag. If the customer brings in a used bag to refill, offer to replace the bag.</p></div></div>
+    <div class="step-card"><div class="step-num">2</div><div class="step-body"><h4>Stamp the Bag</h4><p>Place the coffee stamp on the bag, centering it above the Starbucks logo.</p></div></div>
+    <div class="step-card"><div class="step-num">3</div><div class="step-body"><h4>Weigh the Coffee</h4><p>Place whole bean scoop on scale. Press "tare" so the scale reads zero with the scoop. Open a one-pound FlavorLock™ bag or scoop coffee beans and weigh.</p></div></div>
+    <div class="step-card"><div class="step-num">4</div><div class="step-body"><h4>Grind if Requested</h4><p>If the customer requested freshly ground coffee, take the scoop to the grinder and grind the beans into the bag.</p></div></div>
+    <div class="step-card"><div class="step-num">5</div><div class="step-body"><h4>Fill the Bag</h4><p>Be sure your hands and fingers do not touch the inside of the bag. Pull from the bottom to open it. Pour the beans from the scoop into the bag. Date any residual coffee in a FlavorLock™ bag.</p></div></div>
+    <div class="step-card"><div class="step-num">6</div><div class="step-body"><h4>Remove Air</h4><p>Before closing the bag, tap the bag on the counter to eliminate excess air. Less air in the bag means better protection for the coffee.</p></div></div>
+    <div class="step-card"><div class="step-num">7</div><div class="step-body"><h4>Close the Bag</h4><p>Place on the counter with the stamp side facing you. The top is a "tin-tie." Fold this part toward you once, then roll the bag down by folding the top away from you.</p></div></div>
+    <div class="step-card"><div class="step-num">8</div><div class="step-body"><h4>Secure the Tie</h4><p>When you cannot make any more rolls, tuck the ends of the tie underneath the roll of the bag.</p></div></div>
+  </div>
+
+  <div class="section-heading">Sharing Coffee with Customers</div>
+  <div class="prose">
+    <p>Sometimes the world of coffee can be intimidating or difficult to navigate. As partners, we help customers connect with, understand and appreciate coffee. We want to help every customer find a special coffee they will love.</p>
+  </div>
+  <div class="accordion">
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">❤️</div><div class="acc-title">Share Your Passion</div><div class="acc-arrow">▾</div></div><div class="acc-body">Always be prepared to share about your favorite coffee, or a new coffee that you are excited about, and why you love it. Be confident in your coffee knowledge and excited to share with customers how things like origin and roast impact the taste of coffee.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">📖</div><div class="acc-title">Tell the Story</div><div class="acc-arrow">▾</div></div><div class="acc-body">Customers may want to know how a coffee tastes, but they will also want to hear the coffee's story. A coffee's story helps the customer understand and appreciate the coffee. When you have found the perfect coffee for a customer, offer to bag it and ask them if they need it ground or in an alternative format.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">🌐</div><div class="acc-title">Coffee Outside Our Stores</div><div class="acc-arrow">▾</div></div><div class="acc-body">We sell more of our at-home coffee through other channels like grocery stores and club stores than through our own stores. Most of the at-home coffee sold outside our stores is either pre-ground for a traditional drip brewer, or in a single-serve format (e.g., Keurig® K-Cup® Pods, Nespresso® Capsules, etc.). Some customers may prefer to shop for coffee online or in their grocery store — be ready to let them know that you would still love to help them find a coffee that is great for them and coach them on how to navigate the world of at-home coffee.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">☕</div><div class="acc-title">Our Coffee Range</div><div class="acc-arrow">▾</div></div><div class="acc-body">We have a wide variety of blends, single-origin and seasonal coffees. We have a coffee for every customer's taste preference. Customers may say they want a weaker or milder cup — recommend diluting full-strength coffee with hot water rather than reducing the coffee amount, which leads to a bitter result.</div></div>
+  </div>
+
+  <div class="chapter-nav-footer">
+    <button class="nav-btn" disabled>← Previous</button>
+    <button class="nav-btn primary" onclick="showChapter(1)">Grind &amp; Water →</button>
+  </div>
+</div>
+
+<!-- ═══════════════ CH1: GRIND & WATER -->
+<div class="chapter" id="ch1">
+  <div class="chapter-header">
+    <div class="chapter-num">Chapter 2</div>
+    <h2>Grind Guide &amp; Water</h2>
+    <div class="subtitle">Six grinds, four brewing categories — matching particle size to method.</div>
+  </div>
+
+  <div class="fact-box">
+    <div class="fact-label">Core Principle</div>
+    All commonly used methods of brewing coffee work the same way: hot water passes through ground coffee. The grind size determines how much time the water and coffee are in contact — and this determines exactly what is extracted from the ground coffee.
+  </div>
+
+  <div class="section-heading">The Six Grinds</div>
+  <div class="accordion">
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">☕</div><div class="acc-title">Turkish — Finest Grind</div><div class="acc-arrow">▾</div></div><div class="acc-body">Recommended for: <strong>Cezve (Turkish) pots</strong> and <strong>Briki (Greek) pots</strong>. This is the finest grind available — the coffee is ground to an almost powder-like consistency.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">☕</div><div class="acc-title">Espresso</div><div class="acc-arrow">▾</div></div><div class="acc-body">Recommended for: All <strong>espresso machines that are pump or piston driven</strong>. This grind is finer than Extra Fine but coarser than Turkish.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">☕</div><div class="acc-title">Extra Fine</div><div class="acc-arrow">▾</div></div><div class="acc-body">Recommended for: <strong>All cone-shaped filters</strong>, <strong>siphon brewers</strong>, <strong>reusable K-Cup® pods</strong>, and <strong>steam-driven home espresso machines</strong>.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">☕</div><div class="acc-title">Fine</div><div class="acc-arrow">▾</div></div><div class="acc-body">Recommended for: <strong>Stovetop espresso machines</strong> (Moka Pot / Bialetti®) and <strong>vacuum pots</strong>.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">☕</div><div class="acc-title">Medium</div><div class="acc-arrow">▾</div></div><div class="acc-body">Required for all brewers that use <strong>paper or gold flat-bottomed filters</strong> and <strong>Chemex® pour over</strong>. Customers may say "Grind it for drip" — ask which filter type they use. If uncertain, use Medium — it works better in a cone filter than an extra fine grind works in a flat filter. If the grind is too fine, there is a possibility of coffee grounds and water overflowing the brew basket.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">☕</div><div class="acc-title">Coarse</div><div class="acc-arrow">▾</div></div><div class="acc-body">Recommended for: <strong>Coffee presses</strong>, <strong>cold brew coffee makers (Toddy®)</strong>, <strong>open pots</strong>, and <strong>percolators</strong>. If it is difficult to press down the filter assembly in a coffee press, the grind is probably too fine — gently lift the filter assembly and try pressing again, then check the calibration of your grinder.</div></div>
+  </div>
+
+  <div class="section-heading">Grind Chart — Store Grinder Settings</div>
+  <div style="overflow-x:auto;">
+    <table class="grind-table">
+      <thead>
+        <tr>
+          <th>Grind</th>
+          <th>Customer Brewing Method</th>
+          <th>Mahlkonig VTA6</th>
+          <th>Ditting</th>
+          <th>Grindmaster 890</th>
+          <th>Grindmaster 875</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr><td><span class="grind-badge">Turkish</span></td><td>Cezve pot (Turkish) · Briki pot (Greek)</td><td>n/a</td><td>1</td><td>1</td><td>n/a</td></tr>
+        <tr><td><span class="grind-badge">Espresso</span></td><td>Pump-driven and piston espresso machines</td><td>1</td><td>3</td><td>4</td><td>2</td></tr>
+        <tr><td><span class="grind-badge">Extra Fine</span></td><td>Paper/gold cone filters · Siphon brewer · Steam-driven espresso machines · Re-usable K-cups</td><td>5</td><td>5</td><td>9</td><td>4</td></tr>
+        <tr><td><span class="grind-badge">Fine</span></td><td>Vacuum pot · Stovetop espresso brewer (Moka Pot / Bialetti®)</td><td>6</td><td>6</td><td>10</td><td>5</td></tr>
+        <tr><td><span class="grind-badge">Medium</span></td><td>Paper or gold flat-bottom filter · Chemex® brewer</td><td>7</td><td>7</td><td>12</td><td>6</td></tr>
+        <tr><td><span class="grind-badge">Coarse</span></td><td>Coffee press · Cold brewer / Toddy® · Open pot · Percolator</td><td>10</td><td>9</td><td>15</td><td>9</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="section-heading">Water Quality</div>
+  <div class="two-col">
+    <div class="mini-card">
+      <h4>✅ Good Water Sources</h4>
+      <ul>
+        <li>Filtered water</li>
+        <li>Bottled water</li>
+        <li>Clean, fresh-tasting municipal water</li>
+        <li>Water that tastes clean and is free of impurities</li>
+      </ul>
+    </div>
+    <div class="mini-card">
+      <h4>❌ Avoid These</h4>
+      <ul>
+        <li>Water from water softeners</li>
+        <li>Distilled water</li>
+        <li>Municipal water tasting like chlorine</li>
+        <li>Well water with iron or sulfur smell</li>
+        <li>Any water with a strong taste of its own</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="fact-box">
+    <div class="fact-label">Perfect Brewing Temperature</div>
+    <strong>91°–96°C (195°–205°F)</strong> is ideal. This temperature extracts the full range of coffee's flavors. Automatic coffeemakers must heat to this range. When using a kettle at home: bring water to a boil, remove from heat for about 30 seconds, then pour. A customer can assume that the temperature of water removed from heat just as it begins to boil cools to approximately 93–96°C (200–205°F) by the time it is poured into the brewer.
+  </div>
+
+  <div class="section-heading">Brewing in a Coffee Press</div>
+  <div class="prose"><p>The coffee press highlights the full flavor of Starbucks® coffees. Coffee from a coffee press is very close in strength and character to what a coffee buyer tastes when cupping. This is the best method of sampling for the coffee enthusiast, especially when the café area is full — it helps create an inviting social atmosphere.</p></div>
+
+  <div class="steps-list">
+    <div class="step-card"><div class="step-num">1</div><div class="step-body"><h4>Preheat</h4><p>Rinse the plunger assembly and pot with hot water to preheat them.</p></div></div>
+    <div class="step-card"><div class="step-num">2</div><div class="step-body"><h4>Measure Coffee</h4><p>Measure the correct amount of coarsely ground coffee into the coffee press:<br>• <strong>4-cup press (16 oz):</strong> 6 Tbsp (≈30 g) or three Starbucks scoops<br>• <strong>8-cup press (32 oz):</strong> 10 Tbsp (≈50 g) or five Starbucks scoops<br><em>Note: One Starbucks® coffee measuring scoop = 2 Tbsp (≈10 g)</em></p></div></div>
+    <div class="step-card"><div class="step-num">3</div><div class="step-body"><h4>Add Water</h4><p>Add water from your coffee brewer's hot-water source; stir to make sure all the grounds are wet.</p></div></div>
+    <div class="step-card"><div class="step-num">4</div><div class="step-body"><h4>Place Plunger</h4><p>Place the plunger assembly loosely on top to hold in the heat.</p></div></div>
+    <div class="step-card"><div class="step-num">5</div><div class="step-body"><h4>Brew 4 Minutes</h4><p>Using a timer, let brew for exactly four minutes.</p></div></div>
+    <div class="step-card"><div class="step-num">6</div><div class="step-body"><h4>Press</h4><p>Point the pouring spout away from you and hold the pot by the handle. Slowly press the plunger down with your other hand to push the grounds to the bottom of the pot.</p></div></div>
+    <div class="step-card"><div class="step-num">7</div><div class="step-body"><h4>Serve Immediately</h4><p>Coffee maintains the best taste for only 20 minutes. If all coffee will not be consumed immediately, set a timer for 20 minutes and discard what remains.</p></div></div>
+  </div>
+
+  <div class="section-heading">Cleaning a Coffee Press</div>
+  <div class="prose">
+    <p>Coffee presses must be washed by hand prior to being placed in the sanitizer or dishwasher. The fine, stainless steel screen is a place where coffee oils may gather and become rancid — this gives coffee an unpleasant, stale taste. Do not pour grounds down the drain; coffee press grounds can be mixed with used espresso grounds for the Grounds for Your Garden program (if applicable).</p>
+  </div>
+  <div class="steps-list">
+    <div class="step-card"><div class="step-num">1</div><div class="step-body"><h4>Dispose</h4><p>Dispose of leftover coffee and coffee grounds.</p></div></div>
+    <div class="step-card"><div class="step-num">2</div><div class="step-body"><h4>Rinse</h4><p>Rinse any remaining grounds out of the press.</p></div></div>
+    <div class="step-card"><div class="step-num">3</div><div class="step-body"><h4>Disassemble</h4><p>Disassemble the filter pieces from the press assembly.</p></div></div>
+    <div class="step-card"><div class="step-num">4</div><div class="step-body"><h4>Hand Scrub</h4><p>Soak a detail brush with dishwashing detergent and scrub each piece thoroughly by hand in hot water, including the coffee press carafe and top of press assembly. If a sanitizer or dishwasher is available, run all pieces through the machine after scrubbing. Allow to air-dry and reassemble.</p></div></div>
+  </div>
+
+  <div class="chapter-nav-footer">
+    <button class="nav-btn" onclick="showChapter(0)">← Brewing &amp; Selling</button>
+    <button class="nav-btn primary" onclick="showChapter(2)">Coffee Tasting →</button>
+  </div>
+</div>
+
+<!-- ═══════════════ CH2: COFFEE TASTING -->
+<div class="chapter" id="ch2">
+  <div class="chapter-header">
+    <div class="chapter-num">Chapter 3</div>
+    <h2>Coffee Tasting Activities</h2>
+    <div class="subtitle">Sharing your knowledge and passion for coffee creates the Starbucks Experience.</div>
+  </div>
+
+  <div class="callout">
+    <p>Sharing your knowledge about and passion for coffee helps create the Starbucks Experience for customers. This section includes tasting guidelines for baristas to help customers fully experience our coffees.</p>
+    <cite>— Coffee Tasting Activities</cite>
+  </div>
+
+  <div class="section-heading">The Three Steps of Tasting</div>
+  <div class="tasting-cards">
+    <div class="tasting-card">
+      <div class="tasting-icon">👃</div>
+      <div class="tasting-title">Smell</div>
+      <div class="tasting-desc">Much of our sense of taste is created through the nose, not the mouth. Your tongue can only distinguish five tastes: salty, sweet, bitter, sour and umami. Your nose can detect one trillion aromas. When tasting a coffee, always smell it first.</div>
+    </div>
+    <div class="tasting-card">
+      <div class="tasting-icon">💦</div>
+      <div class="tasting-title">Slurp</div>
+      <div class="tasting-desc">When tasting coffee, it is important to slurp it. By slurping the coffee, you spray the coffee across your tongue and palate. This enables the subtle flavors and aromas to reach your nose.</div>
+    </div>
+    <div class="tasting-card">
+      <div class="tasting-icon">👅</div>
+      <div class="tasting-title">Locate</div>
+      <div class="tasting-desc">Think about where you experience flavors on your tongue. Does the coffee create a sensation on the tip and sides? How does the coffee feel in your mouth? What is the weight or thickness on your tongue?</div>
+    </div>
+    <div class="tasting-card">
+      <div class="tasting-icon">📝</div>
+      <div class="tasting-title">Describe</div>
+      <div class="tasting-desc">What words describe the aroma, acidity, flavor and body? To what food or other experience can you compare it? Personal descriptions make coffee more interesting for customers. A short, meaningful description is more useful than a long and confusing one.</div>
+    </div>
+  </div>
+
+  <div class="section-heading">The Four Tasting Characteristics</div>
+  <div class="accordion">
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">🌸</div><div class="acc-title">Aroma</div><div class="acc-arrow">▾</div></div><div class="acc-body">Aroma is the way the coffee smells. Words used to describe aroma include earthy, spicy, floral and nutty. These distinctive scents are often directly related to the flavor of the coffee. For the novice coffee taster, certain aromas may be subtle and challenging to perceive. It is still important to begin each tasting by smelling the coffee because much of what we perceive as flavor is related to our sense of smell.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">🍋</div><div class="acc-title">Acidity</div><div class="acc-arrow">▾</div></div><div class="acc-body">Acidity is the tangy quality, or tartness that you feel in your mouth. The tasting term "acidity" does <em>not</em> refer to the pH-level of the coffee — it is a technical tasting term describing one aspect of a coffee's character. The acid level, as measured on the pH scale, is nearly the same in every coffee. Acidity creates a sensation on the sides and tip of your tongue, and sometimes around the back of your jawbone — like the way you experience acidity when tasting citrus fruits and drinks. Coffees with high acidity are described as bright, tangy and crisp with a clean finish. Coffees with low acidity feel smooth in your mouth and tend to linger.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">⚖️</div><div class="acc-title">Body</div><div class="acc-arrow">▾</div></div><div class="acc-body">Body is the weight or thickness of the coffee on your tongue. This sensation is like what you experience when you compare the feel of whole milk with nonfat milk. A coffee with light body feels light on your tongue and its flavor does not linger. In contrast, you feel the weight of a full-bodied coffee on your tongue, and its flavor remains in your mouth for a while. Coffees are usually described as light, medium or full-bodied.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">🍫</div><div class="acc-title">Flavor</div><div class="acc-arrow">▾</div></div><div class="acc-body">Flavor refers to how the coffee tastes. This characteristic is detected in different parts of the mouth. Citrus, cocoa and berries are just a few flavors you might taste in coffee. Some coffee flavors are obvious; others are very subtle. To understand flavor, conduct a tasting with Guatemala Antigua (cocoa and soft spice), Sumatra (herbal and earthy), and Kenya (grapefruit and currant).</div></div>
+  </div>
+
+  <div class="section-heading">Featured Coffee Tasting: Three Origins</div>
+  <div class="accordion">
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">🇬🇹</div><div class="acc-title">Guatemala Antigua — Acidity Example</div><div class="acc-arrow">▾</div></div><div class="acc-body">Guatemala Antigua features a refined acidity. Notice how the coffee feels on the side of your tongue and has very little aftertaste. Guatemala Antigua is described as a balanced coffee — elegant and refined, with deep flavors of cocoa and soft spices. <strong>Aroma:</strong> Cocoa and soft spice. <strong>Body:</strong> Medium. <strong>Acidity:</strong> Medium, refined. Pair with dark chocolate to understand "cocoa" flavor note.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">🇮🇩</div><div class="acc-title">Sumatra — Body Example</div><div class="acc-arrow">▾</div></div><div class="acc-body">Starbucks' most popular single-origin coffee, Sumatra is full-bodied and bold with distinctive earthy aroma and lingering notes. It has a thick, sometimes syrupy body that lingers in your mouth. The heavy, full body and concentrated herbal spice notes give Sumatra its big, intense, earthy flavor. <strong>Aroma:</strong> Herbal and earthy. <strong>Body:</strong> Full. <strong>Acidity:</strong> Low. Pair with raw mushrooms to understand "earthy" or with warm brie cheese or shortbread cookie.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">🇰🇪</div><div class="acc-title">Kenya — Flavor Example</div><div class="acc-arrow">▾</div></div><div class="acc-body">Kenya has good acidity, but also has layers of body and flavor. Notice how the flavor of Kenya lingers in your mouth after swallowing. The flavor is typically compared to black currant or blackberry, but it is more identifiable to most people as having a citrus or grapefruit flavor. A simple description of Kenya is having a tangy acidity, citrus flavor and medium to full body. <strong>Aroma:</strong> Grapefruit and currant. <strong>Body:</strong> Medium. Pair with kiwi fruit to understand "fruity."</div></div>
+  </div>
+
+  <div class="section-heading">Quick Coffee Tasting Activities</div>
+  <div class="prose"><p>The following ideas help you gain insight about flavor characteristics while having fun with coffee. These can be easily incorporated into store meetings or daily routines.</p></div>
+  <div class="accordion">
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">1</div><div class="acc-title">Tasting 1 — Non-Coffee to Coffee</div><div class="acc-arrow">▾</div></div><div class="acc-body">Beginning with a non-coffee example, taste orange juice for acidity, nonfat versus whole milk for body, and root beer for flavor. Next, taste Starbucks® Veranda Blend (acidity), Sumatra (body) and Kenya (flavor). Notice the similar sensations you get with the coffees as you discovered in the non-coffee beverages.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">2</div><div class="acc-title">Tasting 2 — Canned vs. Starbucks</div><div class="acc-arrow">▾</div></div><div class="acc-body">Brew canned coffee versus Starbucks® Veranda Blend. Brew each and compare.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">3</div><div class="acc-title">Tasting 3 — Coffee Personalities</div><div class="acc-arrow">▾</div></div><div class="acc-body">Pick three coffees and describe them as if they were people. Describe their personalities. This creative exercise helps partners develop personal language for describing coffee.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">4</div><div class="acc-title">Tasting 4 — Coffee as Music</div><div class="acc-arrow">▾</div></div><div class="acc-body">Choose a coffee. If it could be a piece of music or a song, what would it be and why?</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">5</div><div class="acc-title">Tasting 5 — Feeling Description</div><div class="acc-arrow">▾</div></div><div class="acc-body">Pick your favorite coffee and brew it. Describe the feeling it gives you. This connects the personal emotional experience to the coffee.</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">6</div><div class="acc-title">Tasting 6 — Best Coffee Experience</div><div class="acc-arrow">▾</div></div><div class="acc-body">Share your all-time favorite coffee experience. Were you at home or on vacation? Was it Starbucks® coffee or some other brand?</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">7</div><div class="acc-title">Tasting 7 — Brewer vs. Press</div><div class="acc-arrow">▾</div></div><div class="acc-body">Compare brewed coffee to the same coffee prepared in a coffee press. Notice any similarities or differences?</div></div>
+    <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">10</div><div class="acc-title">Tasting 10 — Food Pairing Discovery</div><div class="acc-arrow">▾</div></div><div class="acc-body">Pair foods with coffee to discover new ways to describe coffee. Pair kiwi with Kenya, raw mushrooms with Sumatra, and dark chocolate with Guatemala Antigua. Try to recognize what is meant when Kenya is described as "fruity" and Sumatra as "earthy." Try to recognize the "cocoa" texture in Guatemala Antigua.</div></div>
+  </div>
+
+  <div class="section-heading">Step-By-Step Sampling Guide</div>
+  <div class="sampling-steps">
+    <div class="sample-step"><h4>Decide What to Sample</h4><p>Each promotional workbook includes sampling suggestions. The store manager may post sampling assignments on a calendar or daily coverage report.</p></div>
+    <div class="sample-step"><h4>Choose a Coffee</h4><p>Pick your favorite, especially one that you enjoy discussing. Personal passion is contagious.</p></div>
+    <div class="sample-step"><h4>Brew the Coffee</h4><p>Use a coffee press or store coffee brewer, or another method to brew freshly ground coffee.</p></div>
+    <div class="sample-step"><h4>Offer a Food Pairing</h4><p>Pairing coffee with food provides a comfortable, familiar context for customers. Prepare food samples while the coffee is brewing.</p></div>
+    <div class="sample-step"><h4>Pour the Coffee</h4><p>Pour into tasting cups. Use the right size — smaller samples let customers try more coffees.</p></div>
+    <div class="sample-step"><h4>Place on Sample Tray</h4><p>Place tasting cups and food samples on a sample tray for easy carrying through the store.</p></div>
+    <div class="sample-step"><h4>Offer Samples</h4><p>Walk around the store. Offer samples to customers waiting in line, seated in the café area, or browsing the merchandise area.</p></div>
+    <div class="sample-step"><h4>Engage the Customer</h4><p>Engage in a conversation about the coffee. Ask if they have ever tried that coffee, or share a story about why it is your favorite.</p></div>
+    <div class="sample-step"><h4>Mention Condiments</h4><p>Tell customers that cream and sugar are available at the condiment bar so they can enjoy their sample as they would enjoy coffee at home.</p></div>
+    <div class="sample-step"><h4>Hold Time</h4><p>Sample only freshly brewed coffee. Discard coffee from a coffee press after 20 minutes. Discard coffee from a coffee brewer after 30 minutes.</p></div>
+  </div>
+
+  <div class="section-heading">Tasting Themes</div>
+  <div class="two-col">
+    <div class="mini-card">
+      <h4>🌍 Around the World</h4>
+      <ul>
+        <li>Latin America: Guatemala Antigua</li>
+        <li>Africa: Kenya</li>
+        <li>Asia/Pacific: Sumatra</li>
+      </ul>
+    </div>
+    <div class="mini-card">
+      <h4>🌎 Latin American Journeys</h4>
+      <ul>
+        <li>Veranda Blend</li>
+        <li>Guatemala Antigua</li>
+        <li>Pike Place® Roast</li>
+      </ul>
+    </div>
+    <div class="mini-card">
+      <h4>🌍 African Adventures</h4>
+      <ul>
+        <li>Ethiopia</li>
+        <li>Kenya</li>
+      </ul>
+    </div>
+    <div class="mini-card">
+      <h4>☕ Dark Roasts</h4>
+      <ul>
+        <li>Espresso Roast</li>
+        <li>Italian Roast</li>
+        <li>French Roast</li>
+      </ul>
+    </div>
+    <div class="mini-card">
+      <h4>🏝 Asia/Pacific Excursions</h4>
+      <ul>
+        <li>Komodo Dragon Blend®</li>
+        <li>Sumatra</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-heading">Pairing Coffee with Chocolate</div>
+  <table class="pair-table">
+    <thead><tr><th>Chocolate</th><th>Recommended Coffee</th></tr></thead>
+    <tbody>
+      <tr><td>Milk chocolate</td><td>Caffè Verona®, Guatemala Antigua</td></tr>
+      <tr><td>Dark chocolate</td><td>Caffè Verona®, Kenya</td></tr>
+      <tr><td>Chocolate with caramel</td><td>Espresso Roast, Italian Roast, Gold Coast Blend®</td></tr>
+      <tr><td>Chocolate with nuts</td><td>Guatemala Antigua, Espresso Roast</td></tr>
+      <tr><td>Chocolate with fruit</td><td>Starbucks® Willow Blend™, Kenya, Guatemala Antigua</td></tr>
+      <tr><td>Chocolate with mint</td><td>Caffè Verona®, Espresso Roast, Italian Roast</td></tr>
+    </tbody>
+  </table>
+
+  <div class="section-heading">Other Food Pairings</div>
+  <div class="two-col">
+    <div class="mini-card">
+      <h4>Coffee → Food</h4>
+      <ul>
+        <li><strong>Sumatra:</strong> warm brie cheese or shortbread cookie</li>
+        <li><strong>Guatemala Antigua:</strong> fresh, ripe mango or caramel apple</li>
+        <li><strong>Christmas Blend:</strong> fresh figs, gingerbread or molasses cookie</li>
+        <li><strong>Gold Coast Blend®:</strong> milk chocolate and dark chocolate</li>
+      </ul>
+    </div>
+    <div class="mini-card">
+      <h4>Language of Coffee Chart</h4>
+      <ul>
+        <li><strong>Bright/Citrus:</strong> Kenya → grapefruit, orange, lemon</li>
+        <li><strong>Earthy:</strong> Sumatra → raw mushrooms</li>
+        <li><strong>Spicy:</strong> Christmas Blend → nutmeg, cinnamon, pepper</li>
+        <li><strong>Cocoa:</strong> Guatemala Antigua → unsweetened cocoa</li>
+        <li><strong>Nutty:</strong> Veranda Blend / Pike Place® → walnuts</li>
+        <li><strong>Buttery:</strong> Sumatra → caramel, shortbread</li>
+      </ul>
+    </div>
+  </div>
+
+  <div class="section-heading">Tasting Tips: Compare and Contrast</div>
+  <div class="callout">
+    <p>The key to tasting is to compare. Tasting only one coffee at a time does not create any context. If you taste two or three coffees, you can discuss them in terms of preference, aroma-acidity-body-flavor and coffee region. When tasting more than one coffee, taste lighter-bodied coffees first and then fuller-bodied coffees. There is always time for a coffee tasting.</p>
+    <cite>— Coffee Tasting Activities Manual</cite>
+  </div>
+
+  <div class="chapter-nav-footer">
+    <button class="nav-btn" onclick="showChapter(1)">← Grind &amp; Water</button>
+    <button class="nav-btn primary" onclick="showChapter(3)">Coffee Facts &amp; Origins →</button>
+  </div>
+</div>
+
+<!-- ═══════════════ CH3: COFFEE FACTS & ORIGINS -->
+<div class="chapter" id="ch3">
+  <div class="chapter-header">
+    <div class="chapter-num">Chapter 4</div>
+    <h2>Coffee Facts &amp; Origins</h2>
+    <div class="subtitle">Every coffee — its aroma, where it hits your tongue, body, flavor, and perfect food pairing.</div>
+  </div>
+
+  <div class="fact-box">
+    <div class="fact-label">How to Use This Chapter</div>
+    Tap <strong>Explore This Coffee</strong> on any card to reveal the full sensory breakdown: what it smells like, what you taste when you slurp it, where it registers on your tongue, how heavy the body feels, and the best food to pair with it.
+  </div>
+
+  <div class="scoffee-grid" id="scoffeeGrid"></div>
+
+  <div class="old-coffee-grid" style="display:none!important"><!-- placeholder --></div>
+  <div class="coffee-grid" style="display:none!important">
+
+    <div class="coffee-card" onclick="this.classList.toggle('open')">
+      <div class="cc-roast">☀️ Blonde Roast</div>
+      <div class="cc-name">Starbucks® Blonde Espresso Roast</div>
+      <div class="cc-notes">Notes of Candied Apple &amp; Bittersweet Chocolate</div>
+      <div class="cc-tags"><span class="cc-tag">Latin America &amp; Africa</span><span class="cc-tag">Medium Acidity</span><span class="cc-tag">Medium Body</span><span class="cc-tag">Washed</span></div>
+      <div class="cc-detail">This subtly sweet coffee creates a new twist on classic espresso beverages, great for new espresso drinkers and seasoned coffee aficionados alike. Made up of select Latin American and East African beans, carefully roasted to coax out sweet, vibrant notes of candied apple and bittersweet chocolate. The result is smooth, well-rounded and versatile — delicious served hot or over ice. <em>Flavor pairings: Lemon, Orange, Caramel. Since 2016 (CAN), 2018 (USA).</em></div>
+    </div>
+
+    <div class="coffee-card" onclick="this.classList.toggle('open')">
+      <div class="cc-roast">☀️ Blonde Roast</div>
+      <div class="cc-name">Starbucks Veranda Blend™</div>
+      <div class="cc-notes">Notes of Toasted Malt &amp; Milk Chocolate</div>
+      <div class="cc-tags"><span class="cc-tag">Latin America</span><span class="cc-tag">Medium Acidity</span><span class="cc-tag">Light Body</span><span class="cc-tag">Washed</span></div>
+      <div class="cc-detail">Starbucks' very first Blonde Roast (2012) — inspired by lightly roasted coffees sipped on breezy verandas overlooking lush coffee trees. Subtle but flavorful, it mixes beautifully with milk. After trying 80 different iterations of blends and roasts, Veranda Blend was born. Known as Lightnote Blend™ in Japan. <em>Flavor pairings: Chocolate, Nuts, Malt.</em></div>
+    </div>
+
+    <div class="coffee-card" onclick="this.classList.toggle('open')">
+      <div class="cc-roast">☀️ Blonde Roast</div>
+      <div class="cc-name">Starbucks Willow Blend™</div>
+      <div class="cc-notes">Notes of Caramel &amp; Lemon Zest</div>
+      <div class="cc-tags"><span class="cc-tag">Latin America &amp; Africa</span><span class="cc-tag">High Acidity</span><span class="cc-tag">Light Body</span><span class="cc-tag">Washed</span></div>
+      <div class="cc-detail">As elegant as the tree that inspired its name. The first sip reveals the juicy, lemony notes of African coffee, followed by a caramel finish from the Latin American beans. Launched alongside Veranda Blend as one of the first two Starbucks® Blonde Roast coffees (2012). <em>Flavor pairings: Lemon, Orange, Milk Caramel.</em></div>
+    </div>
+
+    <div class="coffee-card" onclick="this.classList.toggle('open')">
+      <div class="cc-roast">🌤 Medium Roast</div>
+      <div class="cc-name">Starbucks® Breakfast Blend</div>
+      <div class="cc-notes">Notes of Brown Sugar &amp; Sweet Orange</div>
+      <div class="cc-tags"><span class="cc-tag">Latin America</span><span class="cc-tag">High Acidity</span><span class="cc-tag">Medium Body</span><span class="cc-tag">Washed</span></div>
+      <div class="cc-detail">More toasty than roasty, this blend was made for good mornings. The lively flavor and effervescent acidity found in Latin American coffees were the perfect match. Breakfast Blend's acidity provides a palate-cleansing tanginess with little aftertaste — known as a "clean finish." Introduced in 1998 as part of Starbucks "Milder Dimensions." <em>Flavor pairings: Apples, Caramelized Nuts, Citrus.</em></div>
+    </div>
+
+    <div class="coffee-card" onclick="this.classList.toggle('open')">
+      <div class="cc-roast">🌤 Medium Roast</div>
+      <div class="cc-name">Starbucks® Pike Place® Roast</div>
+      <div class="cc-notes">Notes of Cocoa &amp; Rich Praline</div>
+      <div class="cc-tags"><span class="cc-tag">Latin America</span><span class="cc-tag">Medium Acidity</span><span class="cc-tag">Medium Body</span><span class="cc-tag">Washed</span></div>
+      <div class="cc-detail">Named for our first store in Seattle's Pike Place Market. A smooth, well-rounded blend of Latin American beans. In 2008 we launched this as our everyday brew — after more than 30 recipes and taste tests with nearly 1,000 customers who spent almost 1,500 hours providing input. Available as Decaf Pike Place® Roast. <em>Flavor pairings: Nuts, Chocolate, Cinnamon.</em></div>
+    </div>
+
+    <div class="coffee-card" onclick="this.classList.toggle('open')">
+      <div class="cc-roast">🌤 Medium Roast</div>
+      <div class="cc-name">Starbucks® House Blend</div>
+      <div class="cc-notes">Notes of Toffee &amp; Dusted Cocoa</div>
+      <div class="cc-tags"><span class="cc-tag">Latin America</span><span class="cc-tag">Medium Acidity</span><span class="cc-tag">Medium Body</span><span class="cc-tag">Washed</span></div>
+      <div class="cc-detail">Our beginning — the very first blend we ever created back in 1971. Loaded with flavor, balancing tastes of toffee and dusted cocoa, with just a touch of sweetness from the roast. This set the course of the way our blenders and roasters work even today. A true reflection of us. Decaf House Blend available in select markets. <em>Flavor pairings: Nuts, Apples, Blueberries.</em></div>
+    </div>
+
+    <div class="coffee-card" onclick="this.classList.toggle('open')">
+      <div class="cc-roast">🌤 Medium Roast</div>
+      <div class="cc-name">Single-Origin Guatemala Antigua</div>
+      <div class="cc-notes">Notes of Cocoa &amp; Baking Spice</div>
+      <div class="cc-tags"><span class="cc-tag">Antigua Valley, Guatemala</span><span class="cc-tag">Medium Acidity</span><span class="cc-tag">Medium Body</span><span class="cc-tag">Washed</span></div>
+      <div class="cc-detail">A Starbucks favorite since 1971. In Antigua Valley, coffee is a family tradition — generations of farmers have worked the rich volcanic soil. Guatemala has many active volcanoes and mineral-rich soil contributing to high-elevation coffee. Rich and refined, with elegant notes of dusted cocoa and soft spice. In 2022, Starbucks opened its 1,500th store in Latin America &amp; the Caribbean in Antigua. <em>Flavor pairings: Apples, Chocolate, Cinnamon.</em></div>
+    </div>
+
+    <div class="coffee-card" onclick="this.classList.toggle('open')">
+      <div class="cc-roast">🌤 Medium Roast</div>
+      <div class="cc-name">Single-Origin Kenya</div>
+      <div class="cc-notes">Notes of Black Currant &amp; Grapefruit</div>
+      <div class="cc-tags"><span class="cc-tag">Africa: Kenya</span><span class="cc-tag">High Acidity</span><span class="cc-tag">Medium Body</span><span class="cc-tag">Washed</span></div>
+      <div class="cc-detail">A Starbucks offering since 1971. Kenya's bountiful landscape is home to many smallholder farmers who form community co-ops. Rich, fertile volcanic soil around Mount Kenya — Africa's second highest mountain. Adventurous yet approachable with juicy acidity and notes of black currant and grapefruit. African coffees maintain their flavor characteristics as they cool — great iced. Coffee was not cultivated in Kenya until the 19th century when introduced by French missionaries. <em>Flavor pairings: Grapefruit, Orange, Berries.</em></div>
+    </div>
+
+    <div class="coffee-card" onclick="this.classList.toggle('open')">
+      <div class="cc-roast">🌤 Medium Roast</div>
+      <div class="cc-name">Single-Origin Ethiopia</div>
+      <div class="cc-notes">Notes of Dried Citrus &amp; Savory Spice</div>
+      <div class="cc-tags"><span class="cc-tag">Africa: Ethiopia</span><span class="cc-tag">High Acidity</span><span class="cc-tag">Medium Body</span><span class="cc-tag">Washed</span></div>
+      <div class="cc-detail">Ethiopia is the ultimate coffee origin and the birthplace of coffee. On the ancient slopes flanking Africa's Great Rift Valley, coffee trees first emerged from rich volcanic soil in the 9th century. The Ethiopian word for coffee comes from the Kaffa region. An elaborate coffee ceremony — roasting, grinding, and brewing — is still a staple of Ethiopian social life today. Soft and velvety with notes of dried citrus and savory, pepper-like spices. <em>Flavor pairings: Citrus, Berries.</em></div>
+    </div>
+
+    <div class="coffee-card" onclick="this.classList.toggle('open')">
+      <div class="cc-roast">🌤 Medium Roast</div>
+      <div class="cc-name">Single-Origin Colombia</div>
+      <div class="cc-notes">Notes of Toasted Walnut &amp; Herbs</div>
+      <div class="cc-tags"><span class="cc-tag">Colombia</span><span class="cc-tag">Medium Acidity</span><span class="cc-tag">Medium Body</span><span class="cc-tag">Washed</span></div>
+      <div class="cc-detail">Starbucks has served single-origin Colombian coffees since opening at Pike Place Market in 1971. Nestled on the north end of the Andes, Colombia is home to volcanoes, rich volcanic soil, and diverse micro-climates. The Sierra Nevada and Andes ranges create some of the highest elevations for coffee production in Latin America. In 2012, Starbucks opened a Farmer Support Center in Manizales, Colombia, now supporting over 100,000 coffee farmers. <em>Flavor pairings: Milk Chocolate, Nuts.</em></div>
+    </div>
+
+    <div class="coffee-card" onclick="this.classList.toggle('open')">
+      <div class="cc-roast">🌤 Medium Roast</div>
+      <div class="cc-name">Starbucks Siren's Blend™</div>
+      <div class="cc-notes">Notes of Juicy Citrus &amp; Chocolate</div>
+      <div class="cc-tags"><span class="cc-tag">Latin America &amp; Africa</span><span class="cc-tag">Medium Acidity</span><span class="cc-tag">Medium Body</span><span class="cc-tag">Washed</span></div>
+      <div class="cc-detail">Named for the Siren that symbolizes Starbucks, this blend was inspired and created by the trailblazing women of the coffee industry. Combines East African and Latin American coffees. Fresh, juicy citrus and bright, lively florals complement a syrupy body and melting chocolate mouthfeel. Great brewed hot or iced. The Starbucks Foundation has set a goal to positively impact 1 million women and girls in origin communities by 2030. <em>Since 2019. Flavor pairings: Candied Citrus, Milk Chocolate.</em></div>
+    </div>
+
+    <div class="coffee-card" onclick="this.classList.toggle('open')">
+      <div class="cc-roast">🌑 Dark Roast</div>
+      <div class="cc-name">Starbucks® Espresso Roast</div>
+      <div class="cc-notes">Notes of Molasses &amp; Caramel</div>
+      <div class="cc-tags"><span class="cc-tag">Multi-Region</span><span class="cc-tag">Medium Acidity</span><span class="cc-tag">Full Body</span><span class="cc-tag">Washed &amp; Semi-Washed</span></div>
+      <div class="cc-detail">The heart of our handcrafted beverages since 1975. First developed by Dave Olsen, a local Seattle coffee shop owner, who officially joined Starbucks in 1987. In 1984 Starbucks installed its first espresso machine — they needed a timeless blend that would taste great on its own and punch through steamed milk. The perfect melding of beans and roast reveals notes of rich molasses and bold, caramelly sweetness — a flavor profile so incredible it's never been changed. Available as Decaf. <em>Flavor pairings: Chocolate, Caramel.</em></div>
+    </div>
+
+    <div class="coffee-card" onclick="this.classList.toggle('open')">
+      <div class="cc-roast">🌑 Dark Roast</div>
+      <div class="cc-name">Starbucks® Caffè Verona™</div>
+      <div class="cc-notes">Notes of Dark Cocoa &amp; Caramelized Sugar</div>
+      <div class="cc-tags"><span class="cc-tag">Multi-Region</span><span class="cc-tag">Low Acidity</span><span class="cc-tag">Full Body</span><span class="cc-tag">Washed &amp; Semi-Washed</span></div>
+      <div class="cc-detail">Originally known as Jake's Blend, created in 1975 for a Seattle restaurant. People loved it so much it was blended by hand in stores — originally 80% Yukon Blend and 20% Italian Roast. Named after the city of Romeo and Juliet. Post-roast blending technique ensures each origin's beans are roasted to their full potential separately, then blended. Well-balanced and rich with flavors of dark cocoa and caramelized sugar — pairs perfectly with anything chocolate. <em>Flavor pairings: Chocolate, Caramel.</em></div>
+    </div>
+
+    <div class="coffee-card" onclick="this.classList.toggle('open')">
+      <div class="cc-roast">🌑 Dark Roast</div>
+      <div class="cc-name">Starbucks® Italian Roast</div>
+      <div class="cc-notes">Notes of Dark Cocoa &amp; Toasted Marshmallow</div>
+      <div class="cc-tags"><span class="cc-tag">Multi-Region</span><span class="cc-tag">Low Acidity</span><span class="cc-tag">Medium Body</span><span class="cc-tag">Washed &amp; Semi-Washed</span></div>
+      <div class="cc-detail">Pays homage to the country that gave the world espresso. Slightly darker than our Espresso Roast, capturing the essence of a dark roast. One of our most challenging roasts to master — each batch is expertly roasted to the perfect color, with a small window of opportunity to bring roasty flavor to the forefront. Italian Roast once played a critical role in the earliest days of Frappuccino® blended beverages. Since 1971. <em>Flavor pairings: Caramelized Sugar, Chocolate.</em></div>
+    </div>
+
+    <div class="coffee-card" onclick="this.classList.toggle('open')">
+      <div class="cc-roast">🌑 Dark Roast</div>
+      <div class="cc-name">Starbucks® French Roast</div>
+      <div class="cc-notes">Notes of Dark Caramel &amp; Sweet Smoke</div>
+      <div class="cc-tags"><span class="cc-tag">Multi-Region</span><span class="cc-tag">Low Acidity</span><span class="cc-tag">Light Body</span><span class="cc-tag">Varies</span></div>
+      <div class="cc-detail">Our deepest, darkest roast — intense, uncompromising and adored by adventurous palates. Beans easily reach over 450°F (232°C) during the roast cycle. A dark roasted bean is much less dense than a lighter roasted bean, so it takes a larger volume to make a pound — this is why a bag of French Roast looks larger than other coffees. At this roast level, origin-specific acidity, body, and flavors are no longer present — what remains is a distinctive explosion of smoky flavor. Since 1971. <em>Flavor pairings: Toasted Nuts, Dark Chocolate, Caramel.</em></div>
+    </div>
+
+    <div class="coffee-card" onclick="this.classList.toggle('open')">
+      <div class="cc-roast">🌑 Dark Roast</div>
+      <div class="cc-name">Single-Origin Sumatra</div>
+      <div class="cc-notes">Notes of Rich Herbs &amp; Rustic Spice</div>
+      <div class="cc-tags"><span class="cc-tag">Asia-Pacific: Sumatra, Indonesia</span><span class="cc-tag">Low Acidity</span><span class="cc-tag">Full Body</span><span class="cc-tag">Semi-Washed (wet-hulled)</span></div>
+      <div class="cc-detail">A Starbucks staple since day one (1971) and our most popular single-origin coffee. Grown on a lush Indonesian island by smallholder farmers, sometimes with farms no bigger than a backyard. Uses a unique wet-hulling (giling basah) processing method: immediately after picking, the coffee fruit is removed, beans are rinsed and partially dried in parchment, then hulled while still semi-wet. This distinctive process creates Sumatra's recognizable earthy, full-bodied profile. Available as Decaf Sumatra. <em>Flavor pairings: Cheese, Maple, Cinnamon.</em></div>
+    </div>
+
+    <div class="coffee-card" onclick="this.classList.toggle('open')">
+      <div class="cc-roast">🌑 Dark Roast</div>
+      <div class="cc-name">Starbucks® Komodo Dragon Blend™</div>
+      <div class="cc-notes">Notes of Fresh Herbs &amp; Warm Spice</div>
+      <div class="cc-tags"><span class="cc-tag">Asia-Pacific: Indonesia</span><span class="cc-tag">Low Acidity</span><span class="cc-tag">Full Body</span><span class="cc-tag">Washed &amp; Semi-Washed</span></div>
+      <div class="cc-detail">First launched in 1997 by mail order, became so popular when it launched in North American stores (2004) that it was added to the year-round lineup. Masterfully knits together the distinct flavors and diverse coffee growing traditions found across the Indonesian archipelago. Complex and buttery with layered notes of fresh herbs and warm spice. Partners often tell us they don't understand how a coffee can be "spicy" until they've tasted Komodo Dragon Blend. <em>Flavor pairings: Mushroom, Cheese, Herbs.</em></div>
+    </div>
+
+  </div>
+
+  <div class="chapter-nav-footer">
+    <button class="nav-btn" onclick="showChapter(2)">← Coffee Tasting</button>
+    <button class="nav-btn primary" onclick="showChapter(4)">Glossary →</button>
+  </div>
+</div>
+
+<!-- ═══════════════ CH4: GLOSSARY -->
+<div class="chapter" id="ch4">
+  <div class="chapter-header">
+    <div class="chapter-num">Chapter 5</div>
+    <h2>Glossary of Coffee Terms</h2>
+    <div class="subtitle">The language of coffee — from Acidity to Winey.</div>
+  </div>
+
+  <input class="glossary-search" type="text" placeholder="Search terms... (e.g. 'body', 'acidity', 'bloom')" oninput="filterGlossary(this.value)" id="glossSearch">
+
+  <div class="glossary-grid" id="glossaryGrid">
+  </div>
+
+  <div class="chapter-nav-footer">
+    <button class="nav-btn" onclick="showChapter(3)">← Coffee Facts</button>
+    <button class="nav-btn primary" onclick="showChapter(5)">Knowledge Quiz →</button>
+  </div>
+</div>
+
+<!-- ═══════════════ CH5: QUIZ -->
+<div class="chapter" id="ch5">
+  <div class="chapter-header">
+    <div class="chapter-num">Chapter 6</div>
+    <h2>☕ Coffee Knowledge Quiz</h2>
+    <div class="subtitle">Test your mastery of brewing, tasting, and coffee knowledge.</div>
+  </div>
+
+  <div id="quizContainer"></div>
+
+  <div class="chapter-nav-footer">
+    <button class="nav-btn" onclick="showChapter(4)">← Glossary</button>
+    <button class="nav-btn primary" onclick="resetQuiz()">↺ New Quiz</button>
+  </div>
+</div>
+
+</div><!-- end content -->
+
+<script>
+// ── NAVIGATION ──
+const totalChapters = 6;
+function showChapter(n) {
+  document.querySelectorAll('.chapter').forEach((c,i) => {
+    c.classList.toggle('active', i === n);
+  });
+  document.querySelectorAll('.chapter-btn').forEach((b,i) => {
+    b.classList.toggle('active', i === n);
+  });
+  const pct = Math.round(((n+1)/totalChapters)*100);
+  document.getElementById('progressFill').style.width = pct + '%';
+  document.getElementById('progressPct').textContent = pct + '%';
+  const labels = ['Chapter 1 of 6','Chapter 2 of 6','Chapter 3 of 6','Chapter 4 of 6','Chapter 5 of 6','Chapter 6 of 6'];
+  document.getElementById('progressLabel').textContent = labels[n];
+  window.scrollTo({top:0, behavior:'smooth'});
+}
+
+// ── ACCORDION ──
+function toggleAcc(el) { el.classList.toggle('open'); }
+function toggleValue(el) { el.classList.toggle('active'); }
+
+// ── GLOSSARY ──
+const glossaryTerms = [
+  {term:'Acidity', def:'The lively, palate-cleansing property characteristic of washed coffees grown at a high altitude. Like the refreshing acidity found in some fruits. Creates a sensation on the sides and tip of the tongue, not related to pH level.'},
+  {term:'Aged coffee', def:'Certain coffees from the Asia/Pacific region benefit from prolonged storage prior to roasting. After aging for three to five years, these coffees develop a unique cedar-spice flavor and are used in select blends, including Starbucks® Christmas Blend.'},
+  {term:'Arabica', def:'One of the two major commercially significant species of coffee. The only species purchased by Starbucks. Higher quality and more nuanced flavor than Robusta.'},
+  {term:'Aroma', def:'The term used to describe the scent of the coffee. Descriptors include earthy, spicy, floral and nutty. Much of what we perceive as flavor is related to our sense of smell.'},
+  {term:'Astringency', def:'A drying sensation that some coffees leave in your mouth.'},
+  {term:'Balanced', def:'A coffee that features a pleasant mix of flavor, acidity and body. No single characteristic dominates the cup.'},
+  {term:'Berry', def:'A flavor and aroma reminiscent of blackberries or blueberries. Some of the best coffees of East Africa and the Arabian Peninsula have these characteristics.'},
+  {term:'Bitter', def:'The basic taste sensation perceived primarily at the back of the tongue.'},
+  {term:'Blend', def:'A coffee that combines coffees from different origin countries to achieve a taste that no single origin coffee can offer.'},
+  {term:'Body', def:'The feeling of weight or thickness of the coffee on your tongue. Also referred to as "mouthfeel." Described as light, medium, or full-bodied.'},
+  {term:'Bright', def:'An assertive flavor with a tangy acidity perceived at the front of the mouth. Denotes high-quality and a high-altitude coffee farm.'},
+  {term:'Buttery', def:'A smooth, rich flavor and texture found in some Indonesian coffees.'},
+  {term:'C.A.F.E. Practices', def:'Ethical coffee-buying guidelines that give purchasing preference to coffee suppliers that grow, process and trade coffee in an environmentally, socially and economically responsible way. Stands for Coffee and Farmer Equity.'},
+  {term:'Caramelly', def:'A subtle sweetness, particularly in blends given a deep, dark roast.'},
+  {term:'Citrus', def:'An unmistakable lemon or grapefruit flavor note.'},
+  {term:'Clean', def:'Coffees that leave little aftertaste are described as clean.'},
+  {term:'Cocoa', def:'A texture and flavor reminiscent of unsweetened cocoa powder. It leaves a somewhat dry but very pleasant aftertaste in the mouth.'},
+  {term:'Complex', def:'A coffee with an array of flavors, rather than one dominant taste.'},
+  {term:'Conservation International (CI)', def:'A non-profit organization that is working to protect global biodiversity and demonstrate that human societies can live harmoniously with nature.'},
+  {term:'Cooperative', def:'Small-holder farmers come together to achieve economies of scale, obtaining bargaining power, and collaborate on production methods. Cooperatives can also process and export coffee. All Fair Trade Certified™ coffee is produced by cooperatives.'},
+  {term:'Crisp', def:'A clean coffee with bright acidity can be described as crisp.'},
+  {term:'Decaffeination', def:'The process by which caffeine is removed from coffee. Starbucks offers coffee decaffeinated by the direct contact and indirect contact methods.'},
+  {term:'Earthy', def:'Most often used to describe a flavor found in Indonesian coffees. Earthy flavors remind people of fresh mushrooms. Sumatra is one of these coffees and is Starbucks\' most popular single origin offering.'},
+  {term:'Elegant', def:'Coffees that have a luxurious mouthfeel and intriguing flavors.'},
+  {term:'Estate', def:'A medium to large scale farm that usually has its own processing facility.'},
+  {term:'Exotic', def:'Unusual aromas and flavor notes, such as floral, berry-like or spicy.'},
+  {term:'Exporter', def:'Receives or buys green coffee beans from mills and cooperatives. They contract and arrange for shipment of green coffee to importers or roasters.'},
+  {term:'Fair Trade Certified™', def:'Produced by democratically-run cooperatives of small-scale, family-owned coffee farms that can be certified as Fair Trade.'},
+  {term:'Flavor', def:'How a coffee tastes or the overall impression a coffee leaves in your mouth. Detected in different parts of the mouth.'},
+  {term:'FlavorLock™', def:'The packaging material and one-way valve that lets the gasses out while no air can get into the package, guaranteeing freshness of our coffees. Has a 34-week shelf life.'},
+  {term:'Floral', def:'A fresh, sweet aroma that is fleeting and delicate, but unmistakable.'},
+  {term:'Fruity', def:'Coffees that have a berry or tropical fruit-like flavor or aroma are referred to as being fruity. Kenya is an example of fruity coffee.'},
+  {term:'Full-bodied', def:'A heavier texture. The weightier the coffee on the tongue, the more body it has.'},
+  {term:'Herbal', def:'The taste or aroma reminiscent of pungent herbs, like basil, oregano and other fine cooking herbs.'},
+  {term:'Importer', def:'Receives or buys green coffee beans from mills and cooperatives. They contract and arrange for shipment of green coffee from exporters or producers to roasters.'},
+  {term:'Intense', def:'A singular, potent attribute, such as the earthiness of Sumatra or the smokiness of French Roast.'},
+  {term:'Juicy', def:'The mouthfeel or sensation that makes you salivate.'},
+  {term:'Light-bodied', def:'Less weight on the tongue. A fleeting aftertaste.'},
+  {term:'Medium-bodied', def:'A smooth, even texture, neither fleeting nor overwhelming.'},
+  {term:'Mild', def:'A coffee with approachable flavor characteristics.'},
+  {term:'Mouthfeel', def:'The sensation or weight you feel inside your mouth when tasting coffee. Also known as body.'},
+  {term:'Nutty', def:'An enjoyable flavor reminiscent of walnuts, almonds, hazelnuts or other nuts.'},
+  {term:'Organic coffees', def:'Grown without the use of synthetic pesticides, herbicides or chemical fertilizers. Can be certified organic. Must also be processed in mills and roasting facilities that are certified organic.'},
+  {term:'Peaberry', def:'A round-shaped bean that forms when one of the two flat-sided beans in the coffee cherry fails to grow. The remaining small bean assumes a rounded pea shape. This occurs in about five to ten percent of the beans of a typical arabica crop.'},
+  {term:'Processing', def:'The method in which the fruit of the coffee cherry is separated from the green coffee bean. Three basic methods: washed (wet), natural (dry), and semi-washed.'},
+  {term:'Robusta', def:'One of the two major commercially significant species of coffee, grown at lower altitudes than arabica. The flavor is less refined, and the caffeine content is higher. Starbucks does not purchase robusta coffees.'},
+  {term:'Shade Grown', def:'Coffees that are grown under a canopy of shade trees.'},
+  {term:'Single Origin', def:'A coffee such as Kenya that is made up of coffee entirely from one producing country, offered to showcase the distinctive character of that country\'s coffee.'},
+  {term:'Smoky', def:'The darker the roast, the smokier the aroma and flavor. Used to describe Starbucks® French Roast.'},
+  {term:'Smooth', def:'A round, well-balanced coffee that leaves a pleasant mouth feel.'},
+  {term:'Soft', def:'Low-acidity, mild-flavored coffees are referred to as soft.'},
+  {term:'Spicy', def:'The aroma or flavor of a spice, from sweet to savory.'},
+  {term:'Sparkling', def:'This term describes a coffee with a bright acidity that dances on your tongue before it quickly disappears.'},
+  {term:'Stale coffee', def:'Coffee that has been exposed to oxygen for extended periods of time, resulting in a loss of acidity and a flat, cardboard taste.'},
+  {term:'Starbucks® Blonde Roast', def:'Blonde-roasted coffees have a shorter roast time, lighter body and mellow flavors. Showcases soft flavors too delicate to be found in darker roasts. Not simply lighter — it\'s about finding the precise roast to release delicate flavors.'},
+  {term:'Starbucks® Dark Roast', def:'Darker-roasted coffees feature a fuller body and robust, bold flavors. The darker the roast, the smokier the aroma and flavor.'},
+  {term:'Starbucks® Medium Roast', def:'Medium-roasted coffees are balanced with smooth and rich flavors.'},
+  {term:'Sweet', def:'A positive coffee description that is associated with a pleasant flavor and mouth feel.'},
+  {term:'Syrupy', def:'A thick coffee with a lot of body that leaves a lingering aftertaste.'},
+  {term:'Tangy', def:'A lingering acidity is often described as tangy.'},
+  {term:'Umami ("oo-MA-mee")', def:'Usually defined as a meaty, savory, satisfying taste. The savory taste of foods and the full, tongue-coating sensation they provide.'},
+  {term:'Varietal', def:'A botanical subheading of species. For example, Bourbon is a varietal of the species arabica.'},
+  {term:'Wild', def:'Exotic flavors with extreme characteristics.'},
+  {term:'Winey', def:'A taste like that of red wine or having a fruit quality.'},
+];
+
+function buildGlossary(filter) {
+  const grid = document.getElementById('glossaryGrid');
+  const terms = filter ? glossaryTerms.filter(t => 
+    t.term.toLowerCase().includes(filter.toLowerCase()) || 
+    t.def.toLowerCase().includes(filter.toLowerCase())
+  ) : glossaryTerms;
+  grid.innerHTML = terms.map(t => `
+    <div class="gloss-item">
+      <div class="gloss-term">${t.term}</div>
+      <div class="gloss-def">${t.def}</div>
+    </div>
+  `).join('');
+}
+
+function filterGlossary(val) { buildGlossary(val); }
+buildGlossary('');
+
+// ── QUIZ ──
+const questions = [
+  { q: 'What is the standard coffee-to-water proportion recommended by Starbucks?', opts: ['5 g per 180 ml', '10 g (2 tbsp) per 180 ml (6 fl oz.)', '15 g per 240 ml', '20 g per 180 ml'], answer: 1, fb: 'The recipe is 10 g (2 tbsp) of freshly ground coffee for every 180 ml (6 fl oz.) of water. This standard was established by the Coffee Brewing Center in the 1940s and introduced in 1945.' },
+  { q: 'Why does using too little coffee produce a bitter cup?', opts: ['Less coffee makes weaker extraction', 'More water passes through the grounds, over-extracting after desirable flavors are gone', 'The temperature drops too fast', 'Less coffee means less caffeine'], answer: 1, fb: 'When too little coffee is used, more water passes through, continuing extraction long after the desirable flavor components are pulled out, resulting in thin, bitter coffee. To make a milder cup, dilute full-strength coffee with hot water instead.' },
+  { q: 'What is the ideal water temperature for brewing coffee?', opts: ['75°–80°C (167°–176°F)', '85°–90°C (185°–194°F)', '91°–96°C (195°–205°F)', '100°C (212°F)'], answer: 2, fb: '91°–96°C (195°–205°F) is perfect for extracting the coffee\'s full range of flavors. When using a kettle, bring to a boil, remove from heat for 30 seconds, then pour.' },
+  { q: 'Which grind should be used for a French press (coffee press)?', opts: ['Turkish', 'Espresso', 'Extra Fine', 'Coarse'], answer: 3, fb: 'Coarse grind is recommended for coffee presses, cold brew makers (Toddy®), open pots, and percolators. If it\'s difficult to press down the plunger, the grind is too fine.' },
+  { q: 'Which grind is recommended for a Chemex® pour over with a flat-bottom filter?', opts: ['Fine', 'Medium', 'Extra Fine', 'Coarse'], answer: 1, fb: 'Medium grind is required for all brewers that use paper or gold flat-bottomed filters and Chemex® pour over. When customers say "grind it for drip," ask which filter type they use.' },
+  { q: 'What are the enemies of coffee freshness?', opts: ['Cold, darkness, and dryness', 'Oxygen, heat, light, and moisture', 'Nitrogen, cold, and dark', 'Heat and water only'], answer: 1, fb: 'The four enemies of coffee are oxygen, heat, light, and moisture. These elements will make even the highest-quality coffees taste stale over time.' },
+  { q: 'Once an opened bag of whole bean coffee is marked, within how many days must it be brewed or sold?', opts: ['3 days', '5 days', '7 days', '14 days'], answer: 2, fb: 'An opened bag of whole bean coffee must be brewed or sold within seven days. The bag must also be marked with a seven-day expiration date.' },
+  { q: 'How long does FlavorLock™ packaging preserve unopened coffee?', opts: ['8 weeks', '16 weeks', '34 weeks', '52 weeks'], answer: 2, fb: 'Starbucks FlavorLock™ packaging has a 34-week shelf life. The lot code printed on the bag includes the BEST BEFORE date and the specific roasting batch for quality assurance.' },
+  { q: 'Where should you store coffee at home for best freshness?', opts: ['In the refrigerator', 'In the freezer', 'In an opaque, airtight container at room temperature', 'On the counter in a clear glass jar'], answer: 2, fb: 'Store in an opaque, airtight container at room temperature. Never use a refrigerator or freezer for daily use — moisture condenses onto the coffee each time the container is opened, damaging the coffee.' },
+  { q: 'What is the first step in the three steps of coffee tasting?', opts: ['Slurp', 'Locate', 'Describe', 'Smell'], answer: 3, fb: 'Always smell the coffee first. Much of our sense of taste is created through the nose — the nose can detect one trillion aromas, while the tongue can only distinguish five tastes: salty, sweet, bitter, sour and umami.' },
+  { q: 'In coffee tasting, what does "acidity" refer to?', opts: ['The pH level of the coffee', 'The tangy, lively quality felt on the tongue — not pH level', 'The amount of acid in the coffee', 'A negative characteristic to avoid'], answer: 1, fb: 'Acidity is the tangy quality, or tartness felt in the mouth. It does NOT refer to the pH level — the acid level on the pH scale is nearly the same in every coffee. It describes a tasting characteristic perceived on the sides and tip of the tongue.' },
+  { q: 'Which Starbucks coffee is described as full-bodied with thick, syrupy body and earthy herbal notes?', opts: ['Kenya', 'Guatemala Antigua', 'Sumatra', 'Breakfast Blend'], answer: 2, fb: 'Sumatra is Starbucks\' most popular single-origin coffee, described as full-bodied and bold with distinctive earthy aroma and lingering notes. It has a thick, sometimes syrupy body that lingers in your mouth.' },
+  { q: 'What unique processing method is used for Sumatra coffee?', opts: ['Natural/dry method', 'Washed/wet method', 'Wet-hulling (giling basah)', 'Freeze-dried'], answer: 2, fb: 'Sumatra uses wet-hulling (giling basah): the coffee fruit is removed, beans are rinsed and partially dried in parchment, then hulled while still in a semi-wet state. This unique process contributes to Sumatra\'s recognizable earthy, full-bodied flavor profile.' },
+  { q: 'How long should you brew a coffee press before pressing?', opts: ['2 minutes', '4 minutes', '6 minutes', '8 minutes'], answer: 1, fb: 'Using a timer, let the coffee press brew for exactly four minutes. After pressing, serve immediately — coffee maintains best taste for only 20 minutes in a press.' },
+  { q: 'For a 4-cup coffee press (16 oz), how much coffee should you use?', opts: ['2 Tbsp (one scoop)', '4 Tbsp (two scoops)', '6 Tbsp (three scoops)', '8 Tbsp (four scoops)'], answer: 2, fb: '6 Tbsp (approximately 30 g) or three Starbucks scoops for a 4-cup (16 oz) press. For an 8-cup (32 oz) press, use 10 Tbsp (approximately 50 g) or five Starbucks scoops. One Starbucks® coffee measuring scoop = 2 Tbsp (approximately 10 g).' },
+  { q: 'What flavor notes characterize Kenya coffee?', opts: ['Earthy and herbal', 'Dark cocoa and caramel', 'Black currant and grapefruit', 'Toasted malt and chocolate'], answer: 2, fb: 'Kenya is characterized by notes of black currant and grapefruit — described as having a tangy acidity, citrus flavor and medium to full body. African coffees maintain their flavor characteristics as they cool, making Kenya excellent iced.' },
+  { q: 'What was Caffè Verona™ originally called and why was it created?', opts: ['Seattle Blend, created for tourists', 'Jake\'s Blend, created in 1975 for a Seattle restaurant', 'Romeo\'s Brew, created for an Italian restaurant', 'Dark Reserve, created for corporate events'], answer: 1, fb: 'Originally known as Jake\'s Blend, this decadent coffee was created in 1975 for a Seattle restaurant. People loved the flavor so much Starbucks started blending it by hand in stores — originally 80% Yukon Blend and 20% Italian Roast.' },
+  { q: 'Which grind setting on a Ditting grinder corresponds to a Coarse grind?', opts: ['1', '5', '7', '9'], answer: 3, fb: 'On the Ditting grinder, Coarse grind is setting 9. The full scale: Turkish=1, Espresso=3, Extra Fine=5, Fine=6, Medium=7, Coarse=9.' },
+  { q: 'What is the difference between pre-roast and post-roast blending?', opts: ['Pre-roast uses more beans, post-roast uses fewer', 'Pre-roast blends green beans before roasting; post-roast blends individually-roasted beans together afterwards', 'Pre-roast is for dark coffees, post-roast for light coffees', 'There is no difference'], answer: 1, fb: 'Pre-roast blending mixes green beans before roasting together. Post-roast blending roasts different origins individually to their ideal roast levels, then blends — reserved for coffees whose flavors would get lost if roasted together. Caffè Verona™ uses post-roast blending.' },
+  { q: 'When tasting multiple coffees, what is the correct order?', opts: ['Fuller-bodied first, then lighter-bodied', 'Darker roasts first, then lighter roasts', 'Lighter-bodied first, then fuller-bodied', 'Alphabetical order'], answer: 2, fb: 'When tasting more than one coffee, taste lighter-bodied coffees first and then fuller-bodied coffees. This prevents the intense flavors of full-bodied coffees from overwhelming your palate before tasting lighter ones.' },
+];
+
+let shuffled = [], cur = 0, score = 0;
+
+function resetQuiz() {
+  shuffled = [...questions].sort(() => Math.random() - 0.5).slice(0, 10);
+  cur = 0; score = 0;
+  renderQ();
+}
+
+function renderQ() {
+  const c = document.getElementById('quizContainer');
+  if (cur >= shuffled.length) {
+    const pct = Math.round((score/shuffled.length)*100);
+    const msg = pct===100?'Perfect score — you know your coffee!':pct>=80?'Excellent — great coffee knowledge!':pct>=60?'Good effort! Review the chapters and try again.':'Keep studying — the beans are counting on you!';
+    c.innerHTML = `<div class="quiz-wrap"><div class="quiz-label">Quiz Complete</div><div class="quiz-score show"><div class="score-num">${score}/${shuffled.length}</div><div class="score-label">Questions Correct — ${pct}%</div><p style="margin-top:1rem;font-size:14px;color:var(--muted)">${msg}</p><button class="nav-btn primary" style="margin-top:1rem" onclick="resetQuiz()">↺ Try Again</button></div></div>`;
+    return;
+  }
+  const q = shuffled[cur];
+  c.innerHTML = `<div class="quiz-wrap"><div class="quiz-label">Coffee Knowledge Quiz</div><div class="quiz-progress">Question ${cur+1} of ${shuffled.length}</div><div class="quiz-q">${q.q}</div><div class="quiz-options">${q.opts.map((o,i)=>`<button class="quiz-opt" onclick="answerQ(this,${i},${q.answer})">${o}</button>`).join('')}</div><div class="quiz-feedback" id="qfeedback"></div><button class="quiz-next" id="qnext" onclick="nextQ()">Next →</button></div>`;
+}
+
+function answerQ(btn, chosen, correct) {
+  document.querySelectorAll('.quiz-opt').forEach(b => b.onclick = null);
+  const isRight = chosen === correct;
+  if (isRight) { score++; btn.classList.add('correct'); }
+  else {
+    btn.classList.add('wrong');
+    document.querySelectorAll('.quiz-opt')[correct].classList.add('correct');
+  }
+  const fb = document.getElementById('qfeedback');
+  fb.textContent = shuffled[cur].fb;
+  fb.className = 'quiz-feedback show ' + (isRight?'correct':'wrong');
+  document.getElementById('qnext').className = 'quiz-next show';
+}
+
+function nextQ() { cur++; renderQ(); }
+
+resetQuiz();
+
+
+// ── SENSORY COFFEE CARDS ──
+const sensoryData = [
+  {
+    emoji:'☀️', roast:'Blonde Roast', name:'Starbucks® Blonde Espresso Roast',
+    tagline:'Notes of Candied Apple & Bittersweet Chocolate',
+    region:'Latin America & Africa', since:'2016 (CAN) / 2018 (USA)',
+    processing:'Washed · Pre-roast blend',
+    acidity:55, body:50, sweetness:80, roastness:20,
+    aroma:'The first thing you notice is a bright, sweet, almost candy-like fragrance — like biting into a fresh green apple. There is a soft floral lift underneath, followed by a delicate bittersweet chocolate warmth. Far more approachable than traditional espresso aromas: lighter, sweeter, and almost dessert-like.',
+    slurp:'When you slurp, the coffee sprays wide across your palate with a gentle warmth. You immediately notice a soft, sweet entry — not sharp or intense. A bright fruit note washes forward quickly before a smooth, creamy body settles in.',
+    tongue:'<span class="tongue-zone tip">Tip: sweetness</span><span class="tongue-zone sides">Sides: light bright acidity</span><span class="tongue-zone full">Mid-palate: apple-like fruit</span>',
+    tonguetxt:'Sweetness registers first at the tip of your tongue. A gentle, citrus-like acidity tickles the sides without puckering. The mid-palate delivers the candied apple note, fading into bittersweet chocolate warmth at the back.',
+    body:'Light-to-medium. The mouthfeel is smooth and velvety — noticeably lighter and softer than traditional dark espresso. Think silky rather than heavy. It coats the tongue gently and fades cleanly without a heavy finish.',
+    flavor:'Candied apple sweetness leads, supported by bittersweet chocolate in the finish. There is a lemon zest brightness in between — vibrant but never sharp. The finish is clean, smooth, and inviting. This is the espresso that makes people fall in love with espresso for the first time.',
+    story:'<strong>The Coffee:</strong> This subtly sweet coffee was created to break Starbucks\' own rules. For decades, Starbucks stood for bold, dark-roasted espresso. Blonde Espresso Roast was proof that lighter espresso could be extraordinary. It is made from select Latin American beans (for smooth sweetness) and East African beans (for bright, vibrant acidity). A precisely executed roast coaxes out sweetness and acidity that are brought to life by baristas in each shot of espresso. Developing this blend took five decades of sourcing, blending, and roasting knowledge — it is not simply a lighter version of Espresso Roast. It demonstrates true mastery of coffee blending. Many experiments were run — too much African bean and the acidity became overwhelming, too little and the blend lost its brightness.<br><br><strong>The Cupping Room:</strong> Starbucks set the standard for a dark, boldly roasted espresso — then broke a few of its own rules. This second everyday espresso offering unlocked beverage customization in ways never explored before. From Blonde Lattes to Blonde Cappuccinos, this one blend changed the way baristas thought about espresso craft and customer customization.<br><br><strong>Behind the Packaging Design:</strong> The bag features layers of crema-inspired texture interwoven with abstracted, modern espresso tools — celebrating the craft of espresso making. Strips of silver accent ribbon emphasize the crema textures, referencing the golden foam that crowns a perfect shot. Small rows of coffee beans add dimension and reference the art of coffee blending. The color palette is deliberately light and airy — pale golds, soft whites — using color to tell the story of the Blonde Roast. The overall design message is clear: this is espresso reimagined — sophisticated, modern, and accessible.',
+    pairings:['Lemon loaf cake 🍋','Orange scone 🍊','Vanilla biscotti 🍪','Almond croissant 🥐','Caramel apple pastry 🍎']
+  },
+  {
+    emoji:'🌿', roast:'Blonde Roast', name:'Starbucks Veranda Blend™',
+    tagline:'Notes of Toasted Malt & Milk Chocolate',
+    region:'Latin America', since:'2012',
+    processing:'Washed · Pre-roast blend',
+    acidity:45, body:30, sweetness:70, roastness:15,
+    aroma:'Gentle and inviting — like warm toasted grain straight from the oven. There is a soft sweetness reminiscent of malted milk, a whisper of hazelnut, and a very light cocoa note. Approachable and comforting, not bold or smoky.',
+    slurp:'A light, mellow wave across your palate. The coffee feels delicate and easy-drinking — almost tea-like in its lightness. No harshness, no bitterness. Just a smooth, gentle wash of warmth that settles beautifully.',
+    tongue:'<span class="tongue-zone tip">Tip: mild sweetness</span><span class="tongue-zone sides">Sides: low gentle acidity</span><span class="tongue-zone full">Overall: soft and mellow</span>',
+    tonguetxt:'Very mild sensations throughout — sweetness at the tip, barely perceptible acidity at the sides. The coffee feels light and uniform across the whole palate, finishing cleanly without lingering. Nothing harsh, nothing abrupt.',
+    body:'Light. The lightest body of all Starbucks coffees — like comparing skimmed milk to whole milk. It feels delicate and airy on the tongue, fading quickly and cleanly. This lightness is intentional and the hallmark of the Blonde Roast philosophy.',
+    flavor:'Toasted malt and soft milk chocolate are the primary flavors. Think of a subtle malted milk ball, or the warmth of bread just pulled from the oven. No sharp edges — this is a mellow, accessible cup that welcomes new coffee drinkers and seasoned aficionados alike.',
+    story:'<strong>The Coffee:</strong> Starbucks\' very first Blonde Roast, born in 2012 after 80 different recipe and roast iterations over 18 months. The team knew they wanted a lighter roast, but "lighter" alone was not the goal. The goal was to find the precise roast that would release delicate flavors too subtle to survive a darker roast. Many experiments failed — some tasted underdeveloped and sour, others tasted flat. When they finally found the right roast curve with the right Latin American beans, the result was a mellow, inviting cup that tasted complex without being challenging. Inspired by lightly roasted coffees sipped on breezy verandas overlooking lush coffee trees in Latin America. Known as Lightnote Blend™ in the Japan market.<br><br><strong>The Cupping Room:</strong> Starbucks purchases more coffee from Latin America than any other region because of the consistent taste and quality. The smooth mouthfeel, pleasant acidity, and flavors of cocoa and nuts found in Latin American coffees complement the Starbucks Blonde Roast, resulting in an easy-drinking cup. The blend draws from Farmer Support Centers in Mexico, Guatemala, Costa Rica, Colombia, and Brazil.<br><br><strong>Behind the Packaging Design:</strong> The artwork transports customers to a lively veranda in Latin America — you can almost feel the breeze and hear the birds. The design gives a tangible sense of the coffee\'s origin through tropical foliage, hummingbirds rendered in Starbucks brand green, and bright accent colors on the leaves. The lighter color palette reflects this is a light roast coffee. Every visual element reinforces the story: this is a coffee born from lush, green Latin American landscapes, best enjoyed in the warmth of the morning sun. The hummingbirds — symbols of energy and lightness — mirror the character of the coffee itself.',
+    pairings:['Butter croissant 🥐','Vanilla pound cake 🍰','Shortbread biscuit 🍪','Banana bread 🍌','Toasted almond muffin 🧁']
+  },
+  {
+    emoji:'🌾', roast:'Blonde Roast', name:'Starbucks Willow Blend™',
+    tagline:'Notes of Caramel & Lemon Zest',
+    region:'Latin America & Africa', since:'2012',
+    processing:'Washed · Pre-roast blend',
+    acidity:75, body:30, sweetness:60, roastness:15,
+    aroma:'More complex and vivid than Veranda Blend. The African beans bring a bright, almost perfumed quality — lemon zest and a faint floral lift, almost like dried citrus peel. The Latin American beans add a soft caramel warmth underneath. The aroma is unexpectedly powerful for a light roast.',
+    slurp:'The impact is immediate and bright — the African coffee announces itself with a clean, lemony hit that lights up your palate. Then the Latin American caramel rounds it out into a balanced, refreshing experience.',
+    tongue:'<span class="tongue-zone tip">Tip: bright citrus sweetness</span><span class="tongue-zone sides">Sides: lively sparkling acidity</span><span class="tongue-zone back">Back: warm caramel finish</span>',
+    tonguetxt:'Citrus sweetness hits the tip first, followed immediately by a sparkling, lively acidity on the sides — more assertive than Veranda Blend. The back of the palate catches the caramel warmth from the Latin American beans, creating a pleasing contrast.',
+    body:'Light. Like Veranda Blend, but with more vibrancy — the African beans give it a livelier feel even at the same light body weight. The aroma and flavor are unexpectedly powerful for such a delicate mouthfeel.',
+    flavor:'Juicy lemon zest is the star — bright and lively, almost like squeezing fresh citrus over your palate. It fades into a smooth caramel sweetness. Together they create a blend more complex and layered than either origin offers alone.',
+    story:'<strong>The Coffee:</strong> Launched alongside Veranda Blend in 2011 as one of the two original Starbucks® Blonde Roast coffees. When developing this blend, the team found that a lighter roast highlights the bright notes of African coffees and enhances the crisp, clean finish of Latin American coffees. Using a single origin would give you either bright African character or smooth Latin American character — but blending them together creates something neither achieves alone: the juicy, lemony notes of Africa layered over the caramel smoothness of Latin America. This is a great demonstration of why we blend coffees. A single-origin African coffee has more distinctive, singular flavor notes. Willow Blend has more complexity.<br><br><strong>The Cupping Room:</strong> The flavor and aroma of Willow Blend can be unexpectedly powerful — this is not a delicate coffee despite its light body. Tasting it next to a single-origin Kenya or Ethiopia provides a perfect "aha moment" about the art of blending. Starbucks Master Roasters use the Blonde Roast curve to coax out delicate flavors in the beans, creating an easy-to-drink cup that reveals its complexity only when you pay attention.<br><br><strong>Behind the Packaging Design:</strong> The artwork was inspired by soundscapes of wind in trees and the trade winds that travel between Africa and Latin America — symbolizing how two distant regions come together in every cup. The design features willow leaves in the foreground with careful, delicate linework, while wind blows other leaves toward the background. The flowing, alive composition suggests movement, complexity, and grace — like the branches of the graceful willow tree: lovely, layered, and never overpowering. The color palette celebrates the caramel and citrus flavor notes: warm golds and fresh greens.',
+    pairings:['Lemon tart 🍋','Citrus scone 🍊','Honey cake 🍯','Vanilla bean pastry 🧁','Fresh fruit salad 🍓']
+  },
+  {
+    emoji:'🌅', roast:'Blonde Roast', name:'Starbucks® Breakfast Blend',
+    tagline:'Notes of Brown Sugar & Sweet Orange',
+    region:'Latin America', since:'1998',
+    processing:'Washed · Pre-roast blend',
+    acidity:80, body:50, sweetness:65, roastness:20,
+    aroma:'Bright and uplifting — like peeling a fresh orange while sugar caramelizes nearby. There is a toasty, lightly roasted grain quality underneath, giving it warmth without heaviness. A great morning aroma that promises something lively.',
+    slurp:'A vibrant, effervescent feel — like carbonation without the bubbles. The acidity dances across your palate quickly and cleanly, with the sweet orange note immediately following. It is refreshing and palate-cleansing.',
+    tongue:'<span class="tongue-zone tip">Tip: sweet orange</span><span class="tongue-zone sides">Sides: bright effervescent acidity</span><span class="tongue-zone full">Clean finish — little aftertaste</span>',
+    tonguetxt:'The sweet orange hits the tip of the tongue and fans out to the sides where the effervescent acidity creates a lively, tangy sensation. The finish is notably clean — described as a "clean finish" — with very little aftertaste. This palate-cleansing quality is signature to Breakfast Blend.',
+    body:'Medium. More present than the Blonde Roasts but lighter than a deeper medium like House Blend. It feels smooth and even — neither heavy nor fleeting.',
+    flavor:'Brown sugar sweetness and sweet orange are the defining notes. The orange is not sharp or sour — it is sweet, almost like orange marmalade. The brown sugar adds warmth. The finish is bright and clean, leaving your palate refreshed.',
+    story:'<strong>The Coffee:</strong> More toasty than roasty, this blend was made for good mornings. In 1998, Starbucks introduced Breakfast Blend as part of "Milder Dimensions" — a groundbreaking new category for customers who preferred a milder cup. At the time, Starbucks was deeply associated with bold, dark roasting. Milder Dimensions was a bold move: a lighter, brighter coffee could still be worth celebrating. The lively flavor and effervescent acidity found in Latin American coffees were the perfect match. Breakfast Blend\'s acidity provides a palate-cleansing tanginess with little aftertaste — a characteristic known as a "clean finish." Today we categorize Breakfast Blend under our Blonde Roast family, but our love for it remains unchanged since 1998.<br><br><strong>The Cupping Room:</strong> When developing Breakfast Blend, the team wanted to create a cup that would wake up your palate with flavor dancing across your tongue. The lively flavor and effervescent acidity found in Latin American coffees were the perfect match. In 1998, this was a new and provocative idea at Starbucks. As we expanded eastward from West Coast roots, there was an opportunity to explore the lighter side of medium roasts. Breakfast Blend was that first exploration — and it set the stage for the Blonde Roast category launched in 2011.<br><br><strong>Behind the Packaging Design:</strong> This bag is bright and optimistic — like a first sip of morning coffee. Inspired by previous Breakfast Blend designs, the artwork features a brilliant sun rising against an abstract sky, with floating mountain peaks and a flock of birds in the background. Many layers and textures were used to create depth and movement. The lighter color palette reflects that this is the lightest of the medium-roast coffees. Everything about the design — the rising sun, the birds in flight, the warm golden tones — speaks to mornings, sunshine, and a fresh start to the day. The design itself is energetic and lively, just like the coffee.',
+    pairings:['Fresh orange scone 🍊','Cinnamon roll 🌀','Fruit danish 🥐','Granola with honey 🍯','Apple turnover 🍎']
+  },
+  {
+    emoji:'☕', roast:'Medium Roast', name:'Starbucks® Pike Place® Roast',
+    tagline:'Notes of Cocoa & Rich Praline',
+    region:'Latin America', since:'2008',
+    processing:'Washed · Pre-roast blend',
+    acidity:50, body:55, sweetness:60, roastness:45,
+    aroma:'Warm, familiar, and comforting — like a freshly baked chocolate nut cookie. There is a soft cocoa warmth layered with a subtle caramelized nut sweetness (praline). Nothing sharp or aggressive — this is the aroma of the everyday Starbucks cup.',
+    slurp:'Smooth and even from the first sip. The coffee rolls across your palate gently — no spike of acidity, no bitterness. It wraps around the tongue with a round, even warmth that feels familiar and deeply satisfying.',
+    tongue:'<span class="tongue-zone tip">Tip: gentle sweetness</span><span class="tongue-zone sides">Sides: balanced mild acidity</span><span class="tongue-zone full">Mid-palate: cocoa and praline</span>',
+    tonguetxt:'Very balanced across the whole tongue. Gentle sweetness at the tip, mild acidity at the sides — noticeable but never sharp. The cocoa-praline flavor registers in the mid-palate and fades into a smooth, clean finish.',
+    body:'Medium. The defining characteristic of this coffee — smooth, even, and well-rounded. Not too light to feel empty, not too heavy to feel intense. Perfect for black coffee drinkers and those who add cream.',
+    flavor:'Cocoa and rich praline — like a chocolate-covered caramelized nut. Subtle, warm, and inviting without being complex. This consistency is deliberate: customers wanted a reliable cup they could look forward to every single day.',
+    story:'<strong>The Coffee:</strong> The launch of Pike Place® Roast in 2008 was the culmination of a very specific mission: create a coffee customers would love drinking every day in every Starbucks store. By the early 2000s, Starbucks had a rotating Coffee of the Day, but customers wanted consistency — something smoother and more balanced. After more than 30 recipes and taste tests with nearly 1,000 customers who spent almost 1,500 hours providing input, the team found the answer. A novel roast curve was developed specifically to bring out smoothness in the cup. Every step of development was tested on a Bunn commercial batch-brewer — the exact machine used in stores — keeping the customer experience front of mind. Named for the iconic Pike Place Market, home to the very first Starbucks at 1912 Pike Place in Seattle — a 1,200 square foot store visited by hundreds of thousands each year. Available as Decaf Pike Place® Roast.<br><br><strong>The Cupping Room:</strong> This was developed as Starbucks\' answer to customers who wanted "something smoother." The team did not want to create a mediocre coffee — they wanted to create the best possible smooth coffee. After 30+ iterations and nearly 1,500 hours of customer feedback sessions, Pike Place® Roast became the new everyday standard brewed all day, every day.<br><br><strong>Behind the Packaging Design:</strong> The bag celebrates Starbucks history while staying grounded in coffee — coffee plants are interspersed throughout the artwork. Recognizable images from Starbucks\' storied history at Seattle\'s Pike Place Market are composed with motifs in the style of travel luggage stickers and badges — evoking the journeys coffee takes from farm to store, and the journey Starbucks took from one store to the world. Copper hues come to life for a warm, metallic effect that honors the heritage and craftsmanship of the brand. Pike Place is a registered trademark of The Pike Place Market PDA, used under license.',
+    pairings:['Classic butter croissant 🥐','Chocolate chip cookie 🍪','Banana nut muffin 🧁','Glazed donut 🍩','Cinnamon coffee cake 🍰']
+  },
+  {
+    emoji:'🏠', roast:'Medium Roast', name:'Starbucks® House Blend',
+    tagline:'Notes of Toffee & Dusted Cocoa',
+    region:'Latin America', since:'1971',
+    processing:'Washed · Pre-roast blend',
+    acidity:50, body:55, sweetness:55, roastness:50,
+    aroma:'Rich and welcoming — toffee and cocoa create a warm, sweet, lightly roasted fragrance with gentle nut undertones. This is the aroma of Starbucks heritage — what a great coffee shop has smelled like since 1971.',
+    slurp:'A bold but balanced entry — the coffee delivers more roast character than Pike Place® Roast, but the toffee sweetness prevents it from being harsh. It coats the tongue with a satisfying richness that feels like coming home.',
+    tongue:'<span class="tongue-zone tip">Tip: toffee sweetness</span><span class="tongue-zone sides">Sides: medium acidity</span><span class="tongue-zone full">Mid-palate: dusted cocoa depth</span>',
+    tonguetxt:'Toffee sweetness meets the tip of the tongue, and medium acidity on the sides provides structure. The dusted cocoa note — dry and pleasant like unsweetened cocoa powder — develops in the mid-palate and lingers softly.',
+    body:'Medium, leaning toward the fuller side. More presence than Pike Place® Roast. The dark chestnut roast color contributes a satisfying weight without becoming heavy.',
+    flavor:'Toffee and dusted cocoa — like buttery caramel candy with a dry cocoa finish. The roast adds a touch of sweetness at the very end, creating subtle complexity. House Blend is described as one of Starbucks\' favorite entry points to the world of coffee.',
+    story:'<strong>The Coffee:</strong> The very first blend Starbucks ever created, in 1971. It set the course for the way blenders and roasters work even today. Deceptively simple — a blend of Latin American beans roasted to a glistening dark chestnut color — and loaded with flavor. Every coffee blend created after House Blend was informed by the lessons learned in developing it. Starbucks purchases more coffee from Latin America than any other region because of the consistent taste and quality. The notes of cocoa and pleasing acidity of House Blend exemplify the tasting characteristics of the region. Every subsequent blend was built on the template established by House Blend in 1971. Decaf House Blend available in select markets.<br><br><strong>The Cupping Room:</strong> Because of House Blend\'s balanced profile, this is one of Starbucks\' favorite entry points to the world of coffee — one of the first coffees recommended to new coffee explorers. Every coffee blend is the result of finding the delicate balance of aroma, acidity, body, and flavor. House Blend, Starbucks\' very first blend, set the course for the next fifty years of coffee blend development. It exemplifies what Latin American coffees do best: consistency, balance, and approachability.<br><br><strong>Behind the Packaging Design:</strong> The sweeping brush strokes at the base of the design represent the art and expertise that made this blend possible — and set a precedent for every blend since. Layered on top are illustrations of coffee botanicals and coffee scoops, celebrating the journey from farm to roastery. The color palette leans into the warm tones of medium roast coffee, with accents of Starbucks brand greens. The design honors craftsmanship — the human hands that have scooped, blended, and brewed this coffee since 1971. The brush strokes are intentionally hand-made looking, reminding us that great coffee begins with skilled human hands.',
+    pairings:['Toffee almond bar 🍫','Blueberry muffin 🫐','Pecan brownie 🍫','Apple fritter 🍎','Walnut cookie 🍪']
+  },
+  {
+    emoji:'🦜', roast:'Medium Roast', name:'Single-Origin Guatemala Antigua',
+    tagline:'Notes of Cocoa & Baking Spice',
+    region:'Antigua Valley, Guatemala', since:'1971',
+    processing:'Washed · Single-origin',
+    acidity:55, body:55, sweetness:55, roastness:50,
+    aroma:'Elegant and refined — a warm cocoa fragrance mingles with soft spice notes reminiscent of cinnamon and cardamom. There is a hint of dried fruit underneath. One of the most sophisticated and inviting aromas in the Starbucks lineup.',
+    slurp:'The coffee feels lush and velvety as you slurp — it wraps around your entire mouth with an elegant, even texture. The cocoa note is immediate and prominent, followed by soft spice that develops gracefully.',
+    tongue:'<span class="tongue-zone tip">Tip: subtle sweetness</span><span class="tongue-zone sides">Sides: refined elegant acidity</span><span class="tongue-zone full">Full palate: cocoa and spice</span>',
+    tonguetxt:'Guatemala Antigua has a refined acidity — noticeable but elegant, not aggressive. It creates a gentle sensation on the sides that enhances rather than dominates. The cocoa and baking spice develop across the full palate with a clean finish.',
+    body:'Medium. Smooth with an elegant, almost silky mouthfeel. The volcanic soil of Antigua gives the beans a rich density that translates to a satisfying body without heaviness.',
+    flavor:'Dusted cocoa is the primary flavor — dry and pleasant like unsweetened baking cocoa. Soft spice notes (cinnamon, cardamom-like) add depth and refinement. The finish is clean with very little aftertaste — elegant and refined.',
+    story:'<strong>The Coffee:</strong> A Starbucks favorite since 1971 — one of the very first coffees ever sold. In the Antigua Valley of Guatemala, coffee is a family tradition and a point of pride. Generations of farmers have worked the rich volcanic soil, perfecting their craft and producing some of the finest coffees ever tasted. Guatemala has many active volcanoes and mineral-rich soil which contributes to high-elevation coffee. In Antigua, farmers take enormous pride in traditions, resulting in cup-after-cup consistency — citrus, chocolate, and soft spice notes with an elegant mouthfeel. In 2022, Starbucks celebrated the opening of its first store in Antigua — and the milestone of its 1,500th store in Latin America and the Caribbean region. Starbucks has committed to donating 100 million healthy coffee trees by 2025 to origins like Guatemala, where farmers continue to face challenges from Coffee Leaf Rust and climate change impacts. Starbucks also operates a Farmer Support Center in Guatemala City providing expert agronomy support and free resources.<br><br><strong>The Cupping Room:</strong> Guatemala\'s climate — high altitudes, mild weather, cool evening temperatures, abundant sunlight, and dependable rainy and dry seasons — are key factors in Guatemala\'s specialty-coffee industry. The Antigua region in particular is the touchstone of quality. It\'s why Starbucks loved this coffee in 1971, and why the love endures today.<br><br><strong>Behind the Packaging Design:</strong> This design celebrates the iconic quetzal bird — Guatemala\'s national bird and a symbol of freedom — amidst plant life from the Antigua region. The illustrations are artful and sophisticated, with layers of texture and delicate linework creating depth and detail throughout. The colors are shifted to warm, coppery tones that speak to the coffee\'s roast and lend a beautiful shimmer. Every detail was deliberate: the quetzal honors Guatemala\'s cultural heritage; the botanical linework honors the coffee farms; the warm copper tones honor the roast. The design is as elegant as the coffee itself.',
+    pairings:['Dark chocolate bar 🍫','Cinnamon pastry 🌀','Caramel apple 🍎','Spiced shortbread 🍪','Mango chutney chicken sandwich 🥪']
+  },
+  {
+    emoji:'🦁', roast:'Medium Roast', name:'Single-Origin Kenya',
+    tagline:'Notes of Black Currant & Grapefruit',
+    region:'Africa: Kenya', since:'1971',
+    processing:'Washed · Single-origin',
+    acidity:90, body:55, sweetness:50, roastness:35,
+    aroma:'Vibrant and complex — one of the most aromatic coffees in the Starbucks lineup. You immediately notice a bright, almost jammy berry fragrance (black currant) paired with a sparkling citrus lift (grapefruit). There is also a floral quality — like dried berries and flowers together.',
+    slurp:'When you slurp Kenya, the coffee literally dances on your tongue — the high, sparkling acidity lights up your entire palate like a burst of energy. The fruit notes are vivid and expressive. This is the coffee that gives baristas their "aha" moment.',
+    tongue:'<span class="tongue-zone tip">Tip: juicy citrus sweetness</span><span class="tongue-zone sides">Sides: intense sparkling acidity</span><span class="tongue-zone back">Back: black currant depth</span>',
+    tonguetxt:'Kenya has some of the most assertive and noticeable tongue sensations of any Starbucks coffee. Juicy citrus sweetness hits the tip immediately. Intense, sparkling acidity covers the sides — almost like carbonation. The black currant jamminess develops at the back of the palate and lingers pleasantly.',
+    body:'Medium. Despite the powerful flavor and acidity, Kenya does not feel heavy — it maintains a bright, juicy mouthfeel. African coffees are unique: they maintain and even develop their flavor characteristics as they cool — this makes Kenya exceptional iced.',
+    flavor:'Black currant and grapefruit — bold, vivid, and unmistakable. This is the definitive example of what "fruity" means in coffee language. Adventurous yet approachable, Kenya continues to inspire "aha" moments in everyone who tastes it seriously.',
+    story:'<strong>The Coffee:</strong> A Starbucks offering since 1971 and one of the original coffees on the menu. Kenya\'s bountiful landscape is home to many smallholder farmers who come together to form community cooperatives producing unique and complex coffees. The land around Mount Kenya — Africa\'s second highest mountain — and the surrounding high plateaus are dotted with coffee farms in rich, fertile volcanic soil. Uniquely, Kenya did not cultivate coffee until the 19th century, when trees were introduced by French missionaries. Despite being neighbors with Ethiopia (the birthplace of coffee), Kenya developed its own completely distinctive approach to growing and processing remarkable coffee. Even though Kenya shares a border with Ethiopia, the birthplace of coffee, coffee was not cultivated in Kenya until the 19th century. Today, Kenyan coffee farmers are supported by agronomists based at Starbucks\' Rwanda Farmer Support Center, which covers Rwanda, Burundi, Congo, Uganda, Zambia, and Kenya — supporting over 70,000 coffee farmers. Starbucks has proudly offered Kenyan coffees for more than 40 years.<br><br><strong>The Cupping Room:</strong> In Kenya, rich, fertile volcanic soil around Mount Kenya and the surrounding high plateaus create some of the most coveted coffee in the world. Kenyan coffee features characteristics of citrus — both in flavor and acidity — a sparkling sensation felt on the palate. With its pleasant acidity and citrus flavors, brewing Kenya as an iced coffee is a beloved partner tradition. African coffees maintain their flavor characteristics as they cool, making Kenya exceptional cold.<br><br><strong>Behind the Packaging Design:</strong> The artwork invokes a sense of adventure through layering and a color palette inspired by sunsets over the Kenyan Savannah. Textured elephants — iconic wildlife of the Kenyan landscape — come to life in a surrealistic landscape of coffee botanicals and pink cordyline. Flavor cues of juicy grapefruit and black currant are incorporated as abstracted shapes in the background. Subtle, rough, dry earth textures evoke a sense of time and place. The design feels wild, adventurous, and alive — a visual translation of what Kenya tastes like.',
+    pairings:['Fresh grapefruit 🍊','Dark berry jam on toast 🍓','Lemon pound cake 🍋','Kiwi fruit 🥝','Dark chocolate with orange 🍫']
+  },
+  {
+    emoji:'🌺', roast:'Medium Roast', name:'Single-Origin Ethiopia',
+    tagline:'Notes of Dried Citrus & Savory Spice',
+    region:'Africa: Ethiopia', since:'2013',
+    processing:'Washed · Single-origin',
+    acidity:80, body:45, sweetness:45, roastness:30,
+    aroma:'Unique and unexpected — Ethiopia smells unlike any other coffee in the lineup. There is a soft, dried citrus quality (orange peel, lemon zest) combined with a warm, savory spice note reminiscent of black pepper or cardamom. Complex, almost exotic.',
+    slurp:'Soft and velvety on the palate — the mouthfeel is noticeably smooth and delicate. The flavors are layered and subtle: citrus first, then the savory spice emerges slowly as you hold the coffee in your mouth.',
+    tongue:'<span class="tongue-zone tip">Tip: dried citrus</span><span class="tongue-zone sides">Sides: medium clean acidity</span><span class="tongue-zone back">Back: pepper-like savory spice</span>',
+    tonguetxt:'Dried citrus notes register at the tip, creating a gentle, sweet-tart sensation. Medium acidity on the sides is clean and pleasant. The savory, pepper-like spice develops at the back of the palate and creates a memorable, lingering finish.',
+    body:'Light-to-medium. Soft and velvety — one of the smoothest mouthfeels in the lineup. The coffee feels delicate and elegant, like it floats gently on the palate without weight or pressure.',
+    flavor:'A unique and memorable pairing: dried citrus sweetness (like candied orange peel) meets savory, pepper-like spice. Not a fruit-forward coffee — more savory and complex, honoring the ancient and storied origins of coffee itself.',
+    story:'<strong>The Coffee:</strong> Ethiopia is the ultimate coffee origin — the birthplace of coffee. On the ancient slopes flanking Africa\'s Great Rift Valley, coffee trees first emerged from rich volcanic soil in the 9th century. From those highlands, arabica coffee began its long journey from Ethiopia to the rest of the world. The origin of the word "coffee" can be traced back to the Kaffa region of Ethiopia where the plant was first discovered. An Ethiopian proverb says "buna dabo naw" — "coffee is our bread." Only around half of Ethiopia\'s coffee is exported; the rest is consumed domestically. An elaborate coffee ceremony — roasting, grinding, and brewing — is still a staple of Ethiopian social life today. In Southwestern Ethiopia, arabica shrubs grow wild in veritable coffee forests. Lore has it this is where Kaldi\'s goats made their famous discovery. The longest enduring legend about the discovery of coffee goes back to A.D. 800-900: a young goatherd named Kaldi noticed his goats became energetic after eating the cherry-like berries of a certain shrub. Curious, he tried one himself and before long was dancing along with his goats. Starbucks opened a Farmer Support Center in Addis Ababa in 2014.<br><br><strong>The Cupping Room:</strong> Each sip of coffee from this critical origin is a taste of coffee history. Ethiopia produces some of the most diverse coffee varietals in the world — thousands of heirloom varietals grow in the wild, many still undiscovered and unnamed. The heirloom varietals give Ethiopian coffees flavors found nowhere else in the world. Coffee drinking has been part of Ethiopian life for centuries — it is not just a beverage here, it is a cultural institution.<br><br><strong>Behind the Packaging Design:</strong> The art was inspired by the traditional Ethiopian coffee ceremony. Coffee ceremonies are a way to practice hospitality and strengthen community — bringing relatives and neighbors together to connect in a deep and meaningful way. The design is anchored by the jebena — a traditional Ethiopian clay coffee pot used in every ceremony. The surrounding background is composed of abstracted grass mats (spread on the floor during the ceremony), coffee botanicals, and ceremonial coffee cups. Every element tells the story of a people and a culture that has lived with coffee — and celebrated it together — for more than a thousand years.',
+    pairings:['Spiced orange cake 🍊','Cardamom bun 🌀','Dried apricot 🍑','Savory egg pastry 🥚','Black pepper cheese cracker 🧀']
+  },
+  {
+    emoji:'🏔️', roast:'Medium Roast', name:'Single-Origin Colombia',
+    tagline:'Notes of Toasted Walnut & Herbs',
+    region:'Colombia, South America', since:'1971',
+    processing:'Washed · Single-origin',
+    acidity:60, body:50, sweetness:50, roastness:40,
+    aroma:'Clean and balanced — a toasted nut warmth (walnut, hazelnut) with a green, herbal freshness underneath. There is a subtle floral quality. Not bold or aggressive — Colombia smells refined and approachable.',
+    slurp:'Smooth and well-balanced — a very easy-drinking coffee. The walnut note is comfortably present, the acidity moderate and pleasant, and the herbal quality gives it a distinctive freshness.',
+    tongue:'<span class="tongue-zone tip">Tip: gentle nuttiness</span><span class="tongue-zone sides">Sides: juicy medium acidity</span><span class="tongue-zone full">Mid-palate: herbal freshness</span>',
+    tonguetxt:'Gentle nuttiness registers at the tip of the tongue. The juicy, medium acidity is characteristic of high-altitude Colombian beans — present and pleasant, not sharp. The herbal freshness gives the mid-palate a distinctive character unique to Colombian coffee.',
+    body:'Medium. Smooth and even — the classic "balanced" coffee experience. High-altitude growing conditions in the Andes create dense beans that translate to a satisfying, consistent mouthfeel.',
+    flavor:'Toasted walnut is the primary note — dry, pleasant, and nutty without being bitter. The herbal quality gives the coffee a fresh, slightly savory dimension. The finish is clean with a "juicy acidity" that invites another sip.',
+    story:'<strong>The Coffee:</strong> Starbucks is one of the world\'s largest buyers of premium arabica coffee from Colombia and has been proudly serving single-origin Colombian coffees since opening its doors at Pike Place Market in 1971. Colombia is nestled on the northern end of the Andes mountain chain, home to many volcanoes, rich volcanic soil, and a diversity of micro-climates ideal for growing high-quality coffee. Both the Sierra Nevada and Andes Mountain Ranges create some of the highest elevations for coffee production in all of Latin America. At high elevations, warm days and cold nights slow the green bean\'s growth, creating dense, complex beans. The steep dirt roads, mountain walls, and thousand-foot drops to the valley below are part of every coffee buyer\'s story of finding exceptional Colombian coffee. The juicy acidity, herbal notes, and signature nutty finish are worth the journey every time. In 2012, Starbucks opened a Farmer Support Center in Manizales, Colombia — now supporting over 100,000 coffee farmers. Since 2014, Starbucks stores in Bogotá serve 100% locally sourced and roasted coffee for in-store beverages, honoring the country\'s coffee heritage.<br><br><strong>The Cupping Room:</strong> The incredible diversity in terroir across Colombia\'s many coffee-growing regions enables Starbucks to purchase Colombian coffees offering a wide range of taste experiences. The country is so large and geographically diverse that a coffee from the Cauca region and one from the Antioquia region — both grown at similar elevations and processed the same way — can taste completely different. This is the magic of terroir.<br><br><strong>Behind the Packaging Design:</strong> This bag pays homage to Colombia with artwork inspired by the endless layers of tall, mountainous terrain where coffee grows. The birds depicted are Andean condors — a legacy from previous coffee packaging, updated to feel bold, dynamic, and modern. The geometric elements are a direct nod to mola — a traditional textile art form created by Kuna indigenous women, known for bright colors, complex geometric designs, and layered meanings. The design honors both the landscape of Colombia and the indigenous artistry of its people. Every layer has meaning.',
+    pairings:['Walnut brownie 🍫','Hazelnut biscotti 🍪','Herb and cheese sandwich 🧀','Almond tart 🥧','Pecan coffee cake 🍰']
+  },
+  {
+    emoji:'🧜‍♀️', roast:'Medium Roast', name:"Starbucks Siren's Blend™",
+    tagline:'Notes of Juicy Citrus & Chocolate',
+    region:'Latin America & Africa', since:'2019',
+    processing:'Washed · Pre-roast blend',
+    acidity:65, body:60, sweetness:65, roastness:35,
+    aroma:'Bright and layered — the East African beans bring a lively citrus and floral quality (candied citrus, lemon blossom), while the Latin American beans add a smooth chocolate warmth. Complex and intriguing — two worlds meeting in one aroma.',
+    slurp:'A multi-layered experience — fresh citrus brightness arrives first, then a syrupy, almost molten chocolate quality develops as the coffee sits on your palate. The mouthfeel is notably rich and round.',
+    tongue:'<span class="tongue-zone tip">Tip: juicy citrus sweetness</span><span class="tongue-zone sides">Sides: bright lively acidity</span><span class="tongue-zone full">Full palate: chocolate warmth</span>',
+    tonguetxt:'The citrus hits the tip of the tongue with sweetness and brightness. The acidity on the sides is lively and refreshing without being aggressive. A melting chocolate sensation develops across the full palate.',
+    body:'Medium with a syrupy quality — the mouthfeel is notably richer than most medium roasts. The African beans contribute a round, almost juicy texture that is distinctive and memorable.',
+    flavor:'Fresh, juicy citrus and milk chocolate — two flavors that complement each other beautifully. The citrus keeps the chocolate from feeling heavy; the chocolate keeps the citrus from feeling sharp. Delicious hot or iced.',
+    story:"<strong>The Coffee:</strong> Named for the Siren that symbolizes Starbucks, this blend was inspired — and created — by the trailblazing women of the coffee industry. The coffees come from East Africa and Latin America — two regions where Starbucks works every day to elevate women's leadership and responsible farming practices. The story of this coffee begins with Mary Williams. In 1993, when very few women held leadership roles in the coffee industry, Williams boldly established the path for economic transparency and C.A.F.E. Practices in Starbucks' supply chains. She also developed the flavor profile for a historic blend called 'Siren's Note.' Starbucks Siren's Blend™ puts a modern twist on that old favorite. On International Women's Day, The Starbucks Foundation announced a goal to empower 250,000 women and girls in origin communities — a goal met in 2022. The Foundation has since set a new goal to positively impact 1 million women and girls in origin communities by 2030. Women — especially in origin communities — are the backbone of the coffee industry.<br><br><strong>The Cupping Room:</strong> The flavors are refreshing and complex: fresh, juicy citrus and bright, lively florals complement a syrupy body and melting chocolate mouthfeel. This is a versatile cup — great brewed both hot and iced — delivering the citrusy notes of African beans beautifully balanced with Latin American coffees. The blend honors every woman throughout the coffee supply chain — from farmers to roasters to baristas.<br><br><strong>Behind the Packaging Design:</strong> Inspired by Siren folklore, the blending and swirling movement in the background creates feelings of mystery while also telling a subtle story of sisterhood in the coffee industry. Siren tails are layered over artful coffee botanicals, creating a design that is both mythological and botanical at once. The movement in the design — swirling, flowing, dynamic — symbolizes the trade winds that carry coffees from Africa and Latin America to meet in a single cup. The design is intentionally subtle and sophisticated — like the women it honors. You see the siren tails first, but the more you look, the more story you discover.",
+    pairings:['Milk chocolate truffle 🍫','Candied citrus peel 🍊','Lemon chocolate tart 🍋','Vanilla and orange biscotti 🍪','Caramelized citrus cake 🍰']
+  },
+  {
+    emoji:'❤️', roast:'Dark Roast', name:'Starbucks® Espresso Roast',
+    tagline:'Notes of Molasses & Caramel',
+    region:'Multi-Region (Latin America & Asia/Pacific)', since:'1975',
+    processing:'Washed & Semi-Washed · Pre-roast blend',
+    acidity:40, body:80, sweetness:65, roastness:80,
+    aroma:'Rich, intense, and caramelly — one of the most iconic coffee aromas in the world. Warm molasses sweetness mingles with burnt caramel and a deep, satisfying roast warmth. A subtle smoky undertone runs beneath it all. The aroma fills a room and signals that something serious and delicious is being crafted.',
+    slurp:'Bold and immediate — the coffee commands your palate with intensity. A rich, sweet punch of caramel and molasses, followed by a body that coats the tongue and lingers. In milk-based beverages, the coffee punches through cream and maintains its presence powerfully.',
+    tongue:'<span class="tongue-zone tip">Tip: caramel sweetness</span><span class="tongue-zone sides">Sides: moderate smooth acidity</span><span class="tongue-zone back">Back: molasses depth & roast</span>',
+    tonguetxt:'Caramel sweetness registers clearly at the tip — this espresso is designed to be sweet, not bitter. Moderate acidity on the sides is smooth and controlled. The molasses depth and roast character develop at the back of the palate, creating the bold finish that defines espresso culture.',
+    body:'Full. The most full-bodied espresso in the lineup. It coats the tongue thickly and lingers long after swallowing — essential for cutting through steamed milk in lattes and cappuccinos.',
+    flavor:'Molasses and caramel — bold, sweet, and deeply satisfying. The molasses gives complexity; the caramel gives approachability. This is the flavor that introduced espresso culture to communities around the world. Available as Decaf.',
+    story:'<strong>The Coffee:</strong> The heart of Starbucks\' handcrafted beverages — unchanged since 1975. This richly intense and caramelly blend was first developed by Dave Olsen, a local Seattle coffee shop owner who shared a common love of Starbucks coffee with the founders. Dave opened Cafe Allegro in Seattle in 1975 and needed the perfect espresso blend for his beverages. Together with the Starbucks founders, they spent considerable time developing what became the signature Espresso Roast. They experimented with incorporating Kenyan beans — but the bright, fruity character of African beans, while delicious as brewed coffee, became overwhelming when amplified through espresso. They ended up with a pre-roast blend of Latin American and Indonesian beans, perfectly suited to a singular, very dark roast expression. In 1984, Starbucks installed its first espresso machine. The blend they had — richly intense and caramelly sweet — tasted great on its own and punched through steamed milk to craft coffee-forward lattes and cappuccinos. This espresso checked every box. Dave Olsen officially joined Starbucks in 1987, leading buying, roasting, and education until his retirement in 2013 after 27 years of service. The flavor profile of Espresso Roast has never changed since 1975. Italian style espresso has a tell-tale sweetness with a bright bite of acidity. Some things are so right they never need to change.<br><br><strong>The Cupping Room:</strong> Developing the flavor of Espresso Roast took some time, with many trials to get it just right. The effort paid off. With its assertive boldness and caramelly sweet finish, the espresso balances exquisitely with steamed milk in lattes, cappuccinos, and flat whites, and stands deliciously on its own in a doppio or with added water in an Americano. This is the heart of every handcrafted Starbucks beverage, then and now.<br><br><strong>Behind the Packaging Design:</strong> The design highlights the rich, purple dark roast hues and the flavor notes of caramel and molasses — two colors and flavors that define this coffee. Silver accents convey waves of crema textures, referencing the golden foam that crowns a perfect espresso shot. Small rows of coffee beans add dimension while referencing the craft of blending — because this coffee is, at its heart, a carefully crafted blend. The deep purple tones signal depth, richness, and intensity. The overall design communicates: this is serious, confident espresso — the same espresso that has been at the heart of Starbucks since 1975.',
+    pairings:['Dark chocolate 🍫','Caramel flan 🍮','Tiramisu 🍰','Chocolate-covered almond 🍫','Caramel macaron 🧁']
+  },
+  {
+    emoji:'🌹', roast:'Dark Roast', name:'Starbucks® Caffè Verona™',
+    tagline:'Notes of Dark Cocoa & Caramelized Sugar',
+    region:'Multi-Region', since:'1975',
+    processing:'Washed & Semi-Washed · Post-roast blend',
+    acidity:30, body:85, sweetness:60, roastness:85,
+    aroma:'Deeply chocolatey and romantic — like a rich, dark hot cocoa with caramelized sugar undertones. A pleasant roasty depth more intense than Espresso Roast but without French Roast\'s smokiness. Rich, warm, and deeply comforting.',
+    slurp:'Full and enveloping — the coffee fills the entire mouth with a rich, deep sensation. The dark cocoa note is immediate and prominent, followed by a caramelized sugar sweetness that softens the roast. This is the dessert coffee experience.',
+    tongue:'<span class="tongue-zone tip">Tip: caramelized sweetness</span><span class="tongue-zone sides">Sides: low smooth acidity</span><span class="tongue-zone back">Back: dark cocoa bitterness</span><span class="tongue-zone full">Long lingering finish</span>',
+    tonguetxt:'Caramelized sweetness registers at the tip first, making the entry inviting rather than harsh. Very low acidity on the sides — smooth and integrated. Dark cocoa bitterness develops at the back and creates a long, satisfying finish.',
+    body:'Full — one of the fullest-bodied coffees in the lineup. Post-roast blending ensures both Latin American and Indonesian beans contribute their best characteristics, creating a thick, rich, satisfying mouthfeel.',
+    flavor:'Dark cocoa and caramelized sugar — perfectly balanced. The cocoa provides depth and slight bitterness, the caramelized sugar provides sweetness and warmth. The ultimate pairing coffee for anything chocolate.',
+    story:'<strong>The Coffee:</strong> Originally known as Jake\'s Blend, this decadent coffee was created in 1975 for a well-known Seattle restaurant that wanted a coffee to accompany a rich chocolate cake — the very first private-label coffee Starbucks ever developed for a restaurant. Diners loved the flavor so much they came into Starbucks requesting it by name. So Starbucks started hand-scooping and blending it to order in stores, affectionately calling it "80/20 Blend" — 80% Yukon Blend and 20% Italian Roast. After several years of hand-scooping popularity, it earned a new proprietary name — one that evoked romance. The Italian Roast component inspired the name Caffè Verona™, named after the romantic Italian city most famous as the setting for Shakespeare\'s Romeo and Juliet. "Named after a city known for romance because it\'s easy to fall in love at first sip." 50 years later, each taste is still a delight.<br><br><strong>The Cupping Room:</strong> There are many variables in the roasting process that impact aroma, acidity, body, and flavor. In post-roast blends like Caffè Verona™, different green coffees are roasted individually to different roast levels, then blended together afterward. Post-roast blending is reserved for coffees whose flavors would get lost in the mix if roasted together. This technique ensures each origin\'s beans reach their full potential separately and are blended afterward — ensuring this coffee is a true sum of its exceptional parts.<br><br><strong>Behind the Packaging Design:</strong> This dark roast is named after the setting of Shakespeare\'s Romeo and Juliet, and the design was created to feel romantic and reference Verona\'s ornate architecture. Layered with iconic Verona roses — the universal symbol of romance and love — you find a bubbling fountain, ivy draping off balconies, and Italian castle-like architectural detailing. The deep, dark color palette reinforces the dark roast character. The roses are the defining motif — Caffè Verona is a coffee for romance, for celebration, for dessert, for moments that deserve something truly special. This bag tells you exactly what kind of moment you are about to have.',
+    pairings:['Chocolate lava cake 🍫','Dark chocolate truffles 🍫','Chocolate-covered strawberry 🍓','Chocolate fondue 🍡','Brownie with caramel sauce 🍫']
+  },
+  {
+    emoji:'🏛️', roast:'Dark Roast', name:'Starbucks® Italian Roast',
+    tagline:'Notes of Dark Cocoa & Toasted Marshmallow',
+    region:'Multi-Region', since:'1971',
+    processing:'Washed & Semi-Washed · Pre-roast blend',
+    acidity:25, body:70, sweetness:55, roastness:90,
+    aroma:'Deep, roasty, and slightly sweet — the dark cocoa is rich and prominent, and the toasted marshmallow quality adds an unexpected sweet warmth. A hint of dark caramelization — like sugar that has gone just slightly beyond caramel, deepening into roasty sweetness.',
+    slurp:'A bold, assertive experience — the roast character is immediately dominant. But unlike French Roast, Italian Roast has a sweetness that emerges: the toasted marshmallow quality softens the intensity and creates a satisfying, rounded experience.',
+    tongue:'<span class="tongue-zone tip">Tip: roasty sweetness</span><span class="tongue-zone sides">Sides: very low acidity</span><span class="tongue-zone back">Back: dark cocoa depth</span>',
+    tonguetxt:'Roasty sweetness hits the tip with surprising softness for such a dark roast. Very low acidity on the sides — almost none. Dark cocoa develops at the back and the finish lingers with a roasty-sweet warmth that is satisfying and deep.',
+    body:'Full, but slightly less dense than Caffè Verona™. The darker roast causes the bean to lose some density as natural coffee oils come to the surface — but the body remains rich and satisfying.',
+    flavor:'Dark cocoa is dominant and prominent, with a toasted marshmallow sweetness that prevents it from becoming harsh. This balance is what makes Italian Roast one of the most challenging roasts to master — a narrow window to bring roasty sweetness to the forefront without losing it to bitterness.',
+    story:'<strong>The Coffee:</strong> Our quintessential dark roast, unchanged from Starbucks\' earliest days at Pike Place Market when beans were hand-scooped and sold by the pound. This multi-region blend pays homage to the country that gave the world the gift of espresso — inspired by the roasting traditions of Southern Italy. Slightly darker than Espresso Roast, every sip has a depth of flavor that holds its own with cream and sugar. This is one of the most challenging roasts Starbucks makes: each batch must be expertly roasted to the perfect color — there is a small window of opportunity to bring the roasty flavor to the forefront without losing the sweet notes of caramelized sugar. Dark-roasted coffees take on a noticeable shine as natural coffee oils come to the surface of the bean. Italian Roast played a historically critical role in Starbucks: when Frappuccino® Blended Beverages were first launched, it was Italian Roast brewed extra strong that served as the coffee base at the heart of every blended beverage. Since 1971.<br><br><strong>The Cupping Room:</strong> Italian Roast has remained a staple of the Starbucks coffee lineup since the earliest days at Pike Place Market. It captures the essence of a dark roast — rich in flavor, with lingering finishes and less acidity. Dark roasts like Italian Roast require tremendous skill because the roaster must make split-second decisions in a very narrow window between peak flavor development and burning.<br><br><strong>Behind the Packaging Design:</strong> The design tells an artful and updated story while staying faithful to recognizable elements of this iconic coffee. The interlocking, almost collage-like layout conveys a sense of wandering and roaming the streets of Italy. The artwork brings in architectural motifs — a nod to world-renowned Italian sculpture — beautiful Italian checkered tile flooring, and terrazzo stone textures for depth. The design is a love letter to Italy: the country that gave the world espresso culture, the tradition that first inspired Howard Schultz\'s vision for Starbucks, and the city streets that shaped the idea of the coffeehouse as a gathering place.',
+    pairings:['Tiramisu 🍰','Chocolate mousse 🍫','Dark chocolate biscotti 🍪','S\'mores dessert 🔥','Roasted almond toffee 🍬']
+  },
+  {
+    emoji:'💨', roast:'Dark Roast', name:'Starbucks® French Roast',
+    tagline:'Notes of Dark Caramel & Sweet Smoke',
+    region:'Multi-Region', since:'1971',
+    processing:'Varies · Pre-roast blend',
+    acidity:15, body:40, sweetness:35, roastness:100,
+    aroma:'Intense and unmistakable — this is the boldest, most smoky aroma of any Starbucks coffee. Dark caramel and sweet woodsmoke dominate — like standing near a campfire with caramel candy. There is very little fruit or floral character; the roast is everything at this level.',
+    slurp:'Bold and smoky — the roast character hits immediately and powerfully. The sweet smoke note is distinctive and lingering. Acidity is almost completely absent. This is an intense, uncompromising coffee for adventurous palates.',
+    tongue:'<span class="tongue-zone tip">Tip: dark caramel sweetness</span><span class="tongue-zone sides">Sides: minimal acidity</span><span class="tongue-zone back">Back: sweet smoke & deep roast</span>',
+    tonguetxt:'Dark caramel registers at the tip with sweetness — one of the few pleasant sensations before the roast intensity takes over. Very minimal acidity on the sides. The sweet smoke and intense roast character dominate the back of the palate and linger.',
+    body:'Light — a surprising fact! Dark roasted beans are much less dense than lighter roasted beans; moisture is driven out during roasting, reducing body. A bag of French Roast looks larger than other coffees because it takes more volume to achieve the same weight.',
+    flavor:'At French Roast\'s extreme roast level, all origin-specific flavors disappear. What remains is a distinctive, singular explosion of smoky, dark caramel flavor. This is not a complex coffee — it is an intense, committed, single-minded coffee adored for exactly what it is.',
+    story:'<strong>The Coffee:</strong> Our deepest, darkest roast since 1971 — intense, uncompromising, and adored by adventurous palates. Starbucks starts by carefully sourcing beans that can withstand the extreme heat of the roaster. Not every green coffee can handle these temperatures without simply burning. As the temperature rises, the coffee grows darker with each passing minute. Beans easily exceed 450°F (232°C) during the roast cycle. At this extreme roast level, the acidity, body, and flavors associated with specific growing origins are no longer present in the bean. What remains is a distinctive explosion of smoky flavor. Have you ever noticed a bag of French Roast looks larger than other coffees? A dark roasted bean is much less dense than a lighter roasted bean — it takes a larger volume of beans to make a pound. Watching a master roaster work with French Roast is an inspiration — a memorable experience of sights, smells, and sounds. Our master roasters ensure the flavor stays consistent from roast to roast, even though the processing method and origin of the beans may vary throughout the year.<br><br><strong>The Cupping Room:</strong> French Roast offers intense flavors and a smoky, lingering aftertaste due to its extremely dark roast. Whereas lighter roasts highlight origin flavors, in French Roast all origin-specific flavors are gone — what remains is a singular explosion of smoky character. This is coffee pushed to its absolute, beautiful limit. It is adored by those who know exactly what they want: intensity, smoke, and a coffee that makes no apologies.<br><br><strong>Behind the Packaging Design:</strong> The bag features an illustrative and symmetrical background inspired by French textile and architectural design traditions. Swirling tones of warm brown and dark purple bring forward the flavor notes of smoke and caramel. The fleur-de-lis — the iconic symbol of France — is a salute to the legacy of previous French Roast designs and anchors the design in its French heritage. Flame motifs, smoky textures, and coffee botanicals complete the artwork. The design does not hide what this coffee is — it celebrates the intensity, the drama, the beautiful extremity of the darkest roast in the Starbucks lineup.',
+    pairings:['Dark chocolate espresso bark 🍫','Smoked caramel candy 🍬','Pecan praline 🥜','Rum raisin cake 🍰','Strong aged cheese 🧀']
+  },
+  {
+    emoji:'🐅', roast:'Dark Roast', name:'Single-Origin Sumatra',
+    tagline:'Notes of Rich Herbs & Rustic Spice',
+    region:'Asia-Pacific: Sumatra, Indonesia', since:'1971',
+    processing:'Semi-Washed (wet-hulled) · Single-origin',
+    acidity:20, body:95, sweetness:30, roastness:75,
+    aroma:'Deeply earthy and herbal — one of the most distinctive aromas in all of coffee. Think fresh mushrooms, damp forest floor, and rich herbal notes (basil, cedar) layered together. There is also a rustic spice quality — warm and complex. Nothing like any Latin American or African coffee.',
+    slurp:'The most full-bodied experience in the lineup — when you slurp Sumatra, the coffee is thick and syrupy. It spreads across your palate like warm molasses and coats every part of your mouth with earthy, herbal depth. You feel the weight immediately.',
+    tongue:'<span class="tongue-zone tip">Tip: mild earthy sweetness</span><span class="tongue-zone sides">Sides: very low muted acidity</span><span class="tongue-zone full">Full mouth: thick herbal coating</span>',
+    tonguetxt:'Sumatra does not tingle or dance — it settles. The very low, muted acidity means your tongue feels calm and coated rather than stimulated. The earthy, herbal richness covers the full palate and creates a thick, syrupy sensation that lingers. Howard Schultz wrote: "You will find yourself hooked by the third sip."',
+    body:'Full — the fullest body of any Starbucks single-origin coffee. The wet-hulling (giling basah) processing method contributes enormously to this characteristic. The coffee literally feels heavy and thick in the mouth like warm syrup.',
+    flavor:'Rich herbals (mushroom, cedar, basil-like notes) and rustic spice create a flavor unlike anything else in the lineup. The muted acidity means these flavors are deep, settled, and complex. Each sip reveals something new.',
+    story:'<strong>The Coffee:</strong> A Starbucks staple since day one in 1971 and our most beloved single-origin offering. The rich and rustic flavor profile of Sumatra cannot be replicated anywhere in the world. Grown by smallholder farmers on a volcanic Indonesian island — some farms no bigger than a backyard growing among other crops. Sumatra is part of the Indonesian archipelago — a country of several thousand volcanic islands spanning about 3,200 miles of equatorial ocean. The families who work small, rugged coffee farms cultivate beans with full-bodied flavors that are nothing short of miraculous. Available as Decaf Sumatra.<br><br><strong>The Cupping Room:</strong> In Sumatra, a unique processing method called wet-hulling (giling basah) shapes the recognizable flavor profile. Immediately after picking, the coffee fruit is removed with a hand-cranked pulper. The beans are then rinsed and partially dried in their protective parchment shell. While still in a semi-wet state, the beans are hulled to remove the parchment. Finally, the green bean is dried and readied for transport. The high humidity of Sumatra made traditional washed processing difficult — wet-hulling was developed as a practical solution and accidentally created one of the world\'s most distinctive coffee flavors. Starbucks opened a Farmer Support Center in North Sumatra in 2016.<br><br><strong>Behind the Packaging Design:</strong> For Sumatra, the design is layered with mystery and jungle richness. The color palette emphasizes the dark roast through purples, greens, and blues — with foiling on the tiger stripes and jungle plants that catches the light. The Sumatran tiger — one of the world\'s most endangered big cats, native to the island of Sumatra — is the centerpiece of the design. The designer noted the visual similarities between the shapes of tiger stripes and palm leaves, and adjusted the scale of the tiger in relation to the palm trees and jungle landscape. Layering adds elements of fun and mystery: you see the tiger stripes at first glance, but once you look closer you discover more. The design rewards attention — exactly like the coffee. Each time you look, or sip, you find something new.',
+    pairings:['Warm brie cheese 🧀','Shortbread cookie 🍪','Wild mushroom soup 🍄','Herbed crackers 🧀','Maple pecan tart 🥧']
+  },
+  {
+    emoji:'🦎', roast:'Dark Roast', name:'Starbucks® Komodo Dragon Blend™',
+    tagline:'Notes of Fresh Herbs & Warm Spice',
+    region:'Asia-Pacific: Indonesia', since:'2004 (stores) / 1997 (mail order)',
+    processing:'Washed & Semi-Washed · Pre-roast blend',
+    acidity:25, body:90, sweetness:35, roastness:75,
+    aroma:'Complex and layered — fresh herbal notes (green herbs, fresh cedar) combine with a warm spice quality difficult to describe until you have smelled it. There is also a buttery, almost savory quality underneath. Partners say customers cannot understand "spicy coffee" until they smell and taste this blend.',
+    slurp:'Complex and buttery — the coffee fills the mouth with a layered sensation. First you notice the herbal freshness, then the warm spice emerges, and finally a buttery smooth finish develops. Each element is distinct and contributes to a memorable experience.',
+    tongue:'<span class="tongue-zone tip">Tip: subtle herbal sweetness</span><span class="tongue-zone sides">Sides: low acidity</span><span class="tongue-zone full">Full palate: warm spice & butter</span>',
+    tonguetxt:'A subtle herbal sweetness registers at the tip — fresh and clean. Very low acidity on the sides. The warm spice (black pepper-like, dried herbs) develops across the full palate and the buttery finish coats the tongue with a satisfying richness that lingers.',
+    body:'Full — nearly as full-bodied as Sumatra. The Indonesian beans contribute their characteristic thick, syrupy mouthfeel. Layered and complex throughout.',
+    flavor:'Fresh herbs and warm spice — the combination that gives Komodo Dragon Blend™ its unforgettable "aha" moment. The warm spice is real and identifiable: black pepper-like, herbal, and distinctive. Complex and buttery with remarkable depth.',
+    story:'<strong>The Coffee:</strong> First launched in 1997 exclusively by mail order — a bold choice to debut such an unusual, complex blend as a mail-order exclusive. In 2004, Komodo Dragon Blend™ launched as a promotional coffee at North American stores and became so popular Starbucks added it to the year-round lineup. This blend masterfully knits together the distinct flavors and diverse coffee growing traditions found across the Indonesian archipelago — which spans about 3,200 miles of equatorial ocean. Indonesia plays a crucial role in coffee history and is home to Sumatra, a Starbucks staple since 1971. Despite the remote locations of Indonesian farms and the long journeys beans must take, Indonesian coffees play an essential role in many Starbucks® signature blends. Partners often tell us customers don\'t understand how coffee can be "spicy" until they\'ve tasted Komodo Dragon Blend™ and experienced that "aha moment." The island of Komodo is home to the Komodo dragon — the world\'s largest living lizard — and this coffee is just as bold, powerful, and distinctive as its namesake.<br><br><strong>The Cupping Room:</strong> This blend is layered and bold. The main themes of Komodo Dragon Blend® are terroir and origin — the flavors are a direct expression of the soil, climate, and processing traditions of the Indonesian archipelago. The warm spice note is not added — it emerges naturally from the combination of specific beans and roast. It surprises nearly everyone who tastes it for the first time. The "spicy" quality in coffee is real, and Komodo Dragon Blend™ is the definitive example of it.<br><br><strong>Behind the Packaging Design:</strong> The main themes of the design are terroir and origin — celebrating the unique character of Indonesian coffee. The bag depicts wild Komodo dragons in their natural habitat along with variations of regional plants from across Indonesia. Layered crushed patterns add depth and represent the complex, layered flavors of this dark roast coffee. The Komodo dragon is shown in its natural context — not as a cartoon or icon, but as a real creature in its real landscape. The design is bold and alluring — like an invitation to explore somewhere distant and extraordinary. Every visual element is grounded in the real geography and ecology of Indonesia.',
+    pairings:['Mushroom and herb bruschetta 🍄','Aged parmesan cheese 🧀','Spiced nuts 🥜','Herb and black pepper flatbread 🫓','Smoked gouda 🧀']
+  },
+];
+
+function buildSensoryCards() {
+  const grid = document.getElementById('scoffeeGrid');
+  if (!grid) return;
+  const roastEmojis = {'Blonde Roast':'☀️ Blonde Roast','Medium Roast':'🌤 Medium Roast','Dark Roast':'🌑 Dark Roast'};
+  let html = '';
+  let lastRoast = '';
+  sensoryData.forEach((c, idx) => {
+    if (c.roast !== lastRoast) {
+      html += `<div class="roast-section-divider"><h3>${roastEmojis[c.roast]}</h3></div>`;
+      lastRoast = c.roast;
+    }
+    const bodyLabel = c.body < 40 ? 'Light' : c.body < 70 ? 'Medium' : 'Full';
+    const acidLabel = c.acidity < 30 ? 'Low' : c.acidity < 60 ? 'Medium' : 'High';
+    const sweetLabel = c.sweetness < 40 ? 'Low' : c.sweetness < 65 ? 'Medium' : 'High';
+    const roastLabel = c.roastness < 30 ? 'Mild' : c.roastness < 60 ? 'Medium' : 'Bold';
+    html += `
+    <div class="scoffee-card" id="sc${idx}">
+      <div class="scoffee-header" onclick="toggleSCard(${idx})">
+        <div class="scoffee-emoji">${c.emoji}</div>
+        <div class="scoffee-meta">
+          <div class="scoffee-roast">${c.roast} · ${c.region}</div>
+          <div class="scoffee-name">${c.name}</div>
+          <div class="scoffee-tagline">${c.tagline}</div>
+        </div>
+        <div class="scoffee-toggle" id="stgl${idx}">Explore ▾</div>
+      </div>
+      <div class="scoffee-body">
+        <div class="scoffee-bars">
+          <div class="sbar-row"><div class="sbar-label">Acidity</div><div class="sbar-track"><div class="sbar-fill" style="width:${c.acidity}%"></div></div><div class="sbar-val">${acidLabel}</div></div>
+          <div class="sbar-row"><div class="sbar-label">Body</div><div class="sbar-track"><div class="sbar-fill" style="width:${c.body}%"></div></div><div class="sbar-val">${bodyLabel}</div></div>
+          <div class="sbar-row"><div class="sbar-label">Sweetness</div><div class="sbar-track"><div class="sbar-fill" style="width:${c.sweetness}%"></div></div><div class="sbar-val">${sweetLabel}</div></div>
+          <div class="sbar-row"><div class="sbar-label">Roastiness</div><div class="sbar-track"><div class="sbar-fill" style="width:${c.roastness}%"></div></div><div class="sbar-val">${roastLabel}</div></div>
+        </div>
+        <div class="sensory-sections">
+          <div class="sensory-block">
+            <div class="sensory-block-title"><span class="sensory-block-icon">👃</span> Aroma — What It Smells Like</div>
+            <p>${c.aroma}</p>
+          </div>
+          <div class="sensory-block">
+            <div class="sensory-block-title"><span class="sensory-block-icon">💦</span> When You Slurp It</div>
+            <p>${c.slurp}</p>
+          </div>
+          <div class="sensory-block">
+            <div class="sensory-block-title"><span class="sensory-block-icon">👅</span> Where It Hits Your Tongue</div>
+            <div class="tongue-map">${c.tongue}</div>
+            <p style="margin-top:0.5rem">${c.tonguetxt}</p>
+          </div>
+          <div class="sensory-block">
+            <div class="sensory-block-title"><span class="sensory-block-icon">⚖️</span> Body — How Heavy It Feels</div>
+            <p>${c.body}</p>
+          </div>
+          <div class="sensory-block">
+            <div class="sensory-block-title"><span class="sensory-block-icon">🍫</span> Flavor — What It Tastes Like</div>
+            <p>${c.flavor}</p>
+          </div>
+          <div class="sensory-block">
+            <div class="sensory-block-title"><span class="sensory-block-icon">🍽️</span> Best Food Pairings</div>
+            <div class="pairing-chips">${c.pairings.map(p=>`<span class="pairing-chip">${p}</span>`).join('')}</div>
+          </div>
+          <div class="sensory-block story-block">
+            <div class="sensory-block-title"><span class="sensory-block-icon">📖</span> The Full Story, Cupping Room & Packaging Design</div>
+            <div class="story-text">${c.story.replace(/<br><br><strong>/g, '<strong>').replace(/<br><br>/g, '<br>')}</div>
+            <span class="since-badge" style="margin-top:1rem;display:inline-block">Since ${c.since} · ${c.processing}</span>
+          </div>
+        </div>
+      </div>
+    </div>`;
+  });
+  grid.innerHTML = html;
+}
+
+function toggleSCard(idx) {
+  const card = document.getElementById('sc'+idx);
+  const tgl = document.getElementById('stgl'+idx);
+  card.classList.toggle('open');
+  tgl.textContent = card.classList.contains('open') ? 'Close ▴' : 'Explore ▾';
+}
+
+buildSensoryCards();
+</script>
+</body>
+</html>
