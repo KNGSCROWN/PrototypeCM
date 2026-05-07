@@ -410,9 +410,129 @@
       from { transform: translateY(110vh) rotate(0deg); }
       to   { transform: translateY(-10vh) rotate(360deg); }
     }
+  
+    /* PASSWORD SCREEN */
+    #password-screen {
+      position: fixed; inset: 0;
+      background: var(--espresso);
+      z-index: 9999;
+      display: flex; flex-direction: column;
+      align-items: center; justify-content: center;
+      gap: 1.5rem; padding: 2rem;
+    }
+    #password-screen .lock-icon { font-size: 3rem; margin-bottom: 0.5rem; }
+    #password-screen h2 {
+      font-family: 'Cinzel', serif; font-size: 1.2rem;
+      letter-spacing: 0.2em; color: var(--gold);
+      text-transform: uppercase; text-align: center;
+    }
+    #password-screen p {
+      font-family: 'Cormorant Garamond', serif; font-style: italic;
+      font-size: 1rem; color: rgba(245,234,216,0.6); text-align: center;
+    }
+    #password-input {
+      background: rgba(46,26,14,0.9);
+      border: 1px solid rgba(212,168,83,0.4);
+      color: var(--cream); font-family: 'DM Sans', sans-serif;
+      font-size: 1rem; padding: 0.75rem 1.2rem; border-radius: 2px;
+      width: 100%; max-width: 280px; text-align: center;
+      letter-spacing: 0.15em; outline: none; transition: border-color 0.3s;
+    }
+    #password-input:focus { border-color: var(--gold); }
+    #password-btn {
+      background: var(--gold); color: var(--espresso); border: none;
+      font-family: 'Cinzel', serif; font-size: 0.7rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      padding: 0.75rem 2rem; cursor: pointer; border-radius: 2px;
+      transition: opacity 0.2s;
+    }
+    #password-btn:hover { opacity: 0.85; }
+    #password-error { color: #e07070; font-size: 0.82rem; display: none; }
+
+    /* WARNING POPUP */
+    #warning-overlay {
+      position: fixed; inset: 0;
+      background: rgba(0,0,0,0.85);
+      z-index: 99999;
+      display: flex; align-items: center; justify-content: center;
+      padding: 1.5rem;
+    }
+    #warning-box {
+      background: linear-gradient(145deg, #1a0a0a, #2a0d0d);
+      border: 2px solid #c0392b; border-radius: 4px;
+      max-width: 480px; width: 100%; padding: 2.5rem 2rem;
+      text-align: center;
+      box-shadow: 0 0 40px rgba(192,57,43,0.4), 0 0 80px rgba(192,57,43,0.15);
+      animation: warningPop 0.4s cubic-bezier(0.22,1,0.36,1);
+    }
+    @keyframes warningPop {
+      from { transform: scale(0.85); opacity: 0; }
+      to   { transform: scale(1); opacity: 1; }
+    }
+    #warning-box .warn-icon { font-size: 3rem; margin-bottom: 1rem; display: block; }
+    #warning-box h2 {
+      font-family: 'Cinzel', serif; font-size: 1rem;
+      letter-spacing: 0.22em; color: #e74c3c;
+      text-transform: uppercase; margin-bottom: 1.2rem;
+    }
+    #warning-box .warn-divider {
+      width: 60px; height: 2px; background: #c0392b; margin: 0 auto 1.4rem;
+    }
+    #warning-box p {
+      font-family: 'DM Sans', sans-serif; font-size: 0.88rem;
+      line-height: 1.75; color: rgba(245,234,216,0.85); margin-bottom: 1rem;
+    }
+    #warning-box p strong { color: #e74c3c; font-weight: 600; }
+    #warning-box .warn-note {
+      font-family: 'Cormorant Garamond', serif; font-style: italic;
+      font-size: 0.82rem; color: rgba(245,234,216,0.45); margin-bottom: 1.8rem;
+    }
+    #warning-confirm-btn {
+      background: #c0392b; color: #fff; border: none;
+      font-family: 'Cinzel', serif; font-size: 0.65rem;
+      letter-spacing: 0.2em; text-transform: uppercase;
+      padding: 0.8rem 2.2rem; cursor: pointer; border-radius: 2px;
+      transition: background 0.2s;
+    }
+    #warning-confirm-btn:hover { background: #a93226; }
+
   </style>
 </head>
 <body>
+
+<!-- PASSWORD SCREEN -->
+<div id="password-screen">
+  <div class="lock-icon">☕🔒</div>
+  <h2>Team Access Only</h2>
+  <p>This page is for store partners only.<br>Please enter the team password to continue.</p>
+  <input type="password" id="password-input" placeholder="Enter password" autocomplete="off" />
+  <span id="password-error">❌ Incorrect password. Please try again.</span>
+  <button id="password-btn">Enter</button>
+</div>
+
+<!-- WARNING POPUP -->
+<div id="warning-overlay" style="display:none;">
+  <div id="warning-box">
+    <span class="warn-icon">⚠️</span>
+    <h2>Confidential — Internal Use Only</h2>
+    <div class="warn-divider"></div>
+    <p>
+      This application is intended <strong>exclusively for authorized store team members</strong>.
+      Sharing this app, its link, or any of its contents with anyone outside the team is
+      <strong>strictly prohibited</strong>.
+    </p>
+    <p>
+      Unauthorized sharing may result in <strong>serious consequences</strong> for the person
+      who created and distributed this application, including disciplinary action.
+    </p>
+    <p class="warn-note">
+      By continuing, you confirm that you are an authorized team member and agree not to
+      share this application with anyone outside the store team.
+    </p>
+    <button id="warning-confirm-btn">I Understand — Continue</button>
+  </div>
+</div>
+
 
 <!-- Drifting beans background -->
 <div class="bg-beans" id="beans"></div>
@@ -585,5 +705,64 @@
     container.appendChild(b);
   }
 </script>
+
+<script>
+  const CORRECT_PASSWORD = "480teamsb";
+  const SESSION_KEY = "sbux_auth";
+  const WARNED_KEY = "sbux_warned";
+
+  const screen = document.getElementById('password-screen');
+  const content = document.querySelector('.page');
+  const input = document.getElementById('password-input');
+  const btn = document.getElementById('password-btn');
+  const errorEl = document.getElementById('password-error');
+  const warningOverlay = document.getElementById('warning-overlay');
+  const warningBtn = document.getElementById('warning-confirm-btn');
+
+  // Hide main content initially
+  if (content) content.style.display = "none";
+
+  function showContent() {
+    warningOverlay.style.display = "none";
+    screen.style.display = "none";
+    if (content) content.style.display = "flex";
+  }
+
+  warningBtn.addEventListener('click', function() {
+    sessionStorage.setItem(WARNED_KEY, "true");
+    showContent();
+  });
+
+  function unlock() {
+    if (input.value === CORRECT_PASSWORD) {
+      sessionStorage.setItem(SESSION_KEY, "true");
+      screen.style.display = "none";
+      if (sessionStorage.getItem(WARNED_KEY) !== "true") {
+        warningOverlay.style.display = "flex";
+      } else {
+        showContent();
+      }
+    } else {
+      errorEl.style.display = "block";
+      input.value = "";
+      input.focus();
+    }
+  }
+
+  if (sessionStorage.getItem(SESSION_KEY) === "true") {
+    screen.style.display = "none";
+    if (sessionStorage.getItem(WARNED_KEY) !== "true") {
+      warningOverlay.style.display = "flex";
+    } else {
+      showContent();
+    }
+  }
+
+  btn.addEventListener('click', unlock);
+  input.addEventListener('keydown', function(e) {
+    if (e.key === 'Enter') unlock();
+  });
+</script>
+
 </body>
 </html>
