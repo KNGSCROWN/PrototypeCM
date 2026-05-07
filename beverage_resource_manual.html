@@ -1,0 +1,521 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Starbucks — Beverage Resource Manual FY25</title>
+<style>
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;1,400&family=Libre+Baskerville:ital@0;1&family=DM+Sans:wght@300;400;500&display=swap');
+:root{--cream:#F5F0E8;--espresso:#2C1A0E;--roast:#6B3A1F;--caramel:#C47A2B;--gold:#E8A93A;--muted:#7A5C3A;--border:rgba(107,58,31,0.2);--card:#FFFDF8;}
+*{box-sizing:border-box;margin:0;padding:0;}
+body{font-family:'DM Sans',sans-serif;background:var(--cream);color:var(--espresso);}
+.hero{background:var(--espresso);color:var(--cream);padding:4rem 2rem 3rem;text-align:center;position:relative;overflow:hidden;}
+.hero::before{content:'';position:absolute;top:-60px;left:50%;transform:translateX(-50%);width:400px;height:400px;border-radius:50%;background:radial-gradient(circle,rgba(196,122,43,0.15) 0%,transparent 70%);pointer-events:none;}
+.hero-badge{display:inline-block;font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--gold);border:1px solid rgba(232,169,58,0.4);padding:6px 16px;border-radius:2px;margin-bottom:1.5rem;}
+.hero h1{font-family:'Playfair Display',serif;font-size:clamp(2rem,5vw,3.5rem);font-weight:400;line-height:1.15;margin-bottom:1rem;}
+.hero h1 em{color:var(--gold);font-style:italic;}
+.hero p{font-size:1rem;color:rgba(245,240,232,0.7);max-width:560px;margin:0 auto 2rem;line-height:1.7;}
+.progress-bar-wrap{max-width:400px;margin:0 auto;}
+.progress-label{display:flex;justify-content:space-between;font-size:12px;color:rgba(245,240,232,0.5);margin-bottom:8px;}
+.progress-track{height:3px;background:rgba(245,240,232,0.15);border-radius:2px;overflow:hidden;}
+.progress-fill{height:100%;background:var(--gold);border-radius:2px;transition:width 0.5s ease;}
+.chapter-nav{background:var(--espresso);border-top:1px solid rgba(245,240,232,0.08);overflow-x:auto;scrollbar-width:none;position:sticky;top:0;z-index:100;text-align:center;}
+.chapter-nav-inner{display:inline-flex;padding:0 1.5rem;}
+.chapter-nav::-webkit-scrollbar{display:none;}
+.chapter-btn{flex-shrink:0;padding:14px 16px;font-size:11px;letter-spacing:1px;text-transform:uppercase;color:rgba(245,240,232,0.45);background:none;border:none;border-bottom:2px solid transparent;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;white-space:nowrap;}
+.chapter-btn:hover{color:rgba(245,240,232,0.8);}
+.chapter-btn.active{color:var(--gold);border-bottom-color:var(--gold);}
+.content{max-width:820px;margin:0 auto;padding:3rem 1.5rem 6rem;}
+.chapter{display:none;}.chapter.active{display:block;animation:fadeIn 0.4s ease;}
+@keyframes fadeIn{from{opacity:0;transform:translateY(12px);}to{opacity:1;transform:translateY(0);}}
+.chapter-header{margin-bottom:2.5rem;padding-bottom:1.5rem;border-bottom:1px solid var(--border);}
+.chapter-num{font-size:11px;letter-spacing:3px;text-transform:uppercase;color:var(--caramel);margin-bottom:0.5rem;}
+.chapter-header h2{font-family:'Playfair Display',serif;font-size:clamp(1.6rem,4vw,2.4rem);font-weight:400;color:var(--espresso);line-height:1.2;}
+.subtitle{font-family:'Libre Baskerville',serif;font-style:italic;color:var(--muted);margin-top:0.5rem;font-size:1rem;}
+.callout{background:var(--espresso);color:var(--cream);padding:1.5rem 2rem;border-radius:4px;margin:2rem 0;position:relative;overflow:hidden;}
+.callout::before{content:'\201C';font-family:'Playfair Display',serif;font-size:5rem;color:rgba(232,169,58,0.2);position:absolute;top:-10px;left:10px;line-height:1;}
+.callout p{font-family:'Libre Baskerville',serif;font-style:italic;font-size:1.05rem;line-height:1.7;position:relative;z-index:1;color:rgba(245,240,232,0.9);}
+.callout cite{display:block;font-size:12px;letter-spacing:1px;text-transform:uppercase;color:var(--gold);margin-top:0.75rem;font-style:normal;}
+.fact-box{background:var(--card);border:1px solid var(--border);border-left:3px solid var(--caramel);border-radius:4px;padding:1.25rem 1.5rem;margin:1.5rem 0;font-size:15px;line-height:1.7;color:var(--roast);}
+.fact-label{font-size:10px;letter-spacing:2px;text-transform:uppercase;color:var(--caramel);margin-bottom:0.5rem;font-weight:500;}
+.section-heading{font-family:'Playfair Display',serif;font-size:1.3rem;font-weight:600;color:var(--espresso);margin:2.5rem 0 1rem;padding-bottom:0.5rem;border-bottom:1px solid var(--border);}
+.acc-item{border:1px solid var(--border);border-radius:6px;overflow:hidden;margin-bottom:0.75rem;background:var(--card);}
+.acc-header{display:flex;align-items:center;gap:1rem;padding:1rem 1.25rem;cursor:pointer;user-select:none;}
+.acc-icon{width:34px;height:34px;border-radius:50%;background:var(--espresso);color:var(--gold);display:flex;align-items:center;justify-content:center;font-size:15px;flex-shrink:0;}
+.acc-title{font-weight:500;font-size:15px;flex:1;}
+.acc-arrow{font-size:12px;color:var(--muted);transition:transform 0.2s;}
+.acc-item.open .acc-arrow{transform:rotate(180deg);}
+.acc-body{display:none;padding:1rem 1.25rem 1.25rem;font-size:14px;color:#4a2e16;line-height:1.75;border-top:1px solid var(--border);}
+.acc-item.open .acc-body{display:block;}
+.steps-list{display:grid;gap:0.75rem;margin:1.5rem 0;}
+.step-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1.25rem;display:flex;gap:1rem;align-items:flex-start;}
+.step-num{width:36px;height:36px;border-radius:50%;background:var(--espresso);color:var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:1rem;font-weight:600;flex-shrink:0;}
+.step-body h4{font-weight:500;font-size:15px;margin-bottom:0.25rem;color:var(--espresso);}
+.step-body p{font-size:13px;color:var(--muted);line-height:1.6;}
+.values-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(200px,1fr));gap:1rem;margin:1.5rem 0;}
+.value-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1.5rem;cursor:pointer;transition:all 0.2s;}
+.value-card:hover{box-shadow:0 4px 16px rgba(44,26,14,0.1);transform:translateY(-2px);}
+.value-card.active{border-color:var(--caramel);}
+.value-emoji{font-size:2rem;margin-bottom:0.5rem;}
+.value-name{font-family:'Playfair Display',serif;font-size:1rem;font-weight:600;color:var(--espresso);margin-bottom:0.25rem;}
+.value-short{font-size:13px;color:var(--muted);}
+.value-detail{display:none;font-size:13px;color:#4a2e16;line-height:1.7;border-top:1px solid var(--border);margin-top:0.75rem;padding-top:0.75rem;}
+.value-card.active .value-detail{display:block;}
+.latte-model{display:grid;gap:0.75rem;margin:1.5rem 0;}
+.latte-row{background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden;cursor:pointer;}
+.latte-header{display:flex;align-items:center;gap:1rem;padding:1rem 1.25rem;}
+.latte-letter{width:40px;height:40px;border-radius:50%;background:var(--espresso);color:var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:1.2rem;font-weight:600;flex-shrink:0;}
+.latte-word{font-weight:500;font-size:15px;flex:1;color:var(--espresso);}
+.latte-arrow{font-size:12px;color:var(--muted);transition:transform 0.2s;}
+.latte-row.open .latte-arrow{transform:rotate(180deg);}
+.latte-body{display:none;padding:1rem 1.25rem 1.25rem;font-size:14px;color:#4a2e16;line-height:1.75;border-top:1px solid var(--border);}
+.latte-row.open .latte-body{display:block;}
+.fund-grid{display:grid;grid-template-columns:repeat(2,1fr);gap:1rem;margin:1.5rem 0;}
+@media(max-width:500px){.fund-grid{grid-template-columns:1fr;}}
+.fund-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1.5rem;cursor:pointer;position:relative;overflow:hidden;transition:all 0.2s;}
+.fund-card:hover{box-shadow:0 4px 20px rgba(44,26,14,0.1);}
+.fund-card.open{border-color:var(--caramel);}
+.fund-bg{font-family:'Playfair Display',serif;font-size:4rem;color:rgba(44,26,14,0.05);position:absolute;top:0;right:8px;line-height:1;}
+.fund-icon{font-size:1.5rem;margin-bottom:0.5rem;}
+.fund-title{font-weight:500;font-size:16px;color:var(--espresso);}
+.fund-body{display:none;font-size:13px;color:#4a2e16;line-height:1.75;border-top:1px solid var(--border);padding-top:0.75rem;margin-top:0.75rem;}
+.fund-card.open .fund-body{display:block;}
+.tea-tabs{background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden;margin:1.5rem 0;}
+.tea-tab-bar{display:flex;flex-wrap:wrap;gap:0.5rem;background:rgba(44,26,14,0.04);border-bottom:1px solid var(--border);padding:0.75rem;}
+.ttab{padding:6px 14px;border-radius:20px;font-size:12px;border:1px solid var(--border);background:none;cursor:pointer;font-family:'DM Sans',sans-serif;transition:all 0.2s;color:var(--muted);}
+.ttab:hover{border-color:var(--caramel);color:var(--caramel);}
+.ttab.active{background:var(--espresso);color:var(--gold);border-color:var(--espresso);}
+.tea-panel{padding:1.5rem;display:none;}
+.tea-panel.active{display:block;}
+.tea-panel h4{font-family:'Playfair Display',serif;font-size:1rem;color:var(--espresso);margin-bottom:0.5rem;}
+.tea-panel p{font-size:14px;color:#4a2e16;line-height:1.75;}
+.temp-gauge{display:grid;gap:0.5rem;margin:1.5rem 0;}
+.temp-row{display:flex;align-items:center;gap:1rem;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1rem 1.25rem;}
+.temp-color{width:14px;height:14px;border-radius:50%;flex-shrink:0;}
+.temp-label{font-weight:500;font-size:14px;flex:1;color:var(--espresso);}
+.temp-val{font-size:13px;color:var(--muted);font-family:'Libre Baskerville',serif;}
+.temp-note{font-size:11px;color:var(--caramel);margin-top:2px;}
+.shots-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:0.75rem;margin:1.5rem 0;}
+.shot-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1rem;text-align:center;}
+.shot-name{font-family:'Playfair Display',serif;font-size:0.95rem;font-weight:600;color:var(--espresso);}
+.shot-italian{font-size:11px;color:var(--caramel);letter-spacing:0.5px;margin-bottom:0.4rem;}
+.shot-desc{font-size:12px;color:var(--muted);line-height:1.5;}
+.shelf-table{width:100%;border-collapse:collapse;margin:1.5rem 0;background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden;font-size:14px;}
+.shelf-table th{background:var(--espresso);color:var(--gold);padding:10px 14px;text-align:left;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;font-weight:500;}
+.shelf-table td{padding:10px 14px;border-bottom:1px solid var(--border);color:#4a2e16;line-height:1.5;vertical-align:top;}
+.shelf-table tr:last-child td{border-bottom:none;}
+.shelf-table tr:hover td{background:rgba(196,122,43,0.04);}
+.tag{display:inline-block;padding:2px 8px;border-radius:3px;font-size:11px;font-weight:500;}
+.tag-urgent{background:rgba(139,0,0,0.08);color:#8B0000;border:1px solid rgba(139,0,0,0.2);}
+.tag-safe{background:rgba(0,112,74,0.08);color:#00704A;border:1px solid rgba(0,112,74,0.2);}
+.tag-mid{background:rgba(196,122,43,0.1);color:var(--caramel);border:1px solid rgba(196,122,43,0.25);}
+.routine-table{width:100%;border-collapse:collapse;margin:1.5rem 0;background:var(--card);border:1px solid var(--border);border-radius:8px;overflow:hidden;font-size:13px;}
+.routine-table th{background:var(--espresso);color:var(--gold);padding:10px 14px;text-align:left;font-size:11px;letter-spacing:1.5px;text-transform:uppercase;font-weight:500;}
+.routine-table td{padding:10px 14px;border-bottom:1px solid var(--border);color:#4a2e16;line-height:1.6;vertical-align:top;}
+.routine-table tr:last-child td{border-bottom:none;}
+.routine-table tr:nth-child(even) td{background:rgba(196,122,43,0.03);}
+.routine-table td:first-child{font-weight:500;color:var(--espresso);white-space:nowrap;}
+.calling-list{display:grid;gap:0.5rem;margin:1.5rem 0;}
+.calling-item{background:var(--card);border:1px solid var(--border);border-radius:6px;padding:0.85rem 1.25rem;display:flex;align-items:center;gap:1rem;}
+.calling-num{width:28px;height:28px;border-radius:50%;background:var(--espresso);color:var(--gold);display:flex;align-items:center;justify-content:center;font-family:'Playfair Display',serif;font-size:0.85rem;font-weight:600;flex-shrink:0;}
+.calling-label{flex:1;font-weight:500;font-size:14px;color:var(--espresso);}
+.calling-default{font-size:12px;color:var(--muted);font-style:italic;}
+.shot-visual-wrap{display:flex;gap:2rem;align-items:flex-start;background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1.5rem;margin:1.5rem 0;flex-wrap:wrap;}
+.shot-glass{display:flex;flex-direction:column;align-items:center;gap:6px;flex-shrink:0;}
+.shot-layer{width:72px;display:flex;align-items:center;justify-content:center;font-size:9px;letter-spacing:1px;font-weight:600;color:rgba(255,255,255,0.9);text-transform:uppercase;}
+.layer-crema{height:24px;background:#C8A060;border-radius:4px 4px 0 0;}
+.layer-body{height:32px;background:#7B3F1A;}
+.layer-heart{height:24px;background:#3A1506;border-radius:0 0 4px 4px;}
+.shot-glass-ml{font-family:'Playfair Display',serif;font-size:1.4rem;color:var(--espresso);}
+.shot-glass-label{font-size:11px;letter-spacing:1px;text-transform:uppercase;color:var(--muted);}
+.shot-details{flex:1;min-width:200px;}
+.shot-details h4{font-family:'Playfair Display',serif;font-size:1.1rem;color:var(--espresso);margin-bottom:1rem;}
+.sizes-wrap{display:flex;gap:1.5rem;flex-wrap:wrap;margin:1.5rem 0;align-items:flex-end;}
+.size-cup{display:flex;flex-direction:column;align-items:center;gap:0.5rem;}
+.cup-visual{background:var(--espresso);border-radius:4px 4px 8px 8px;display:flex;align-items:center;justify-content:center;}
+.size-name{font-family:'Playfair Display',serif;font-size:0.85rem;font-weight:600;color:var(--espresso);}
+.size-oz{font-size:11px;color:var(--muted);}
+.code-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(140px,1fr));gap:0.5rem;margin:1rem 0;}
+.code-chip{background:var(--card);border:1px solid var(--border);border-radius:4px;padding:0.5rem 0.75rem;display:flex;gap:0.5rem;align-items:center;}
+.code-key{font-family:'Libre Baskerville',serif;font-weight:700;color:var(--caramel);min-width:32px;font-size:13px;}
+.code-val{font-size:12px;color:var(--muted);}
+.pump-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:0.75rem;margin:1.5rem 0;}
+.pump-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1.25rem;}
+.pump-name{font-size:13px;color:var(--muted);margin-bottom:0.25rem;}
+.pump-vol{font-family:'Playfair Display',serif;font-size:1.6rem;color:var(--espresso);}
+.pump-unit{font-size:11px;color:var(--caramel);}
+.lid-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(175px,1fr));gap:0.75rem;margin:1.5rem 0;}
+.lid-card{background:var(--card);border:1px solid var(--border);border-radius:8px;padding:1.25rem;text-align:center;}
+.lid-icon{font-size:2.5rem;margin-bottom:0.5rem;}
+.lid-type{font-family:'Playfair Display',serif;font-size:0.95rem;color:var(--espresso);margin-bottom:0.4rem;}
+.lid-beverages{font-size:12px;color:var(--muted);line-height:1.6;}
+.allergen-chips{display:flex;flex-wrap:wrap;gap:0.5rem;margin:1rem 0;}
+.allergen-chip{padding:6px 14px;background:rgba(139,69,19,0.1);border:1px solid rgba(139,69,19,0.25);border-radius:20px;font-size:13px;color:var(--roast);font-weight:500;}
+.chapter-nav-footer{display:flex;justify-content:space-between;margin-top:3rem;padding-top:1.5rem;border-top:1px solid var(--border);}
+.nav-btn{padding:10px 20px;border:1px solid var(--border);border-radius:4px;background:none;font-size:13px;letter-spacing:1px;text-transform:uppercase;cursor:pointer;font-family:'DM Sans',sans-serif;color:var(--muted);transition:all 0.2s;}
+.nav-btn:hover{border-color:var(--caramel);color:var(--caramel);}
+.nav-btn.primary{background:var(--espresso);color:var(--gold);border-color:var(--espresso);}
+.nav-btn:disabled{opacity:0.3;cursor:default;}
+</style></head><body>
+<div class="hero">
+  <div class="hero-badge">Starbucks Coffee Academy &middot; FY25</div>
+  <h1>Beverage <em>Resource</em> Manual</h1>
+  <p>The complete operational guide to beverage standards &mdash; shelf life, espresso, dairy, cold brew, customization, and more.</p>
+  <div class="progress-bar-wrap">
+    <div class="progress-label"><span id="progressLabel">Chapter 1 of 7</span><span id="progressPct">14%</span></div>
+    <div class="progress-track"><div class="progress-fill" id="progressFill" style="width:14%"></div></div>
+  </div>
+</div>
+<nav class="chapter-nav"><div class="chapter-nav-inner">
+  <button class="chapter-btn active" onclick="showChapter(0)">Introduction</button>
+  <button class="chapter-btn" onclick="showChapter(1)">Shelf Life</button>
+  <button class="chapter-btn" onclick="showChapter(2)">Bev Orders</button>
+  <button class="chapter-btn" onclick="showChapter(3)">Espresso</button>
+  <button class="chapter-btn" onclick="showChapter(4)">Dairy &amp; Steaming</button>
+  <button class="chapter-btn" onclick="showChapter(5)">Brewing &amp; Cold</button>
+  <button class="chapter-btn" onclick="showChapter(6)">Appendix</button>
+</div></nav>
+<div class="content">
+
+<div class="chapter active" id="ch0">
+  <div class="chapter-header"><div class="chapter-num">Chapter 1</div><h2>Our Barista Promise</h2><div class="subtitle">The quality contract that keeps every customer coming back.</div></div>
+  <div class="callout"><p>Love your beverage or let us know. We&rsquo;ll always make it right.</p><cite>&mdash; Our Barista Promise &middot; FY25 Beverage Resource Manual</cite></div>
+  <div class="fact-box"><div class="fact-label">What the Promise Means</div>Our Barista Promise is our quality contract with our customers. It gives them permission to try something new, without risk. YOU are the reason our customers return &mdash; it is your ability to make every moment right that keeps them coming back.</div>
+  <div class="section-heading">Service Recovery &mdash; The L.A.T.T.E. Model</div>
+  <div class="latte-model">
+    <div class="latte-row" onclick="toggleLatte(this)"><div class="latte-header"><div class="latte-letter">L</div><div class="latte-word">Listen</div><div class="latte-arrow">&#9660;</div></div><div class="latte-body">Listen without interrupting. Let the customer fully express their emotions. Do not jump to solutions &mdash; they need to feel heard first. This is the most important step.</div></div>
+    <div class="latte-row" onclick="toggleLatte(this)"><div class="latte-header"><div class="latte-letter">A</div><div class="latte-word">Apologize</div><div class="latte-arrow">&#9660;</div></div><div class="latte-body">Apologize without condition &mdash; never make excuses or place blame. &ldquo;I&rsquo;m sorry that happened&rdquo; is always appropriate. An unconditional apology acknowledges the customer&rsquo;s experience.</div></div>
+    <div class="latte-row" onclick="toggleLatte(this)"><div class="latte-header"><div class="latte-letter">T</div><div class="latte-word">Take Action</div><div class="latte-arrow">&#9660;</div></div><div class="latte-body">Take action quickly. Remake the beverage, offer a replacement. Speed of recovery matters &mdash; a fast resolution often leaves the customer more satisfied than if nothing had gone wrong.</div></div>
+    <div class="latte-row" onclick="toggleLatte(this)"><div class="latte-header"><div class="latte-letter">T</div><div class="latte-word">Thank</div><div class="latte-arrow">&#9660;</div></div><div class="latte-body">Thank the customer for giving us an opportunity to make it right. They trusted us enough to speak up &mdash; that deserves genuine gratitude.</div></div>
+    <div class="latte-row" onclick="toggleLatte(this)"><div class="latte-header"><div class="latte-letter">E</div><div class="latte-word">Ensure Satisfaction</div><div class="latte-arrow">&#9660;</div></div><div class="latte-body">Watch customer cues after taking action. If still not satisfied, ask: &ldquo;What can I do to make this right for you?&rdquo; Don&rsquo;t assume &mdash; confirm it.</div></div>
+  </div>
+  <div class="section-heading">Sampling Standards</div>
+  <div class="steps-list">
+    <div class="step-card"><div class="step-num">1</div><div class="step-body"><h4>Prepare According to Recipe</h4><p>Always prepare sampling beverages to standard &mdash; never take shortcuts with samples.</p></div></div>
+    <div class="step-card"><div class="step-num">2</div><div class="step-body"><h4>Serve in 4 fl oz Sample Cups</h4><p>Divide into sample cups and complete the beverage if applicable. Share at the hand-off plane or Drive Thru window.</p></div></div>
+    <div class="step-card"><div class="step-num">3</div><div class="step-body"><h4>Give Beverage Name &amp; Description</h4><p>Always state the beverage name as you hand it out &mdash; especially critical for samples containing potential allergens (soy, almond, coconut).</p></div></div>
+    <div class="step-card"><div class="step-num">4</div><div class="step-body"><h4>Never Serve Directly to Children</h4><p>Samples must be handed off to a parent or guardian. All stores must have coffee presses ready to sample brewed coffee.</p></div></div>
+  </div>
+  <div class="section-heading">Starbucks Delivers &mdash; Key Guidelines</div>
+  <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">&#128293;</div><div class="acc-title">Steam All Milk-Based Hot Beverages Extra Hot</div><div class="acc-arrow">&#9660;</div></div><div class="acc-body">For delivery orders, always steam milk-based hot beverages extra hot so they arrive at an acceptable temperature for the customer.</div></div>
+  <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">&#129398;</div><div class="acc-title">Hot &amp; Cold Beverages in Separate Bags</div><div class="acc-arrow">&#9660;</div></div><div class="acc-body">Always keep hot and cold beverages in different bags to maintain temperature integrity. Use Hot Delivery Lids for all hot beverages. Do not top hot beverages with whipped cream unless the customer specifically requested it.</div></div>
+  <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">&#128230;</div><div class="acc-title">Seal All Food &amp; Beverages</div><div class="acc-arrow">&#9660;</div></div><div class="acc-body">Seal all food and beverages in their respective bags. Once sealed, the bag should not be opened until received by the customer.</div></div>
+  <div class="chapter-nav-footer"><button class="nav-btn" disabled>&larr; Previous</button><button class="nav-btn primary" onclick="showChapter(1)">Shelf Life &rarr;</button></div>
+</div>
+
+<div class="chapter" id="ch1">
+  <div class="chapter-header"><div class="chapter-num">Chapter 2</div><h2>Shelf Life Standards</h2><div class="subtitle">Fresh ingredients ensure quality and food safety at every moment.</div></div>
+  <div class="fact-box"><div class="fact-label">Three Core Rules</div><strong>1.</strong> All products must be within shelf life. &nbsp;<strong>2.</strong> Rotate using FIFO (First In, First Out). &nbsp;<strong>3.</strong> Multi-day products must be labelled with shelf life when opened.</div>
+  <div class="section-heading">Coffee &amp; Tea</div>
+  <table class="shelf-table"><thead><tr><th>Product</th><th>Shelf Life</th></tr></thead><tbody>
+    <tr><td>Brewed Coffee</td><td><span class="tag tag-urgent">60 minutes</span> &middot; Do not let serving temp fall below 71&deg;C</td></tr>
+    <tr><td>Cold Brew (Concentrate + water)</td><td><span class="tag tag-safe">7 days refrigerated</span></td></tr>
+    <tr><td>Cold Brew for Cornelius</td><td><span class="tag tag-mid">3 days refrigerated</span></td></tr>
+    <tr><td>Espresso Shot</td><td><span class="tag tag-urgent">Use immediately</span></td></tr>
+    <tr><td>Frappuccino&reg; Roast</td><td><span class="tag tag-mid">48 hours unrefrigerated</span></td></tr>
+    <tr><td>Ground Pure Matcha Powder</td><td><span class="tag tag-safe">7 days, ambient</span></td></tr>
+    <tr><td>Teavana&reg; Chai Concentrate</td><td><span class="tag tag-mid">5 days refrigerated / 24 hrs unrefrigerated</span></td></tr>
+    <tr><td>Teavana&reg; Iced Tea Concentrate</td><td><span class="tag tag-urgent">12 hours unrefrigerated</span> &middot; Do NOT refrigerate</td></tr>
+    <tr><td>Whole Bean FlavorLock&trade; / 5 lb bullets</td><td><span class="tag tag-safe">Opened: 7 days (today&rsquo;s date + 6)</span></td></tr>
+    <tr><td>Pre-ground Cold Brew Blend</td><td>Unopened: see package &middot; Opened: <span class="tag tag-urgent">Use immediately</span></td></tr>
+  </tbody></table>
+  <div class="section-heading">Milk &amp; Non-Dairy Products</div>
+  <table class="shelf-table"><thead><tr><th>Product</th><th>Shelf Life</th></tr></thead><tbody>
+    <tr><td>Milk, Cream, Whipping Cream (opened)</td><td><span class="tag tag-urgent">2 days refrig. / 30 min max unrefrig.</span> at or below 5&deg;C (41&deg;F)</td></tr>
+    <tr><td>Oatmilk</td><td><span class="tag tag-mid">Opened: 5 days refrigerated</span></td></tr>
+    <tr><td>Soymilk</td><td><span class="tag tag-mid">Opened: 3 days refrigerated</span></td></tr>
+    <tr><td>Coconutmilk</td><td><span class="tag tag-safe">Opened: 7 days refrigerated</span></td></tr>
+    <tr><td>Half-and-Half (prepared)</td><td><span class="tag tag-urgent">24 hours refrigerated</span></td></tr>
+  </tbody></table>
+  <div class="section-heading">Sauces, Syrups &amp; Toppings</div>
+  <table class="shelf-table"><thead><tr><th>Product</th><th>Shelf Life</th></tr></thead><tbody>
+    <tr><td>Caramel Sauce / Dark Caramel Sauce</td><td><span class="tag tag-safe">14 days ambient</span></td></tr>
+    <tr><td>Dark Mocha Sauce / Mocha Sauce</td><td><span class="tag tag-mid">7 days ambient</span></td></tr>
+    <tr><td>Frappuccino&reg; Drink Bases</td><td><span class="tag tag-safe">30 days ambient</span></td></tr>
+    <tr><td>Starbucks&reg; Flavored Syrups</td><td><span class="tag tag-safe">30 days ambient</span></td></tr>
+    <tr><td>White Chocolate Mocha Sauce</td><td><span class="tag tag-mid">14 days ambient</span></td></tr>
+    <tr><td>Strawberry Sauce</td><td><span class="tag tag-mid">14 days refrigerated</span></td></tr>
+    <tr><td>Sugar Cane Syrup</td><td><span class="tag tag-safe">30 days ambient</span></td></tr>
+    <tr><td>Honey Red Grapefruit Sauce</td><td><span class="tag tag-urgent">24 hours ambient</span></td></tr>
+    <tr><td>Whipped Cream / Vanilla Sweet Cream</td><td><span class="tag tag-urgent">24 hours refrigerated</span></td></tr>
+    <tr><td>Lemonade</td><td><span class="tag tag-safe">7 days refrigerated</span></td></tr>
+    <tr><td>Coffee Jelly</td><td><span class="tag tag-urgent">2 days refrigerated</span></td></tr>
+    <tr><td>Frappuccino&reg; Chips / Dark Mocha Powder</td><td><span class="tag tag-safe">7 days ambient</span></td></tr>
+    <tr><td>Pomegranate Pearls</td><td><span class="tag tag-mid">8 days refrigerated</span></td></tr>
+    <tr><td>Dried Strawberry / Mango Dragonfruit Inclusion</td><td><span class="tag tag-urgent">3 days unrefrigerated</span> &middot; wrap with cling wrap end of day</td></tr>
+    <tr><td>Signature Hot Chocolate Premix (hydrated)</td><td><span class="tag tag-urgent">48 hours refrigerated</span></td></tr>
+  </tbody></table>
+  <div class="section-heading">Condiment Items &mdash; Tap to Expand</div>
+  <div class="values-grid">
+    <div class="value-card" onclick="toggleValue(this)"><div class="value-emoji">&#127807;</div><div class="value-name">Cinnamon</div><div class="value-short">7 days in shaker</div><div class="value-detail">7 days in shaker / 5 months bulk packaging. Follow whichever date comes first.</div></div>
+    <div class="value-card" onclick="toggleValue(this)"><div class="value-emoji">&#127851;</div><div class="value-name">Cocoa/Mocha Powder</div><div class="value-short">7 days in shaker</div><div class="value-detail">7 days in shaker / 3 months bulk packaging. Follow whichever date comes first.</div></div>
+    <div class="value-card" onclick="toggleValue(this)"><div class="value-emoji">&#127815;</div><div class="value-name">Nutmeg</div><div class="value-short">7 days in shaker</div><div class="value-detail">7 days in shaker / 5 months bulk packaging. Follow whichever date comes first.</div></div>
+    <div class="value-card" onclick="toggleValue(this)"><div class="value-emoji">&#127852;</div><div class="value-name">Sugar (bulk)</div><div class="value-short">7 days in shaker</div><div class="value-detail">7 days in shaker / 6 months bulk packaging. Follow whichever date comes first.</div></div>
+    <div class="value-card" onclick="toggleValue(this)"><div class="value-emoji">&#127800;</div><div class="value-name">Vanilla Powder</div><div class="value-short">7 days in shaker</div><div class="value-detail">7 days in shaker / 4 months bulk packaging. Follow whichever date comes first.</div></div>
+  </div>
+  <div class="chapter-nav-footer"><button class="nav-btn" onclick="showChapter(0)">&larr; Introduction</button><button class="nav-btn primary" onclick="showChapter(2)">Bev Orders &rarr;</button></div>
+</div>
+
+<div class="chapter" id="ch2">
+  <div class="chapter-header"><div class="chapter-num">Chapter 3</div><h2>Beverage Orders &amp; Customization</h2><div class="subtitle">Identification, calling standards, cup sizes, and charging guidelines.</div></div>
+  <div class="section-heading">Cup Sizes</div>
+  <div class="sizes-wrap">
+    <div class="size-cup"><div class="cup-visual" style="width:44px;height:50px;"><span style="font-size:8px;color:var(--gold)">SHORT</span></div><div class="size-name">Short</div><div class="size-oz">8 fl oz &middot; Hot only</div></div>
+    <div class="size-cup"><div class="cup-visual" style="width:50px;height:64px;"><span style="font-size:8px;color:var(--gold)">TALL</span></div><div class="size-name">Tall</div><div class="size-oz">12 fl oz &middot; 355 ml</div></div>
+    <div class="size-cup"><div class="cup-visual" style="width:58px;height:78px;"><span style="font-size:8px;color:var(--gold)">GRANDE</span></div><div class="size-name">Grande</div><div class="size-oz">16 fl oz &middot; 473 ml</div></div>
+    <div class="size-cup"><div class="cup-visual" style="width:66px;height:92px;"><span style="font-size:8px;color:var(--gold)">VENTI</span></div><div class="size-name">Venti</div><div class="size-oz">20 fl oz &middot; 591 ml</div></div>
+  </div>
+  <div class="section-heading">Beverage Calling Order</div>
+  <div class="calling-list">
+    <div class="calling-item"><div class="calling-num">1</div><div class="calling-label">Number of Beverages</div><div class="calling-default">One</div></div>
+    <div class="calling-item"><div class="calling-num">2</div><div class="calling-label">Type of Cup (Iced / Personal / For Here)</div><div class="calling-default">&ldquo;To go&rdquo; hot cup</div></div>
+    <div class="calling-item"><div class="calling-num">3</div><div class="calling-label">Decaffeinated</div><div class="calling-default">Caffeinated</div></div>
+    <div class="calling-item"><div class="calling-num">4</div><div class="calling-label">Shot Quantity &amp; Type</div><div class="calling-default">Per beverage recipe</div></div>
+    <div class="calling-item"><div class="calling-num">5</div><div class="calling-label">Cup Size</div><div class="calling-default">No default</div></div>
+    <div class="calling-item"><div class="calling-num">6</div><div class="calling-label">Syrups / Sauces</div><div class="calling-default">Default to recipe</div></div>
+    <div class="calling-item"><div class="calling-num">7</div><div class="calling-label">Milk</div><div class="calling-default">Whole Milk (or default to recipe)</div></div>
+    <div class="calling-item"><div class="calling-num">8</div><div class="calling-label">Customizers</div><div class="calling-default">No default</div></div>
+    <div class="calling-item"><div class="calling-num">9</div><div class="calling-label">Beverage Name</div><div class="calling-default">Default to beverage name</div></div>
+  </div>
+  <div class="section-heading">Customization &amp; Charging</div>
+  <div class="callout"><p>Acknowledge that the beverage is not on our regular menu and let the customer know we have many ways to customize beverages &mdash; so you can help them find what they are looking for.</p><cite>&mdash; FY25 Beverage Resource Manual</cite></div>
+  <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">&#128176;</div><div class="acc-title">What Customers Are Charged For</div><div class="acc-arrow">&#9660;</div></div><div class="acc-body">Each additional espresso shot above standard recipe &middot; Each additional Frappuccino&reg; roast pump above standard &middot; Plant-based milk substitution &middot; Alternative milk and heavy cream as creamers (per 2 oz, up to 4 oz) &middot; Adding more than 118 ml whole milk, nonfat or breve to water-based beverages.</div></div>
+  <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">&#10003;</div><div class="acc-title">When Extras Are NOT Charged</div><div class="acc-arrow">&#9660;</div></div><div class="acc-body">Syrups, sauces, or dry inclusions already in the recipe are not charged as long as the additional amount does not exceed 2&times; the original recipe quantity. Mocha drizzle, whipped cream, and chai concentrate already in the recipe are not charged for the standard addition.</div></div>
+  <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">&#127817;</div><div class="acc-title">Sweetness Variation Requests</div><div class="acc-arrow">&#9660;</div></div><div class="acc-body"><strong>Less Sweet (Sugar Cane Syrup beverages):</strong> Reduce Sugar Cane syrup by 1 pump. Cup mark: V/LS.<br><br><strong>Not Sweet:</strong> Zero pumps of Sugar Cane Syrup. Cup mark: V/NS.<br><br><strong>Frappuccino&reg; Blended:</strong> Less Sweet = use Light Frappuccino&reg; Drink Bases (e.g., CFL, MFL).</div></div>
+  <div class="chapter-nav-footer"><button class="nav-btn" onclick="showChapter(1)">&larr; Shelf Life</button><button class="nav-btn primary" onclick="showChapter(3)">Espresso &rarr;</button></div>
+</div>
+
+<div class="chapter" id="ch3">
+  <div class="chapter-header"><div class="chapter-num">Chapter 4</div><h2>Espresso Beverages</h2><div class="subtitle">Shot standards, timing, the three layers, and beverage routines.</div></div>
+  <div class="callout"><p>The perfect shot is dense and caramelly sweet. Learning to taste and evaluate shot quality takes time and practice.</p><cite>&mdash; FY25 Beverage Resource Manual &middot; Espresso Beverages</cite></div>
+  <div class="section-heading">The Three Layers of a Perfect Shot</div>
+  <div class="shot-visual-wrap">
+    <div class="shot-glass">
+      <div class="shot-glass-ml">45 ml</div>
+      <div class="shot-layer layer-crema">CREMA</div>
+      <div class="shot-layer layer-body">BODY</div>
+      <div class="shot-layer layer-heart">HEART</div>
+      <div class="shot-glass-label">Mastrena&reg; II</div>
+    </div>
+    <div class="shot-glass">
+      <div class="shot-glass-ml">60 ml</div>
+      <div class="shot-layer layer-crema">CREMA</div>
+      <div class="shot-layer layer-body">BODY</div>
+      <div class="shot-layer layer-heart">HEART</div>
+      <div class="shot-glass-label">La Marzocco</div>
+    </div>
+    <div class="shot-details">
+      <h4>Reading Your Shot</h4>
+      <div class="steps-list" style="margin:0">
+        <div class="step-card" style="padding:0.75rem 1rem"><div class="step-num" style="width:28px;height:28px;background:#C8A060;font-size:0.7rem;flex-shrink:0">C</div><div class="step-body"><h4>Crema</h4><p>Foamy, light-brown top. Source of much of the sweetness. Indicates a fresh, well-extracted shot.</p></div></div>
+        <div class="step-card" style="padding:0.75rem 1rem"><div class="step-num" style="width:28px;height:28px;background:#7B3F1A;font-size:0.7rem;flex-shrink:0">B</div><div class="step-body"><h4>Body</h4><p>Middle layer. Contains the majority of espresso flavor compounds.</p></div></div>
+        <div class="step-card" style="padding:0.75rem 1rem"><div class="step-num" style="width:28px;height:28px;background:#3A1506;font-size:0.7rem;flex-shrink:0">H</div><div class="step-body"><h4>Heart</h4><p>Dark brown base. Most concentrated layer &mdash; anchors the entire beverage flavor.</p></div></div>
+      </div>
+    </div>
+  </div>
+  <div class="section-heading">Shot Terminology</div>
+  <div class="shots-grid">
+    <div class="shot-card"><div class="shot-italian">Single</div><div class="shot-name">Solo</div><div class="shot-desc">1 espresso shot</div></div>
+    <div class="shot-card"><div class="shot-italian">Double</div><div class="shot-name">Doppio</div><div class="shot-desc">2 shots (standard)</div></div>
+    <div class="shot-card"><div class="shot-italian">Triple</div><div class="shot-name">Triple</div><div class="shot-desc">3 espresso shots</div></div>
+    <div class="shot-card"><div class="shot-italian">Quad</div><div class="shot-name">Quad</div><div class="shot-desc">4 espresso shots</div></div>
+    <div class="shot-card"><div class="shot-italian">Short Shot</div><div class="shot-name">Ristretto</div><div class="shot-desc">Less water, same coffee. Sweeter, more intense.</div></div>
+    <div class="shot-card"><div class="shot-italian">Long Shot</div><div class="shot-name">Lungo</div><div class="shot-desc">More water &mdash; higher volume, more diluted.</div></div>
+    <div class="shot-card"><div class="shot-italian">Decaf</div><div class="shot-name">X</div><div class="shot-desc">Decaffeinated espresso</div></div>
+    <div class="shot-card"><div class="shot-italian">Half Decaf</div><div class="shot-name">&frac12; X</div><div class="shot-desc">Half regular + half decaf</div></div>
+  </div>
+  <div class="section-heading">Shot Timing Guidelines</div>
+  <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">&#9201;</div><div class="acc-title">Mastrena&reg; II &mdash; Shot Timing</div><div class="acc-arrow">&#9660;</div></div><div class="acc-body">Pull five sets of double shots. Look for the <strong>star symbol</strong> to indicate shots are within standard. If outside standard, pull five more double shots. If the problem persists, consult the Store Cleanliness and Equipment Maintenance Manual.</div></div>
+  <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">&#9201;</div><div class="acc-title">La Marzocco &mdash; Shot Timing (18&ndash;23 seconds)</div><div class="acc-arrow">&#9660;</div></div><div class="acc-body">Time shots every 15 minutes. A good shot looks like &ldquo;honey dripping from a spoon&rdquo; with 3 clear visible layers.<br><br><strong>Fast pour (&lt;18 sec):</strong> Grind too coarse / tamp too low &rarr; adjust grind finer.<br><br><strong>Slow pour (&gt;23 sec):</strong> Grind too fine / tamp too high &rarr; adjust grind coarser.</div></div>
+  <div class="section-heading">Espresso Beverage Routine (Mastrena&reg; II)</div>
+  <table class="routine-table"><thead><tr><th>Major Step</th><th>Key Points</th><th>Reason Why</th></tr></thead><tbody>
+    <tr><td>Steam Milk</td><td>Follow the milk steaming routine</td><td>To ensure quality</td></tr>
+    <tr><td>Queue Shots</td><td>Press the appropriate shot button. Capture shots in cup or shot glasses.</td><td>Ensure flavor &middot; Capture crema &middot; Create beverage to standard</td></tr>
+    <tr><td>Add Syrup</td><td>Add syrup after queuing shots. Dispense full pumps (all the way down and all the way back up).</td><td>Reduces wait time &middot; Produces consistent flavor</td></tr>
+    <tr><td>Finish &amp; Connect</td><td>Pour milk into cup. Add any ice/toppings. Deliver to customer.</td><td>Create quality beverage &middot; Elevate customer experience</td></tr>
+  </tbody></table>
+  <div class="fact-box"><div class="fact-label">Quality Check &mdash; 3&times; Daily Minimum</div>Partners must verify espresso quality <strong>three times daily, minimum</strong> &mdash; before peak, mid-shift, and after peak. All partners on shift must taste espresso once per shift. Taste from a demitasse cup &mdash; not from the shot glass.</div>
+  <div class="chapter-nav-footer"><button class="nav-btn" onclick="showChapter(2)">&larr; Bev Orders</button><button class="nav-btn primary" onclick="showChapter(4)">Dairy &amp; Steaming &rarr;</button></div>
+</div>
+
+<div class="chapter" id="ch4">
+  <div class="chapter-header"><div class="chapter-num">Chapter 5</div><h2>Dairy &amp; Non-Dairy Products</h2><div class="subtitle">Steaming standards, temperature control, cold foam, and whipped cream.</div></div>
+  <div class="section-heading">Milk Steaming Temperatures</div>
+  <div class="temp-gauge">
+    <div class="temp-row"><div class="temp-color" style="background:#4FC3F7"></div><div class="temp-label">Kids&rsquo; Temperature<div class="temp-note">Use a calibrated thermometer always for children&rsquo;s beverages</div></div><div class="temp-val">54&deg;C / 130&deg;F</div></div>
+    <div class="temp-row"><div class="temp-color" style="background:#66BB6A"></div><div class="temp-label">Warm Temperature<div class="temp-note">Lower than standard adult serving temperature</div></div><div class="temp-val">60&deg;C / 140&deg;F</div></div>
+    <div class="temp-row"><div class="temp-color" style="background:#FFA726"></div><div class="temp-label">Regular Temperature &#10003;<div class="temp-note">Default for all adult beverages unless otherwise requested</div></div><div class="temp-val">66&ndash;77&deg;C / 150&ndash;170&deg;F</div></div>
+    <div class="temp-row"><div class="temp-color" style="background:#EF5350"></div><div class="temp-label">Do NOT Serve Above &#9940;<div class="temp-note">Discard immediately &middot; Never steam above 90&deg;C / 195&deg;F for barista safety</div></div><div class="temp-val">90&deg;C / 195&deg;F</div></div>
+  </div>
+  <div class="section-heading">Milk Steaming Routine</div>
+  <table class="routine-table"><thead><tr><th>Major Step</th><th>Key Points</th><th>Reason Why</th></tr></thead><tbody>
+    <tr><td>Pour Milk</td><td>Measure to beverage size using lines on pitcher</td><td>Reduces waste and steaming time</td></tr>
+    <tr><td>Aerate Milk</td><td>Fully submerge steam wand. Tilt pitcher so wand tip doesn&rsquo;t touch the bottom. Open steam to &ldquo;auto.&rdquo; Slowly lower pitcher until you hear a paper-tearing sound. Aerate 1&ndash;3 seconds (6&ndash;8 sec for cappuccino).</td><td>Ensures large bubbles are not created &middot; Creates quality microfoam</td></tr>
+    <tr><td>Steam Milk</td><td>Set pitcher down. Angle steam wand toward machine to create whirlpool while milk steams. Milk should steam quietly.</td><td>Frees hands &middot; Allows whirlpool to create creamy, dense foam</td></tr>
+    <tr><td>Sanitize Wand</td><td>Remove pitcher. Wipe steam wand, then exhaust for two seconds. Keep wand angled out.</td><td>Removes residual milk &middot; Prevents clogging</td></tr>
+    <tr><td>Groom Milk</td><td>Gently tap on counter and swirl the pitcher.</td><td>Removes bubbles &middot; Creates shiny, wet-glossy-paint consistency</td></tr>
+  </tbody></table>
+  <div class="fact-box"><div class="fact-label">Critical Standard &mdash; Never Re-Steam</div>Do not add fresh milk to steamed milk. A fresh pitcher must be steamed for each beverage. <strong>Milk is never re-steamed.</strong> Steamed milk that falls below 66&deg;C (150&deg;F) must be discarded immediately.</div>
+  <div class="section-heading">Cold Foam &mdash; Tap to Expand</div>
+  <div class="fund-grid">
+    <div class="fund-card" onclick="toggleFund(this)"><div class="fund-bg">C</div><div class="fund-icon">&#129655;</div><div class="fund-title">Skim / Nonfat Cold Foam</div><div class="fund-body">Pour skim milk to 150 ml line (some recipes 100 ml &mdash; follow recipe). Add syrup if applicable (2 full dose pumps). Blend using button #4. Leave 2 cm of room in beverage and finish with Cold Foam.</div></div>
+    <div class="fund-card" onclick="toggleFund(this)"><div class="fund-bg">V</div><div class="fund-icon">&#127846;</div><div class="fund-title">Vanilla Sweet Cream Cold Foam</div><div class="fund-body">Pour Vanilla Sweet Cream to 100 ml line. Blend using button #4. Leave 2 cm of room in beverage and finish by topping with Cold Foam.</div></div>
+    <div class="fund-card" onclick="toggleFund(this)"><div class="fund-bg">!</div><div class="fund-icon">&#9888;</div><div class="fund-title">What NOT to Add</div><div class="fund-body">Powdered inclusions are not recommended &mdash; the blender blade may not dissolve them. Frappuccino&reg; chips and Refreshers fruit inclusions are also not recommended as the blade does not break up the pieces.</div></div>
+    <div class="fund-card" onclick="toggleFund(this)"><div class="fund-bg">S</div><div class="fund-icon">&#129803;</div><div class="fund-title">Cold Foam Standards</div><div class="fund-body">Ensure the cold foam blender pitcher is well drained before use &mdash; excess water impacts quality. Ensure dairy is cold before using. Stores must have at least two cold foam blender pitchers in stock at all times.</div></div>
+  </div>
+  <div class="section-heading">Non-Dairy Guidelines</div>
+  <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">&#127807;</div><div class="acc-title">Oatmilk</div><div class="acc-arrow">&#9660;</div></div><div class="acc-body">Not a creamer &mdash; never give out as a creamer. Pre-chill 4 hours prior to use. Once opened, keep refrigerated (5 days). Oatmilk separates &mdash; <strong>shake well before each use.</strong> Aerate 1&ndash;3 seconds for consistent foam.</div></div>
+  <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">&#127811;</div><div class="acc-title">Coconutmilk</div><div class="acc-arrow">&#9660;</div></div><div class="acc-body">Not a creamer &mdash; never give out as a creamer. Pre-chill 4 hours. Once opened, refrigerate (4 days OraRi / 7 days SunOpta). Coconutmilk separates &mdash; shake well before each use. Aerate 1&ndash;3 seconds.</div></div>
+  <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">&#129752;</div><div class="acc-title">Soymilk</div><div class="acc-arrow">&#9660;</div></div><div class="acc-body">Pre-chill 4 hours prior to use. Once opened, refrigerate (3 days). Aerate 1&ndash;3 seconds for consistent foam.</div></div>
+  <div class="acc-item" onclick="toggleAcc(this)"><div class="acc-header"><div class="acc-icon">&#127991;</div><div class="acc-title">Alternative Milk Stickers</div><div class="acc-arrow">&#9660;</div></div><div class="acc-body">Use dedicated alternative milk stickers (Soymilk, Coconutmilk, Oatmilk) on cups with alternative milk orders to ensure accuracy at hand-off.</div></div>
+  <div class="chapter-nav-footer"><button class="nav-btn" onclick="showChapter(3)">&larr; Espresso</button><button class="nav-btn primary" onclick="showChapter(5)">Brewing &amp; Cold &rarr;</button></div>
+</div>
+
+<div class="chapter" id="ch5">
+  <div class="chapter-header"><div class="chapter-num">Chapter 6</div><h2>Brewing &amp; Cold Beverages</h2><div class="subtitle">Brewed coffee standards, cold brew, Nitro, blended beverages, and tea.</div></div>
+  <div class="fact-box"><div class="fact-label">Brewed Coffee Key Standards</div><strong>Hold Time:</strong> Discard coffee more than 1 hour old. <strong>Minimum Serve Temp:</strong> 71&deg;C (160&deg;F). <strong>Quality Check:</strong> Taste brewed coffee once daily minimum &mdash; before or after peak.</div>
+  <div class="section-heading">BUNN&reg; Digital Brewer Recipe</div>
+  <table class="shelf-table"><thead><tr><th>Batch Size</th><th>Coffee Weight</th><th>Spray Over Volume</th><th>Brewed Yield</th></tr></thead><tbody>
+    <tr><td>Quarter Batch</td><td>120 g (0.26 lb)</td><td>1.3 L</td><td>1.2 L &middot; 2 Grandes</td></tr>
+    <tr><td>Half Batch</td><td>168 g (0.37 lb)</td><td>2.8 L</td><td>2.5 L &middot; 5 Grandes</td></tr>
+    <tr><td>Full Batch</td><td>255 g (0.55 lb)</td><td>6.0 L</td><td>5.4 L &middot; 11 Grandes</td></tr>
+  </tbody></table>
+  <div class="section-heading">Cold Brew Procedure (Toddy Brewer)</div>
+  <div class="steps-list">
+    <div class="step-card"><div class="step-num">1</div><div class="step-body"><h4>Prep &amp; Grind</h4><p>Wash hands and put on food service gloves. Open the filter, folding the top 5 cm (2 in.) over, and place into the dry Toddy Brewer. Fill with ground Cold Brew Blend per recipe.</p></div></div>
+    <div class="step-card"><div class="step-num">2</div><div class="step-body"><h4>Fill</h4><p>Pour 7L (full batch) or 4.5L (half batch) of cold filtered water into the filter, ensuring all grounds are wet. Tie the filter string in a knot, leaving 6&ndash;10 cm (3&ndash;4 in.) at the top.</p></div></div>
+    <div class="step-card"><div class="step-num">3</div><div class="step-body"><h4>Brew</h4><p>Pour remaining water on top of the closed filter. Cover with lid. Date code. Brew unrefrigerated for <strong>20 hours.</strong> Do NOT move the Toddy Brewer &mdash; agitation causes over-extraction and impacts quality.</p></div></div>
+    <div class="step-card"><div class="step-num">4</div><div class="step-body"><h4>Dispense</h4><p>Transfer concentrate into plastic 2L pitchers or storage cubes. Label: 7 days refrigerated. Dilution ratio: 1:1 concentrate to cold water.</p></div></div>
+    <div class="step-card"><div class="step-num">5</div><div class="step-body"><h4>Wash &amp; Sanitize</h4><p>Always wash and sanitize the Toddy Brewer before the next batch. Refer to the Cold Brew Toddy Brewer Equipment Maintenance Manual.</p></div></div>
+  </div>
+  <div class="section-heading">Blended Beverage Routine</div>
+  <table class="routine-table"><thead><tr><th>Major Step</th><th>Key Points</th><th>Reason Why</th></tr></thead><tbody>
+    <tr><td>Pump Coffee</td><td>Dispense full pumps into cup. Skip for Blended Cream beverages.</td><td>Consistent coffee flavor</td></tr>
+    <tr><td>Pour Milk</td><td>Measure to the lower line on the cup</td><td>Consistent texture</td></tr>
+    <tr><td>Pour Cup Contents</td><td>Empty all cup contents into blender pitcher. Set the cup near the blender.</td><td>Fully incorporate ingredients</td></tr>
+    <tr><td>Add Flavor &amp; Ice</td><td>Dispense full pumps into blender pitcher. Add one level ice scoop.</td><td>Consistent flavor and texture</td></tr>
+    <tr><td>Pump Base</td><td>Dispense full pumps into the blender pitcher</td><td>Consistent flavor and texture</td></tr>
+    <tr><td>Blend</td><td>Close the blender shroud. Press button #1.</td><td>Safety + quality and speed</td></tr>
+    <tr><td>Finish &amp; Connect</td><td>Include toppings, secure lid. Deliver to customer.</td><td>Consistent flavor and experience</td></tr>
+    <tr><td>Clean Up</td><td>Take blender pitcher to rinse sink. Use the Blender Pitcher Rinser (BPR).</td><td>Reduce motion &middot; Save water</td></tr>
+  </tbody></table>
+  <div class="section-heading">Tea Steeping Times &mdash; Tap a Type</div>
+  <div class="tea-tabs">
+    <div class="tea-tab-bar">
+      <button class="ttab active" onclick="showTea(this,'tWhite')">White Tea</button>
+      <button class="ttab" onclick="showTea(this,'tGreen')">Green Tea</button>
+      <button class="ttab" onclick="showTea(this,'tOolong')">Oolong Tea</button>
+      <button class="ttab" onclick="showTea(this,'tBlack')">Black Tea</button>
+      <button class="ttab" onclick="showTea(this,'tHerbal')">Herbal Tea</button>
+    </div>
+    <div class="tea-panel active" id="tWhite"><h4>White Tea &mdash; 3 Minutes at 80&deg;C / 176&deg;F</h4><p><strong>Varieties:</strong> Youthberry Tea<br><br>The least processed of all teas. Steep for 3 minutes. Sachets per size: Tall = 1, Grande = 1, Venti = 2.</p></div>
+    <div class="tea-panel" id="tGreen"><h4>Green Tea &mdash; 3 Minutes at 80&deg;C / 176&deg;F</h4><p><strong>Varieties:</strong> Emperor&rsquo;s Clouds &amp; Mist, Mint Citrus Tea<br><br>Minimally oxidized. Steep for 3 minutes. Sachets: Tall = 1, Grande = 1, Venti = 2.</p></div>
+    <div class="tea-panel" id="tOolong"><h4>Oolong Tea &mdash; 7 Minutes at 80&deg;C / 176&deg;F</h4><p><strong>Varieties:</strong> Zen Clouds Oolong Tea<br><br>Partially oxidized &mdash; sits between green and black tea. Longest steep time at 7 minutes. Sachets: Tall = 1, Grande = 1, Venti = 2.</p></div>
+    <div class="tea-panel" id="tBlack"><h4>Black Tea &mdash; 5 Minutes at 80&deg;C / 176&deg;F</h4><p><strong>Varieties:</strong> Black Tea, Golden Monkey Tea, English Breakfast Tea, Earl Grey Tea<br><br>Fully oxidized &mdash; the most robust tea type. Brew for 5 minutes. Sachets: Tall = 1, Grande = 1, Venti = 2.</p></div>
+    <div class="tea-panel" id="tHerbal"><h4>Herbal Tea &mdash; 5 Minutes at 80&deg;C / 176&deg;F</h4><p><strong>Varieties:</strong> Hibiscus Tea, Chamomile Tea, Mint Blend Tea<br><br>Tisanes from botanicals &mdash; not from Camellia sinensis leaves. Steep for 5 minutes. Sachets: Tall = 1, Grande = 1, Venti = 2.</p></div>
+  </div>
+  <div class="chapter-nav-footer"><button class="nav-btn" onclick="showChapter(4)">&larr; Dairy &amp; Steaming</button><button class="nav-btn primary" onclick="showChapter(6)">Appendix &rarr;</button></div>
+</div>
+
+<div class="chapter" id="ch6">
+  <div class="chapter-header"><div class="chapter-num">Chapter 7</div><h2>Appendix &amp; Reference Guides</h2><div class="subtitle">Beverage ID codes, pump volumes, lid standards, and allergens.</div></div>
+  <div class="section-heading">Beverage ID Codes &mdash; Syrups</div>
+  <div class="code-grid">
+    <div class="code-chip"><span class="code-key">A</span><span class="code-val">Almond</span></div>
+    <div class="code-chip"><span class="code-key">BS</span><span class="code-val">Brown Sugar</span></div>
+    <div class="code-chip"><span class="code-key">C</span><span class="code-val">Caramel</span></div>
+    <div class="code-chip"><span class="code-key">CA</span><span class="code-val">Cascara</span></div>
+    <div class="code-chip"><span class="code-key">CH</span><span class="code-val">Chai Concentrate</span></div>
+    <div class="code-chip"><span class="code-key">H</span><span class="code-val">Hazelnut</span></div>
+    <div class="code-chip"><span class="code-key">R</span><span class="code-val">Raspberry</span></div>
+    <div class="code-chip"><span class="code-key">SC</span><span class="code-val">Salted Caramel</span></div>
+    <div class="code-chip"><span class="code-key">SU</span><span class="code-val">Sugar Cane</span></div>
+    <div class="code-chip"><span class="code-key">LS</span><span class="code-val">Less Sweet</span></div>
+    <div class="code-chip"><span class="code-key">NS</span><span class="code-val">Not Sweet</span></div>
+  </div>
+  <div class="section-heading">Beverage ID Codes &mdash; Sauces</div>
+  <div class="code-grid">
+    <div class="code-chip"><span class="code-key">CAS</span><span class="code-val">Cascara Sauce</span></div>
+    <div class="code-chip"><span class="code-key">DCR</span><span class="code-val">Dark Caramel</span></div>
+    <div class="code-chip"><span class="code-key">DMO</span><span class="code-val">Dark Mocha</span></div>
+    <div class="code-chip"><span class="code-key">MO</span><span class="code-val">Mocha Sauce</span></div>
+    <div class="code-chip"><span class="code-key">WMO</span><span class="code-val">White Mocha</span></div>
+    <div class="code-chip"><span class="code-key">RGS</span><span class="code-val">Honey Red Grapefruit</span></div>
+    <div class="code-chip"><span class="code-key">ST</span><span class="code-val">Strawberry</span></div>
+  </div>
+  <div class="section-heading">Beverage ID Codes &mdash; Milk</div>
+  <div class="code-grid">
+    <div class="code-chip"><span class="code-key">N</span><span class="code-val">Nonfat (Skim)</span></div>
+    <div class="code-chip"><span class="code-key">W</span><span class="code-val">Whole (Full fat)</span></div>
+    <div class="code-chip"><span class="code-key">S</span><span class="code-val">Soy</span></div>
+    <div class="code-chip"><span class="code-key">CO</span><span class="code-val">Coconut</span></div>
+    <div class="code-chip"><span class="code-key">A</span><span class="code-val">Almond</span></div>
+    <div class="code-chip"><span class="code-key">O</span><span class="code-val">Oatmilk</span></div>
+    <div class="code-chip"><span class="code-key">B</span><span class="code-val">Breve (half-and-half)</span></div>
+    <div class="code-chip"><span class="code-key">HC</span><span class="code-val">Heavy Cream</span></div>
+    <div class="code-chip"><span class="code-key">%</span><span class="code-val">2% Lowfat</span></div>
+  </div>
+  <div class="section-heading">Beverage ID Codes &mdash; Customizers</div>
+  <div class="code-grid">
+    <div class="code-chip"><span class="code-key">CF</span><span class="code-val">Cold Foam</span></div>
+    <div class="code-chip"><span class="code-key">WC</span><span class="code-val">Whipped Cream</span></div>
+    <div class="code-chip"><span class="code-key">XH</span><span class="code-val">Extra Hot</span></div>
+    <div class="code-chip"><span class="code-key">K</span><span class="code-val">Kid&rsquo;s Beverage</span></div>
+    <div class="code-chip"><span class="code-key">D</span><span class="code-val">Dry</span></div>
+    <div class="code-chip"><span class="code-key">H2O</span><span class="code-val">Water</span></div>
+    <div class="code-chip"><span class="code-key">VSC</span><span class="code-val">Vanilla Sweet Cream</span></div>
+    <div class="code-chip"><span class="code-key">POM</span><span class="code-val">Pomegranate Pearls</span></div>
+    <div class="code-chip"><span class="code-key">CJ</span><span class="code-val">Coffee Jelly</span></div>
+    <div class="code-chip"><span class="code-key">CR</span><span class="code-val">Caramel (topping)</span></div>
+    <div class="code-chip"><span class="code-key">NUT</span><span class="code-val">Nutmeg</span></div>
+    <div class="code-chip"><span class="code-key">CHIP</span><span class="code-val">Frappuccino&reg; Chips</span></div>
+    <div class="code-chip"><span class="code-key">TOP</span><span class="code-val">No Topping</span></div>
+    <div class="code-chip"><span class="code-key">U</span><span class="code-val">Upside-down</span></div>
+    <div class="code-chip"><span class="code-key">X</span><span class="code-val">Extra (before code)</span></div>
+    <div class="code-chip"><span class="code-key">BLx2</span><span class="code-val">Double-blended</span></div>
+  </div>
+  <div class="section-heading">Pump Volume Reference Guide</div>
+  <div class="pump-grid">
+    <div class="pump-card"><div class="pump-name">Espresso Bar Mocha Sauce</div><div class="pump-vol">15 ml</div><div class="pump-unit">0.5 fl oz per pump</div></div>
+    <div class="pump-card"><div class="pump-name">White Mocha Sauce</div><div class="pump-vol">15 ml</div><div class="pump-unit">0.5 fl oz per pump</div></div>
+    <div class="pump-card"><div class="pump-name">CBS Mocha Sauce</div><div class="pump-vol">7.4 ml</div><div class="pump-unit">0.25 fl oz per pump</div></div>
+    <div class="pump-card"><div class="pump-name">Chai Concentrate</div><div class="pump-vol">20 ml</div><div class="pump-unit">0.67 fl oz per pump</div></div>
+    <div class="pump-card"><div class="pump-name">Frappuccino&reg; Roast</div><div class="pump-vol">13 ml</div><div class="pump-unit">0.44 fl oz per pump</div></div>
+    <div class="pump-card"><div class="pump-name">Strawberry Sauce</div><div class="pump-vol">20 ml</div><div class="pump-unit">0.67 fl oz per pump</div></div>
+    <div class="pump-card"><div class="pump-name">Dark Caramel Sauce</div><div class="pump-vol">8.5 ml</div><div class="pump-unit">0.29 fl oz per pump</div></div>
+  </div>
+  <div class="fact-box"><div class="fact-label">Calibration Check &mdash; Target: 60 ml (2 fl oz)</div>Chai Concentrate / Strawberry Sauce = 3 pumps &middot; Espresso Bar Mocha / White Mocha = 4 pumps &middot; CBS Mocha = 8 pumps &middot; Frappuccino&reg; Roast = 5 pumps &middot; Dark Caramel Sauce = 7 pumps. Discard sauce or concentrate after calibration.</div>
+  <div class="section-heading">Cold Beverage Lid Standards</div>
+  <div class="lid-grid">
+    <div class="lid-card"><div class="lid-icon">&#127462;</div><div class="lid-type">Strawless Lid</div><div class="lid-beverages">Iced espresso &amp; coffee &middot; Iced teas &amp; Refreshers &middot; Iced beverages with Cold Foam &middot; Beverages with inclusions/jellies</div></div>
+    <div class="lid-card"><div class="lid-icon">&#129482;</div><div class="lid-type">U-Cut Dome + Straw</div><div class="lid-beverages">Iced &amp; Blended beverages with whipped cream</div></div>
+    <div class="lid-card"><div class="lid-icon">&#127890;</div><div class="lid-type">Strawless + Straw on Request</div><div class="lid-beverages">Blended beverages without whipped cream</div></div>
+    <div class="lid-card"><div class="lid-icon">&#9898;</div><div class="lid-type">Strawless Lid Only</div><div class="lid-beverages">Nitro Cold Brew &mdash; always strawless, never with a straw</div></div>
+  </div>
+  <div class="section-heading">Major Food Allergens</div>
+  <p style="font-size:14px;color:var(--muted);margin-bottom:1rem;">All major food allergens may be present at Starbucks. Because the same steam wand, pitchers, and rinsers are used to prepare all milks, beverages are not guaranteed to be allergen-free.</p>
+  <div class="allergen-chips">
+    <span class="allergen-chip">&#129368; Milk</span>
+    <span class="allergen-chip">&#129368; Eggs</span>
+    <span class="allergen-chip">&#127806; Wheat</span>
+    <span class="allergen-chip">&#129752; Soy</span>
+    <span class="allergen-chip">&#129372; Nuts</span>
+    <span class="allergen-chip">&#128031; Fish</span>
+    <span class="allergen-chip">&#129408; Shellfish</span>
+  </div>
+  <div class="chapter-nav-footer"><button class="nav-btn" onclick="showChapter(5)">&larr; Brewing &amp; Cold</button><button class="nav-btn primary" onclick="showChapter(0)">&#8635; Start Over</button></div>
+</div>
+
+</div>
+<script>
+const chapters=document.querySelectorAll('.chapter');
+const chapterBtns=document.querySelectorAll('.chapter-btn');
+let current=0;
+function showChapter(n){chapters[current].classList.remove('active');chapterBtns[current].classList.remove('active');current=n;chapters[current].classList.add('active');chapterBtns[current].classList.add('active');const pct=Math.round(((n+1)/chapters.length)*100);document.getElementById('progressFill').style.width=pct+'%';document.getElementById('progressLabel').textContent='Chapter '+(n+1)+' of '+chapters.length;document.getElementById('progressPct').textContent=pct+'%';window.scrollTo({top:0,behavior:'smooth'});}
+function toggleAcc(item){item.classList.toggle('open');}
+function toggleLatte(row){row.classList.toggle('open');}
+function toggleValue(card){card.classList.toggle('active');}
+function toggleFund(card){card.classList.toggle('open');}
+function showTea(btn,id){btn.closest('.tea-tabs').querySelectorAll('.ttab').forEach(t=>t.classList.remove('active'));btn.classList.add('active');btn.closest('.tea-tabs').querySelectorAll('.tea-panel').forEach(p=>p.classList.remove('active'));document.getElementById(id).classList.add('active');}
+</script>
+</body></html>
